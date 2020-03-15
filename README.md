@@ -11,6 +11,10 @@ some minor changes have been made, e.g added asynchronous code, support of newer
 Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see which .net platform versions can implement this library before using!
 
 ## Usage
+Use NuGet package manager to add a reference to this project, for example with dotnet cli:
+```
+> dotnet add package tplink-smartdevices --version 1.0.0
+```
 ### Discovery
 	// Runs in a async Task<List<TPLinkSmartDevice>>
 	var discoveredDevices = await new TPLinkSmartDevices.TPLinkDiscovery().Discover();
