@@ -9,6 +9,9 @@ https://github.com/anthturner/TPLinkSmartDevices <br>
 some minor changes have been made, e.g added asynchronous code, support of newer KL-series bulbs
 
 Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see which .net platform versions can implement this library before using!
+#### Prerequisites
+Before using tplink-smartdevices your devices must be connected to the Wi-Fi network.
+This can be done using the TP-Link provided mobile app Kasa.
 
 ## Usage
 Use NuGet package manager to add a reference to this project, for example with dotnet cli:
