@@ -19,16 +19,16 @@ Use NuGet package manager to add a reference to this project, for example with d
 > dotnet add package tplink-smartdevices --version 1.0.0
 ```
 ### Discovery
-	// Runs in a async Task<List<TPLinkSmartDevice>>
-	var discoveredDevices = await new TPLinkSmartDevices.TPLinkDiscovery().Discover();
+	// Runs in a async Task<List<XamarinTPLinkSmartDevice>>
+	var discoveredDevices = await new TPLinkDiscovery().Discover();
 
 
 ### Example Usage
-    var smartPlug = new TPLinkSmartDevices.Devices.TPLinkSmartPlug("100.10.4.1");
+    var smartPlug = new XamarinTPLinkSmartDevices.Devices.TPLinkSmartPlug("100.10.4.1");
     smartPlug.OutletPowered = true; // Turn on relay
     smartPlug.OutletPowered = false; // Turn off relay
 
-    var smartBulb = new TPLinkSmartDevices.Devices.TPLinkSmartBulb("100.10.4.2");
+    var smartBulb = new XamarinTPLinkSmartDevices.Devices.TPLinkSmartBulb("100.10.4.2");
     smartBulb.PoweredOn = true; // Turn on bulb
     smartBulb.PoweredOn = false; // Turn off bulb
  
