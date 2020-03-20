@@ -24,11 +24,11 @@ Use NuGet package manager to add a reference to this project, for example with d
 
 
 ### Example Usage
-    var smartPlug = new XamarinTPLinkSmartDevices.Devices.TPLinkSmartPlug("100.10.4.1");
+    var smartPlug = new TPLinkSmartPlug("100.10.4.1");
     smartPlug.OutletPowered = true; // Turn on relay
     smartPlug.OutletPowered = false; // Turn off relay
 
-    var smartBulb = new XamarinTPLinkSmartDevices.Devices.TPLinkSmartBulb("100.10.4.2");
+    var smartBulb = new TPLinkSmartBulb("100.10.4.2");
     smartBulb.PoweredOn = true; // Turn on bulb
     smartBulb.PoweredOn = false; // Turn off bulb
  
@@ -36,14 +36,12 @@ or after discovery:
     
     foreach (var item in discoveredDevices)
     {
-        if (item is XamarinTPLinkSmartDevices.Devices.TPLinkSmartPlug )
+        if (item is TPLinkSmartPlug plug)
         {
-            XamarinTPLinkSmartDevices.Devices.TPLinkSmartPlug plug = item as XamarinTPLinkSmartDevices.Devices.TPLinkSmartPlug;
             plug.OutletPowered = true;
         }
-        else if (item is XamarinTPLinkSmartDevices.Devices.TPLinkSmartBulb) 
+        else if (item is TPLinkSmartBulb bulb) 
         {
-            XamarinTPLinkSmartDevices.Devices.TPLinkSmartBulb bulb = item as XamarinTPLinkSmartDevices.Devices.TPLinkSmartBulb;
             bulb.PoweredOn = true;
         }
     }
