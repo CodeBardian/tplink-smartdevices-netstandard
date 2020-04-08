@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace XamarinTPLinkSmartDevices.Messaging
+namespace TPLinkSmartDevices.Messaging
 {
     public class TimeGatedMessageCache : IMessageCache
     {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XamarinTPLinkSmartDevices.Data;
+using TPLinkSmartDevices.Data;
 
-namespace XamarinTPLinkSmartDevices.Devices
+namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartMeterPlug : TPLinkSmartPlug
     {

@@ -1,6 +1,7 @@
 using System;
+using System.Threading.Tasks;
 
-namespace XamarinTPLinkSmartDevices.Devices
+namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartPlug : TPLinkSmartDevice
     {
@@ -35,9 +36,9 @@ namespace XamarinTPLinkSmartDevices.Devices
 
         public string[] Features { get; private set; }
 
-        public TPLinkSmartPlug(string hostname) : base(hostname)
+        public TPLinkSmartPlug(string hostname, int port=9999) : base(hostname,port)
         {
-            Refresh();
+            Task.Run(() => Refresh()).Wait();
         }
 
         /// <summary>

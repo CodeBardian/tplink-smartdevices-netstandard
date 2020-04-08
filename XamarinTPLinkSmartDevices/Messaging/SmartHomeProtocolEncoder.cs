@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace XamarinTPLinkSmartDevices.Messaging
+namespace TPLinkSmartDevices.Messaging
 {
     internal static class SmartHomeProtocolEncoder
     {

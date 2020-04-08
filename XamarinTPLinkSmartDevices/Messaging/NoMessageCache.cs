@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace XamarinTPLinkSmartDevices.Messaging
+namespace TPLinkSmartDevices.Messaging
 {
     public class NoMessageCache : IMessageCache
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using XamarinTPLinkSmartDevices.Messaging;
+using TPLinkSmartDevices.Messaging;
 
-namespace XamarinTPLinkSmartDevices.Devices
+namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartDevice
     {

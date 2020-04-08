@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XamarinTPLinkSmartDevices.Messaging
+namespace TPLinkSmartDevices.Messaging
 {
     public class SmartHomeProtocolMessage
     {

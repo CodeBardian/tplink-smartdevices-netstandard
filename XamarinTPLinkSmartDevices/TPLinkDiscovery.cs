@@ -5,13 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using XamarinTPLinkSmartDevices.Devices;
+using TPLinkSmartDevices.Devices;
 using Microsoft.CSharp.RuntimeBinder;
 
-namespace XamarinTPLinkSmartDevices
+namespace TPLinkSmartDevices
 {
     public class TPLinkDiscovery
     {
@@ -35,7 +33,7 @@ namespace XamarinTPLinkSmartDevices
             DiscoveredDevices.Clear();
             PORT_NUMBER = port;
 
-            SendDiscoveryRequestAsync();
+            await SendDiscoveryRequestAsync();
             
             udp = new UdpClient(PORT_NUMBER);
             IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
@@ -87,7 +85,7 @@ namespace XamarinTPLinkSmartDevices
                 Receive();
         }
 
-        private async void SendDiscoveryRequestAsync()
+        private async Task SendDiscoveryRequestAsync()
         {
             UdpClient client = new UdpClient(PORT_NUMBER);
             IPEndPoint ip = new IPEndPoint(IPAddress.Broadcast, PORT_NUMBER);

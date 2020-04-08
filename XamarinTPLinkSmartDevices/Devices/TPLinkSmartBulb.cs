@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Threading.Tasks;
 
-namespace XamarinTPLinkSmartDevices.Devices
+namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartBulb : TPLinkSmartDevice
     {
@@ -96,15 +97,15 @@ namespace XamarinTPLinkSmartDevices.Devices
             }
         }
 
-        public TPLinkSmartBulb(string hostName) : base(hostName)
+        public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
-            Refresh();
+            Task.Run(() => Refresh()).Wait();
         }
 
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public async void Refresh()
+        public async Task Refresh()
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");///
             IsColor = (bool)sysInfo.is_color;
