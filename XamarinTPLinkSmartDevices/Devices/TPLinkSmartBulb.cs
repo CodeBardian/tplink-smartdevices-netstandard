@@ -122,7 +122,7 @@ namespace TPLinkSmartDevices.Devices
             _colorTemp = lightState.color_temp;
             _brightness = lightState.brightness;
             
-            Refresh(sysInfo);
+            await Refresh(sysInfo);
         }
 
         public class BulbHSV

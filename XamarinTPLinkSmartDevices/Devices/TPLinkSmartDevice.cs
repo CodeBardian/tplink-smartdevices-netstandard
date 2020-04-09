@@ -8,8 +8,6 @@ namespace TPLinkSmartDevices.Devices
     {
         const byte INITIALIZATION_VECTOR = 171;
 
-        private string _alias;
-
         // TODO: EMeter-related commands
 
         public string Hostname { get; private set; }
@@ -23,7 +21,6 @@ namespace TPLinkSmartDevices.Devices
         public string Model { get; private set; }
         public string MacAddress { get; private set; }
         public string DevName { get; private set; }
-
         public string HardwareId { get; private set; }
         public string FirmwareId { get; private set; }
         public string DeviceId { get; private set; }
@@ -33,28 +30,9 @@ namespace TPLinkSmartDevices.Devices
 
         public int[] LocationLatLong { get; private set; }
 
-        public string Alias
-        {
-            get { return _alias; }
-            set
-            {
-                dynamic x = Execute("system", "set_dev_alias", "alias", value);
-                _alias = value;
-            }
-        }
+        public string Alias { get; private set; }
 
-        public DateTime CurrentTime
-        {
-            get
-            {
-                dynamic rawTime = Execute("time", "get_time");
-                return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
-            }
-            set
-            {
-                // TODO: Implement this
-            }
-        }
+        private DateTime CurrentTime {get;  set; }
 
         protected TPLinkSmartDevice(string hostname, int port=9999)
         {
@@ -62,7 +40,7 @@ namespace TPLinkSmartDevices.Devices
             Port = port;
         }
 
-        public async void Refresh(dynamic sysInfo = null)
+        public async Task Refresh(dynamic sysInfo = null)
         {
             if (sysInfo == null)
                 sysInfo = await Execute("system", "get_sysinfo");
@@ -73,7 +51,7 @@ namespace TPLinkSmartDevices.Devices
             Model = sysInfo.model;
             MacAddress = sysInfo.mac;
             DevName = sysInfo.dev_name;
-            _alias = sysInfo.alias;
+            Alias = sysInfo.alias;
             HardwareId = sysInfo.hwId;
             FirmwareId = sysInfo.fwId;
             DeviceId = sysInfo.deviceId;
@@ -90,6 +68,25 @@ namespace TPLinkSmartDevices.Devices
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
             return await MessageCache.Request(message, Hostname, Port);
+        }
+
+        public void SetAlias(string value)
+        {
+            Task.Run(async () =>
+            {
+                await Execute("system", "set_dev_alias", "alias", value);
+                this.Alias = value;
+            });
+        }
+
+        public DateTime GetTime()  // not optimal solution
+        {
+            Task.Run(async () =>
+            {
+                dynamic rawTime = await Execute("time", "get_time");
+                return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
+            });
+            return default;
         }
     }
 }

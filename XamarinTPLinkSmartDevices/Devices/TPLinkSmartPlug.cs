@@ -14,12 +14,10 @@ namespace TPLinkSmartDevices.Devices
         {
             get
             {
-                Refresh();
                 return _powered;
             }
-            set
+            private set
             {
-                Execute("system", "set_relay_state", "state", value ? 1 : 0);
                 _powered = value;
             }
         }
@@ -44,7 +42,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public async void Refresh()
+        public async Task Refresh()
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
             Features = ((string)sysInfo.feature).Split(':');
@@ -55,7 +53,16 @@ namespace TPLinkSmartDevices.Devices
             else
                 PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
-            Refresh(sysInfo);
+            await Refresh(sysInfo);
+        }
+
+        public void SetOutletPowered(bool value)
+        {
+            Task.Run(async() =>
+            {
+                await Execute("system", "set_relay_state", "state", value ? 1 : 0);
+                this.OutletPowered = value;
+            });
         }
     }
 }

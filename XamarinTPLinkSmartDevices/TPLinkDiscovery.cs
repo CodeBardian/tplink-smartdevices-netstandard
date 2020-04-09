@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Devices;
 using Microsoft.CSharp.RuntimeBinder;
+using TPLinkSmartDevices.Events;
 
 namespace TPLinkSmartDevices
 {
     public class TPLinkDiscovery
     {
+        public event EventHandler<DeviceFoundEventArgs> DeviceFound;
+
         private int PORT_NUMBER = 9999;
 
         public List<TPLinkSmartDevice> DiscoveredDevices { get; private set; }
@@ -26,7 +29,7 @@ namespace TPLinkSmartDevices
             DiscoveredDevices = new List<TPLinkSmartDevice>();
         }
 
-        public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=10000)
+        public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=5000)
         {
             discoveryComplete = false;
 
@@ -80,7 +83,10 @@ namespace TPLinkSmartDevices
             }
 
             if (device != null)
+            {
                 DiscoveredDevices.Add(device);
+                OnDeviceFound(device);
+            }
             if (udp != null)
                 Receive();
         }
@@ -101,6 +107,11 @@ namespace TPLinkSmartDevices
             client.EnableBroadcast = true;
             await client.SendAsync(bytes, bytes.Length, ip);
             client.Dispose();
+        }
+
+        private void OnDeviceFound(TPLinkSmartDevice device)
+        {
+            DeviceFound?.Invoke(this, new DeviceFoundEventArgs(device));
         }
     }
 }
