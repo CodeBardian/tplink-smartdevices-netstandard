@@ -6,7 +6,7 @@ This includes support for TP-Link Smart Plugs HS100/105/110 as well as TP-Link S
 
 This project is migrated to .net standard from Anthony Turner's TP-Link Smart Devices SDK: <br>
 https://github.com/anthturner/TPLinkSmartDevices <br>
-some minor changes have been made, e.g added asynchronous code, support of newer KL-series bulbs
+some minor changes have been made, e.g added asynchronous code, support of newer KL-series bulbs, added event for better discovery handling
 
 Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see which .net platform versions can implement this library before using!
 #### Prerequisites
