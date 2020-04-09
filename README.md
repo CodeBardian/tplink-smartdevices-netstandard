@@ -16,12 +16,26 @@ This can be done using the TP-Link provided mobile app Kasa.
 ## Usage
 Use NuGet package manager to add a reference to this project, for example with dotnet cli:
 ```
-> dotnet add package tplink-smartdevices --version 1.0.0
+> dotnet add package tplink-smartdevices --version 1.0.1
 ```
 ### Discovery
-	// Runs in a async Task<List<XamarinTPLinkSmartDevice>>
-	var discoveredDevices = await new TPLinkDiscovery().Discover();
 
+basic:
+
+	// Runs in a async Task<List<TPLinkSmartDevice>>
+	var discoveredDevices = await new TPLinkDiscovery().Discover();
+	
+with event handler:
+
+	TPLinkDiscovery discovery = new TPLinkDiscovery();
+	discovery.DeviceFound += Discovery_DeviceFound;
+	var discoveredDevices = await discovery.Discover();
+
+	private void Discovery_DeviceFound(object sender, DeviceFoundEventArgs e)
+	{
+	    //Console.WriteLine("Device found: " + e.Device.Alias);
+	    //Log.Debug("DISCOVERY","Device found" + e.Device.Alias);
+	}
 
 ### Example Usage
     var smartPlug = new TPLinkSmartPlug("100.10.4.1");
