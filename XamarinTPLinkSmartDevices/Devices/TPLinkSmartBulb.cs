@@ -125,7 +125,7 @@ namespace TPLinkSmartDevices.Devices
             await Refresh(sysInfo);
         }
 
-        public class BulbHSV
+        public class BulbHSV //TODO: merge to data folder 
         {
             public byte Hue { get; set; }
             public byte Saturation { get; set; }

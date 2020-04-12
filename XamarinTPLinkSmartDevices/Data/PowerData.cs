@@ -19,22 +19,22 @@ namespace TPLinkSmartDevices.Data
         }
 
         /// <summary>
-        /// Current measured voltage in volts.
+        /// Currently measured voltage in volts.
         /// </summary>
         public double Voltage => _powerData.voltage_mv / 1000.0d;
 
         /// <summary>
-        /// Current measured amperage in amps.
+        /// Currently measured current in amperes.
         /// </summary>
         public double Amperage => _powerData.current_ma / 1000.0d;
 
         /// <summary>
-        /// Current measured power usage in watts.
+        /// Currently measured power in watts.
         /// </summary>
         public double Power => _powerData.power_mw / 1000.0d;
 
         /// <summary>
-        /// Current total power consumption in kilowatthours.
+        /// Total power consumption in kilowatthours. What does total mean here? In which timeframe?
         /// </summary>
         public double Total => _powerData.total_wh / 1000.0d;
 

@@ -40,6 +40,9 @@ namespace TPLinkSmartDevices.Devices
             Port = port;
         }
 
+        /// <summary>
+        /// Refresh device information
+        /// </summary>
         public async Task Refresh(dynamic sysInfo = null)
         {
             if (sysInfo == null)
@@ -64,6 +67,9 @@ namespace TPLinkSmartDevices.Devices
                 LocationLatLong = new int[2] { sysInfo.latitude_i, sysInfo.longitude_i };
         }
 
+        /// <summary>
+        /// Sends command to device and returns answer 
+        /// </summary>
         protected async Task<dynamic> Execute(string system, string command, string argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);

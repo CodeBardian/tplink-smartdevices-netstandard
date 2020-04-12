@@ -39,7 +39,7 @@ namespace TPLinkSmartDevices.Messaging
             {
                 object argObject;
                 if (Value != null)
-                    argObject = new JObject { new JProperty(Argument, Value) };
+                    argObject = new JObject { new JProperty(Argument.ToString(), Value) };
                 else
                     argObject = Argument;
 
@@ -51,10 +51,10 @@ namespace TPLinkSmartDevices.Messaging
 
         public string System { get; set; }
         public string Command { get; set; }
-        public string Argument { get; set; }
+        public object Argument { get; set; }
         public object Value { get; set; }
 
-        internal SmartHomeProtocolMessage(string system, string command, string argument, object value)
+        internal SmartHomeProtocolMessage(string system, string command, object argument, object value)
         {
             System = system;
             Command = command;
@@ -67,8 +67,13 @@ namespace TPLinkSmartDevices.Messaging
             var messageToSend = SmartHomeProtocolEncoder.Encrypt(JSON);
 
             var client = new TcpClient();
-            await client.ConnectAsync(hostname, port);
-            //client.Client.Connect(hostname, port);
+            client.ConnectAsync(hostname, port).Wait(2000);
+
+            if (!client.Connected)
+            {
+                return null;
+            }
+
             byte[] packet = new byte[0];
             using (var stream = client.GetStream())
             {

@@ -8,19 +8,9 @@ namespace TPLinkSmartDevices.Devices
         private bool _powered;
 
         /// <summary>
-        /// If the outlet relay is powered on (forces a refresh, to make this behavior consistent with Smart Bulbs)
+        /// If the outlet relay is powered on
         /// </summary>
-        public bool OutletPowered
-        {
-            get
-            {
-                return _powered;
-            }
-            private set
-            {
-                _powered = value;
-            }
-        }
+        public bool OutletPowered { get; private set; }
 
         /// <summary>
         /// If the LED on the smart plug is on
@@ -56,6 +46,9 @@ namespace TPLinkSmartDevices.Devices
             await Refresh(sysInfo);
         }
 
+        /// <summary>
+        /// Send command which changes power state to bulb
+        /// </summary>
         public void SetOutletPowered(bool value)
         {
             Task.Run(async() =>

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TPLinkSmartDevices.Devices;
 using Microsoft.CSharp.RuntimeBinder;
 using TPLinkSmartDevices.Events;
+using TPLinkSmartDevices.Messaging;
 
 namespace TPLinkSmartDevices
 {
@@ -112,6 +113,18 @@ namespace TPLinkSmartDevices
         private void OnDeviceFound(TPLinkSmartDevice device)
         {
             DeviceFound?.Invoke(this, new DeviceFoundEventArgs(device));
+        }
+
+        public async Task Associate(string ssid, string password, int type = 3)
+        {
+            dynamic scan = await new SmartHomeProtocolMessage("netif","get_scaninfo","refresh","1").Execute("192.168.0.1", 9999);
+            
+            dynamic result = await new SmartHomeProtocolMessage("netif", "set_stainfo", new JObject
+                {
+                    new JProperty("ssid", ssid),
+                    new JProperty("password", password),
+                    new JProperty("key_type", type)
+                }, null).Execute("192.168.0.1", 9999);
         }
     }
 }
