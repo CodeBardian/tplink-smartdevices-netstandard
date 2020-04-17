@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Messaging;
 
@@ -25,9 +26,9 @@ namespace TPLinkSmartDevices.Devices
         public string FirmwareId { get; private set; }
         public string DeviceId { get; private set; }
         public string OemId { get; private set; }
-
-        public int RSSI { get; private set; }
-
+        public string CloudServer { get; private set; }
+        public bool RemoteAccessEnabled { get; set; }
+        public int RSSI { get; private set; } 
         public int[] LocationLatLong { get; private set; }
 
         public string Alias { get; private set; }
@@ -45,6 +46,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh(dynamic sysInfo = null)
         {
+            GetCloudInfo();
             if (sysInfo == null)
                 sysInfo = await Execute("system", "get_sysinfo");
 
@@ -70,7 +72,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Sends command to device and returns answer 
         /// </summary>
-        protected async Task<dynamic> Execute(string system, string command, string argument = null, object value = null)
+        protected async Task<dynamic> Execute(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
             return await MessageCache.Request(message, Hostname, Port);
@@ -93,6 +95,42 @@ namespace TPLinkSmartDevices.Devices
                 return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
             });
             return default;
+        }
+
+        public void GetCloudInfo()
+        {
+            Task.Run(async () =>
+            {
+                dynamic cloudInfo = await Execute("cnCloud", "get_info");
+                CloudServer = cloudInfo.server;
+                RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
+            });
+        }
+
+        public async Task ConfigureRemoteAccess(string username, string password)
+        {
+            try
+            {
+                dynamic result = await Execute("cnCloud", "bind", new JObject
+                    {
+                        new JProperty("username", username),
+                        new JProperty("password", password)
+                    }, null);
+                RemoteAccessEnabled = true;
+            }
+            catch (Exception e)
+            {
+                RemoteAccessEnabled = false;
+                if (e.Message.Contains("20601") || e.Message.Contains("3"))
+                {
+                    throw new Exception("The specified password is incorrect");
+                }
+                else if (e.Message.Contains("20600"))
+                {
+                    throw new Exception("The username wasn't found");
+                };
+                throw new Exception("Internal error");
+            }
         }
     }
 }

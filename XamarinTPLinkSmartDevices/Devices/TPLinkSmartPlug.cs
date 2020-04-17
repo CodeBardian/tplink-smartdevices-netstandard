@@ -47,7 +47,7 @@ namespace TPLinkSmartDevices.Devices
         }
 
         /// <summary>
-        /// Send command which changes power state to bulb
+        /// Send command which changes power state to plug
         /// </summary>
         public void SetOutletPowered(bool value)
         {
@@ -55,6 +55,18 @@ namespace TPLinkSmartDevices.Devices
             {
                 await Execute("system", "set_relay_state", "state", value ? 1 : 0);
                 this.OutletPowered = value;
+            });
+        }
+
+        /// <summary>
+        /// Send command which enables or disables night mode (LED state)
+        /// </summary>
+        public void SetLedOn(bool value)
+        {
+            Task.Run(async () =>
+            {
+                await Execute("system", "set_led_off", "off", value ? 0 : 1);
+                this.LedOn = value;
             });
         }
     }

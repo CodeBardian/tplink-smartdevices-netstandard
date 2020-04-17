@@ -115,16 +115,32 @@ namespace TPLinkSmartDevices
             DeviceFound?.Invoke(this, new DeviceFoundEventArgs(device));
         }
 
+        /// <summary>
+        /// Makes device connect to specified network. Host who runs the application needs to be connected to the open configuration network! (TP-Link_Smart Plug_XXXX or similar)
+        /// </summary>
         public async Task Associate(string ssid, string password, int type = 3)
         {
             dynamic scan = await new SmartHomeProtocolMessage("netif","get_scaninfo","refresh","1").Execute("192.168.0.1", 9999);
-            
+            //TODO: use scan to get type of user specified network
+
+            if (scan == null || !scan.ToString().Contains(ssid))
+            {
+                throw new Exception("Couldn't find network!");
+            }
+
             dynamic result = await new SmartHomeProtocolMessage("netif", "set_stainfo", new JObject
                 {
                     new JProperty("ssid", ssid),
                     new JProperty("password", password),
                     new JProperty("key_type", type)
                 }, null).Execute("192.168.0.1", 9999);
+
+            if (result == null)
+            {
+                throw new Exception("Couldn't connect to network. Check password");
+            }
+            else if (result["err_code"] != null && result.err_code != 0)
+                throw new Exception($"Protocol error {result.err_code} ({result.err_msg})");
         }
     }
 }
