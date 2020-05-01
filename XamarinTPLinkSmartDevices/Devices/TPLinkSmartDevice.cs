@@ -107,16 +107,19 @@ namespace TPLinkSmartDevices.Devices
             });
         }
 
+        /// <summary>
+        /// Binds account to cloud server
+        /// </summary>
         public async Task ConfigureRemoteAccess(string username, string password)
         {
+            if (!RemoteAccessEnabled) SetRemoteAccessEnabled(true);
             try
-            {
+            {               
                 dynamic result = await Execute("cnCloud", "bind", new JObject
                     {
                         new JProperty("username", username),
                         new JProperty("password", password)
                     }, null);
-                RemoteAccessEnabled = true;
             }
             catch (Exception e)
             {
@@ -131,6 +134,35 @@ namespace TPLinkSmartDevices.Devices
                 };
                 throw new Exception("Internal error");
             }
+        }
+
+        /// <summary>
+        /// Unbinds currently set account from cloud server
+        /// </summary>
+        public void UnbindRemoteAccess()
+        {
+            Task.Run(async () =>
+            {
+                dynamic result = await Execute("cnCloud", "unbind");
+                SetRemoteAccessEnabled(false);
+            });
+        }
+
+        private void SetRemoteAccessEnabled(bool enabled, string server = "n-devs.tplinkcloud.com")
+        {
+            Task.Run(async () =>
+            {
+                if (enabled)
+                {
+                    dynamic result = await Execute("cnCloud", "set_server_url", "server", server);
+                    RemoteAccessEnabled = true;
+                }
+                else
+                {
+                    dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com");
+                    RemoteAccessEnabled = false;
+                }
+            });
         }
     }
 }
