@@ -1,6 +1,7 @@
 # tplink-smartdevices-netstandard
 .NET Standard 1.6 Library for Discovering and Operating TP-Link Smart Devices <br><br>
 [![Nuget](https://img.shields.io/nuget/v/tplink-smartdevices?style=for-the-badge)](https://www.nuget.org/packages/tplink-smartdevices/)
+![Travis (.org)](https://img.shields.io/travis/CodeBardian/tplink-smartdevices-netstandard?style=for-the-badge)
 
 This library allows a developer to discover and operate TP-Link Smart Devices with C# applications such as Xamarin, UWP or .net framework.
 This includes support for TP-Link Smart Plugs HS100/105/110 as well as TP-Link Smart Bulbs KL/LB: 100/110/120/130.
