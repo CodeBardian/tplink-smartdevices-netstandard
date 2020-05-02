@@ -8,21 +8,9 @@ namespace TPLinkSmartDevices.Devices
         private bool _powered;
 
         /// <summary>
-        /// If the outlet relay is powered on (forces a refresh, to make this behavior consistent with Smart Bulbs)
+        /// If the outlet relay is powered on
         /// </summary>
-        public bool OutletPowered
-        {
-            get
-            {
-                Refresh();
-                return _powered;
-            }
-            set
-            {
-                Execute("system", "set_relay_state", "state", value ? 1 : 0);
-                _powered = value;
-            }
-        }
+        public bool OutletPowered { get; private set; }
 
         /// <summary>
         /// If the LED on the smart plug is on
@@ -44,7 +32,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public async void Refresh()
+        public async Task Refresh()
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
             Features = ((string)sysInfo.feature).Split(':');
@@ -55,7 +43,31 @@ namespace TPLinkSmartDevices.Devices
             else
                 PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
-            Refresh(sysInfo);
+            await Refresh(sysInfo);
+        }
+
+        /// <summary>
+        /// Send command which changes power state to plug
+        /// </summary>
+        public void SetOutletPowered(bool value)
+        {
+            Task.Run(async() =>
+            {
+                await Execute("system", "set_relay_state", "state", value ? 1 : 0);
+                this.OutletPowered = value;
+            });
+        }
+
+        /// <summary>
+        /// Send command which enables or disables night mode (LED state)
+        /// </summary>
+        public void SetLedOn(bool value)
+        {
+            Task.Run(async () =>
+            {
+                await Execute("system", "set_led_off", "off", value ? 0 : 1);
+                this.LedOn = value;
+            });
         }
     }
 }
