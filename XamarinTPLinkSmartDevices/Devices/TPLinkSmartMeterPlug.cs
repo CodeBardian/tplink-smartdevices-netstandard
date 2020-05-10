@@ -17,8 +17,8 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async() =>
             {
-                CurrentPowerUsage =  new PowerData(await Execute("emeter", "get_realtime"));
-                _gainData = await Execute("emeter", "get_vgain_igain");
+                CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"));
+                _gainData = await Execute("emeter", "get_vgain_igain");          
             });
         }
 
@@ -40,14 +40,13 @@ namespace TPLinkSmartDevices.Devices
             });
         }
 
-        public async void GetDayStats()
+        public async void GetMonthStats(DateTime date)
         {
             dynamic result = await Execute("emeter", "get_daystat", new JObject
                 {
-                    new JProperty("month", 3),
-                    new JProperty("password", 2020)
+                    new JProperty("month", date.Month),
+                    new JProperty("year", date.Year)
                 }, null);
-            result = null;
         }
     }
 }

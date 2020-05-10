@@ -65,7 +65,14 @@ namespace TPLinkSmartDevices.Devices
 
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
-            Task.Run(() => Refresh()).Wait();
+            try
+            {
+                Task.Run(() => Refresh()).Wait();
+            }
+            catch (AggregateException) 
+            {
+                throw new Exception("No SmartDevice found behind this IP-address");
+            }
         }
 
         /// <summary>
