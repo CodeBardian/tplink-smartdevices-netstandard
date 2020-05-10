@@ -1,6 +1,6 @@
 ﻿namespace TPLinkSmartDevices.Data
 {
-    public class BulbHSV //TODO: merge to data folder 
+    public class BulbHSV
     {
         public byte Hue { get; set; }
         public byte Saturation { get; set; }

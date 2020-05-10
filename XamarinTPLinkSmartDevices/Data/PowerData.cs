@@ -34,9 +34,9 @@ namespace TPLinkSmartDevices.Data
         public double Power => _powerData.power_mw / 1000.0d;
 
         /// <summary>
-        /// Total power consumption in kilowatthours. What does total mean here? In which timeframe?
+        /// Total power consumption in kilowatthours. 
         /// </summary>
-        public double Total => _powerData.total_wh / 1000.0d;
+        public double Total => _powerData.total_wh / 1000.0d;   //What does total mean here? In which timeframe?
 
         public int ErrorCode => _powerData.err_code;
 

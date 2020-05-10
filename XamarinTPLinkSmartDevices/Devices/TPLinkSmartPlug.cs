@@ -5,8 +5,6 @@ namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartPlug : TPLinkSmartDevice
     {
-        private bool _powered;
-
         /// <summary>
         /// If the outlet relay is powered on
         /// </summary>
@@ -36,7 +34,6 @@ namespace TPLinkSmartDevices.Devices
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
             Features = ((string)sysInfo.feature).Split(':');
-            _powered = (bool)sysInfo.relay_state;
             LedOn = !(bool)sysInfo.led_off;
             if ((int)sysInfo.on_time == 0)
                 PoweredOnSince = default(DateTime);
