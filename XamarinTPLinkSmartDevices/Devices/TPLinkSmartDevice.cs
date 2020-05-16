@@ -29,7 +29,7 @@ namespace TPLinkSmartDevices.Devices
         public string CloudServer { get; private set; }
         public bool RemoteAccessEnabled { get; set; }
         public int RSSI { get; private set; } 
-        public int[] LocationLatLong { get; private set; }
+        public double[] LocationLatLong { get; private set; }
 
         public string Alias { get; private set; }
 
@@ -64,9 +64,9 @@ namespace TPLinkSmartDevices.Devices
             RSSI = sysInfo.rssi;
 
             if (sysInfo.latitude != null)
-                LocationLatLong = new int[2] { sysInfo.latitude, sysInfo.longitude };
+                LocationLatLong = new double[2] { sysInfo.latitude, sysInfo.longitude };
             else if (sysInfo.latitude_i != null)
-                LocationLatLong = new int[2] { sysInfo.latitude_i, sysInfo.longitude_i };
+                LocationLatLong = new double[2] { sysInfo.latitude_i, sysInfo.longitude_i };
         }
 
         /// <summary>

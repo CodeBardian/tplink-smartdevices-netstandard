@@ -28,9 +28,9 @@ namespace TPLinkSmartDevices.Devices
             {
                 Task.Run(() => Refresh()).Wait();
             }
-            catch (AggregateException) 
+            catch (AggregateException e) 
             {
-                throw new Exception("No SmartDevice found behind this IP-address");
+                throw new Exception($"No SmartDevice found behind this IP-address, Details: {e}");
             }
         }
 

@@ -107,6 +107,7 @@ namespace TPLinkSmartDevices
             var bytes = discoveryPacket.Skip(4).ToArray();
             client.EnableBroadcast = true;
             await client.SendAsync(bytes, bytes.Length, ip);
+            client.Close();
             client.Dispose();
         }
 
