@@ -48,5 +48,10 @@ namespace TPLinkSmartDevices.Devices
                     new JProperty("year", date.Year)
                 }, null);
         }
+
+        public async void GetYearStats(DateTime date)
+        {
+            dynamic result = await Execute("emeter", "get_monthstat", "year", date.Year);
+        }
     }
 }
