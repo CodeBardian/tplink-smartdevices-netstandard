@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
 
@@ -40,18 +42,30 @@ namespace TPLinkSmartDevices.Devices
             });
         }
 
-        public async void GetMonthStats(DateTime date)
+        public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
         {
             dynamic result = await Execute("emeter", "get_daystat", new JObject
                 {
-                    new JProperty("month", date.Month),
-                    new JProperty("year", date.Year)
+                    new JProperty("month", month),
+                    new JProperty("year", year)
                 }, null);
+            var stats = new Dictionary<DateTime, int>();
+            foreach (dynamic day_stat in result.day_list)
+            {
+                stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (int)day_stat.energy);
+            }
+            return stats;
         }
 
-        public async void GetYearStats(DateTime date)
+        public async Task<Dictionary<int, int>> GetYearStats(int year)
         {
-            dynamic result = await Execute("emeter", "get_monthstat", "year", date.Year);
+            dynamic result = await Execute("emeter", "get_monthstat", "year", year);
+            var stats = new Dictionary<int, int>();
+            foreach (dynamic month_stat in result.month_list)
+            {
+                stats.Add((int)month_stat.month, (int)month_stat.energy);
+            }
+            return stats;
         }
     }
 }

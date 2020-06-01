@@ -9,8 +9,6 @@ namespace TPLinkSmartDevices.Devices
     {
         const byte INITIALIZATION_VECTOR = 171;
 
-        // TODO: EMeter-related commands
-
         public string Hostname { get; private set; }
         public int Port { get; private set; }
 
