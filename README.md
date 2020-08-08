@@ -1,5 +1,5 @@
 # tplink-smartdevices-netstandard
-.NET Standard 1.6 Library for Discovering and Operating TP-Link Smart Devices <br><br>
+.NET Standard 2.0 Library for Discovering and Operating TP-Link Smart Devices <br><br>
 [![Nuget](https://img.shields.io/nuget/v/tplink-smartdevices?style=for-the-badge)](https://www.nuget.org/packages/tplink-smartdevices/)
 ![Travis (.org)](https://img.shields.io/travis/CodeBardian/tplink-smartdevices-netstandard?style=for-the-badge)
 
@@ -27,7 +27,7 @@ Note that the device running the program needs to be connected to the network wh
 ## Usage
 Use NuGet package manager to add a reference to this project, for example with dotnet cli:
 ```
-> dotnet add package tplink-smartdevices --version 1.0.2
+> dotnet add package tplink-smartdevices --version 1.0.3
 ```
 
 ### Discovery
@@ -77,19 +77,6 @@ If you still want to control your devices remotely (not from within the same net
 smartdevice.ConfigureRemoteAccess("username", "password");
 ```
 To check if your device is linked to tplink cloud use `RemoteAccessEnabled` property.
-
-## Changelog
-
-### [1.0.2] - 2020-04-17
-
-#### Added
-
-- associate devices to home network
-- configure remote access via tplink cloud and kasa
-
-#### Changed
-- more consistent asynchronous code -> all commands to smart devices are now asynchronous
-- restructured parts of code for better readability
 
 ## Disclaimer
 I can not guarantee the functionality of this library as I only tested a HS100 and a KL130 in a Xamarin.Android application yet.
