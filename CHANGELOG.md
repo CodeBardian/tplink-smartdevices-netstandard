@@ -1,19 +1,20 @@
 ## Changelog
 
-### [1.0.3] - unreleased
+### [1.0.3] - 2020-08-08
 
 #### Added
 
-- access energy stats of hs100 
+- access energy stats of hs110 
+- handle different hardware versions for hs110 
 
 #### Changed
 - project now targets .net standard 2.0
 - improved emetering commands with error handling
+- improved XML documentation for IntelliSense recommendations
 
 #### Fixed
 - location is no longer of type integer
 - udp port correctly closing
-
 
 ### [1.0.2] - 2020-04-17
 
