@@ -65,7 +65,7 @@ namespace TPLinkSmartDevices.Devices
 
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
-            Task.Run(() => Refresh()).Wait();
+            Task.Run(() => Refresh()).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -73,12 +73,12 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");///
+            dynamic sysInfo = await Execute("system", "get_sysinfo");//
             IsColor = (bool)sysInfo.is_color;
             IsDimmable = (bool)sysInfo.is_dimmable;
             IsVariableColorTemperature = (bool)sysInfo.is_variable_color_temp;
 
-            dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state"); ///
+            dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state"); //
             _poweredOn = lightState.on_off;
 
             if (!_poweredOn)
