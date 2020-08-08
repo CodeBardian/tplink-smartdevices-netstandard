@@ -12,39 +12,33 @@ namespace TPLinkSmartDevices.Data
     public class PowerData
     {
         private readonly dynamic _powerData;
+        private string _hwversion;
 
-        public PowerData(dynamic powerData)
+        public PowerData(dynamic powerData, string hwversion)
         {
             _powerData = powerData;
+            _hwversion = hwversion;
         }
 
-        //for older firmware versions
-        //public double Voltage => _powerData.voltage_mv / 1000.0d;
-        //public double Amperage => _powerData.current_ma / 1000.0d;
-        //public double Power => _powerData.power_mw / 1000.0d;
-        //public double Total => _powerData.total_wh / 1000.0d;
-
-
-        // recent firmware
         /// <summary>
         /// Currently measured voltage in volts.
         /// </summary>
-        public double Voltage => _powerData.voltage;
+        public double Voltage => _hwversion.StartsWith("1") ? _powerData.voltage : _powerData.voltage_mv / 1000.0d;
 
         /// <summary>
         /// Currently measured current in amperes.
         /// </summary>
-        public double Amperage => _powerData.current / 1000.0d;
+        public double Amperage => _hwversion.StartsWith("1") ? _powerData.current : _powerData.current_ma / 1000.0d;
 
         /// <summary>
         /// Currently measured power in watts.
         /// </summary>
-        public double Power => _powerData.power;
+        public double Power => _hwversion.StartsWith("1") ? _powerData.power : _powerData.power_mw / 1000.0d;
 
         /// <summary>
         /// Total power consumption in kilowatthours. 
         /// </summary>
-        public double Total => _powerData.total;
+        public double Total => _hwversion.StartsWith("1") ? _powerData.total : _powerData.total_wh / 1000.0d;
 
         public int ErrorCode => _powerData.err_code;
 

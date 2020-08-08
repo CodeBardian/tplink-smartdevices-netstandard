@@ -85,7 +85,7 @@ namespace TPLinkSmartDevices.Devices
             });
         }
 
-        public DateTime GetTime()  // not optimal solution
+        public DateTime GetTime()  //refactor needed
         {
             Task.Run(async () =>
             {

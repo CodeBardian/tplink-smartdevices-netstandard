@@ -19,14 +19,13 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async() =>
             {
-                CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"));
-                _gainData = await Execute("emeter", "get_vgain_igain");          
-            });
+                await Refresh();   
+            }).GetAwaiter().GetResult();
         }
 
         public new async Task Refresh()
         {
-            CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"));
+            CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"), HardwareVersion);
             _gainData = await Execute("emeter", "get_vgain_igain");
             await base.Refresh();
         }
@@ -42,6 +41,12 @@ namespace TPLinkSmartDevices.Devices
             });
         }
 
+        /// <summary>
+        /// Query collected usage statistics from a specific month
+        /// </summary>
+        /// <returns><c>Dictionary&lt;DateTime, int&gt;</c> of each day in a month and energy consumption of that day (in watt hours (?))</returns>
+        /// <param name = "month" >month of <paramref name="year"/>: ranging from 1(january) to 12(december)</param>
+        /// <param name = "year" ></param>
         public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
         {
             dynamic result = await Execute("emeter", "get_daystat", new JObject
@@ -57,8 +62,14 @@ namespace TPLinkSmartDevices.Devices
             return stats;
         }
 
+        /// <summary>
+        /// Query collected usage statistics over the course of a year
+        /// </summary>
+        /// <returns><c>Dictionary&lt;int, int&gt;</c> of months and energy consumption</returns>
+        /// <param name = "year" >year of stats</param>
         public async Task<Dictionary<int, int>> GetYearStats(int year)
         {
+            //TODO: check if year is correct
             dynamic result = await Execute("emeter", "get_monthstat", "year", year);
             var stats = new Dictionary<int, int>();
             foreach (dynamic month_stat in result.month_list)
