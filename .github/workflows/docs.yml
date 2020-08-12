@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v1
       
       - name: build
-        working-directory: tplink-smartdevices-docs
+        working-directory: docs
         run: | 
           pip install mkdocs
           pip install mkdocs-material
