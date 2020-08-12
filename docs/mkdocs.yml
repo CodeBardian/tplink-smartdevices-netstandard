@@ -1,0 +1,34 @@
+site_name: tplink-smartdevices-docs
+nav:
+    - Home: 'index.md'
+    - 'Getting Started': 'getting-started.md'
+    - Docs:
+      - 'TPLinkDiscovery': 'docs/discovery.md'
+      - Devices: 
+        - 'TPLinkSmartDevice': 'docs/devices/device.md'
+        - 'TPLinkSmartPlug': 'docs/devices/plug.md'
+        - 'TPLinkSmartMeterPlug': 'docs/devices/smartmeter-plug.md'
+        - 'TPLinkSmartBulb': 'docs/devices/bulb.md'
+      - Data:
+        - 'BulbHSV': 'docs/data/hsv.md'
+        - 'PowerData': 'docs/data/power.md'
+theme:
+  name: material
+  favicon: assets/icon.png
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/CodeBradian
+repo_url: https://www.github.com/CodeBardian/tplink-smartdevices-netstandard
+repo_name: CodeBardian/tplink-smartdevices-netstandard
+markdown_extensions:
+  - admonition
+  - def_list
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.highlight
+  - pymdownx.snippets
+google_analytics:
+  - UA-145854471-2
+  - auto
