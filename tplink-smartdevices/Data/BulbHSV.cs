@@ -2,8 +2,9 @@
 {
     public class BulbHSV
     {
-        public byte Hue { get; set; }
+        public int Hue { get; set; }
         public byte Saturation { get; set; }
         public byte Value { get; set; }
+        public int Brightness { get; set; }
     }
 }

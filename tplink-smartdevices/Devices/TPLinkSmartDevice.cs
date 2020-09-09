@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Messaging;
 
@@ -12,7 +13,7 @@ namespace TPLinkSmartDevices.Devices
         public string Hostname { get; private set; }
         public int Port { get; private set; }
 
-        public IMessageCache MessageCache { get; set; } = new TimeGatedMessageCache(2);
+        public IMessageCache MessageCache { get; } = new TimeGatedMessageCache(2);
 
         public string SoftwareVersion { get; private set; }
         public string HardwareVersion { get; private set; }
@@ -26,14 +27,14 @@ namespace TPLinkSmartDevices.Devices
         public string OemId { get; private set; }
         public string CloudServer { get; private set; }
         public bool RemoteAccessEnabled { get; set; }
-        public int RSSI { get; private set; } 
+        public int RSSI { get; private set; }
         public double[] LocationLatLong { get; private set; }
 
         public string Alias { get; private set; }
 
-        private DateTime CurrentTime {get;  set; }
+        private DateTime CurrentTime { get; set; }
 
-        protected TPLinkSmartDevice(string hostname, int port=9999)
+        protected TPLinkSmartDevice(string hostname, int port = 9999)
         {
             Hostname = hostname;
             Port = port;
@@ -44,9 +45,11 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh(dynamic sysInfo = null)
         {
-            GetCloudInfo();
+            await GetCloudInfo();
             if (sysInfo == null)
-                sysInfo = await Execute("system", "get_sysinfo");
+            {
+                sysInfo = await ExecuteAsync("system", "get_sysinfo");
+            }
 
             SoftwareVersion = sysInfo.sw_ver;
             HardwareVersion = sysInfo.hw_ver;
@@ -62,47 +65,42 @@ namespace TPLinkSmartDevices.Devices
             RSSI = sysInfo.rssi;
 
             if (sysInfo.latitude != null)
+            {
                 LocationLatLong = new double[2] { sysInfo.latitude, sysInfo.longitude };
+            }
             else if (sysInfo.latitude_i != null)
+            {
                 LocationLatLong = new double[2] { sysInfo.latitude_i, sysInfo.longitude_i };
+            }
         }
 
         /// <summary>
         /// Sends command to device and returns answer 
         /// </summary>
-        protected async Task<dynamic> Execute(string system, string command, object argument = null, object value = null)
+        protected async Task<dynamic> ExecuteAsync(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
             return await MessageCache.Request(message, Hostname, Port);
         }
 
-        public void SetAlias(string value)
+        public Task SetAlias(string value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("system", "set_dev_alias", "alias", value);
-                this.Alias = value;
-            });
+            Alias = value;
+            return ExecuteAsync("system", "set_dev_alias", "alias", value);
         }
 
-        public DateTime GetTime()  //refactor needed
+        public async Task<DateTime> GetTimeAsync()  //refactor needed
         {
-            Task.Run(async () =>
-            {
-                dynamic rawTime = await Execute("time", "get_time");
-                return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
-            });
-            return default;
+            dynamic rawTime = await ExecuteAsync("time", "get_time");
+            return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
         }
 
-        public void GetCloudInfo()
+        public async Task GetCloudInfo()
         {
-            Task.Run(async () =>
-            {
-                dynamic cloudInfo = await Execute("cnCloud", "get_info");
+           
+                dynamic cloudInfo = await ExecuteAsync("cnCloud", "get_info");
                 CloudServer = cloudInfo.server;
                 RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
-            });
         }
 
         /// <summary>
@@ -110,14 +108,18 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task ConfigureRemoteAccess(string username, string password)
         {
-            if (!RemoteAccessEnabled) SetRemoteAccessEnabled(true);
+            if (!RemoteAccessEnabled)
+            {
+                await SetRemoteAccessEnabledAsync(true);
+            }
+
             try
-            {               
-                dynamic result = await Execute("cnCloud", "bind", new JObject
-                    {
-                        new JProperty("username", username),
-                        new JProperty("password", password)
-                    }, null);
+            {
+                dynamic result = await ExecuteAsync("cnCloud", "bind", new JObject
+                {
+                    new JProperty("username", username),
+                    new JProperty("password", password)
+                }, null);
             }
             catch (Exception e)
             {
@@ -137,30 +139,24 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Unbinds currently set account from cloud server
         /// </summary>
-        public void UnbindRemoteAccess()
+        public async Task UnbindRemoteAccess()
         {
-            Task.Run(async () =>
-            {
-                dynamic result = await Execute("cnCloud", "unbind");
-                SetRemoteAccessEnabled(false);
-            });
+            dynamic result = await ExecuteAsync("cnCloud", "unbind");
+            await SetRemoteAccessEnabledAsync(false);
         }
 
-        private void SetRemoteAccessEnabled(bool enabled, string server = "n-devs.tplinkcloud.com")
+        private async Task SetRemoteAccessEnabledAsync(bool enabled, string server = "n-devs.tplinkcloud.com")
         {
-            Task.Run(async () =>
+            if (enabled)
             {
-                if (enabled)
-                {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", server);
-                    RemoteAccessEnabled = true;
-                }
-                else
-                {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com");
-                    RemoteAccessEnabled = false;
-                }
-            });
+                dynamic result = await ExecuteAsync("cnCloud", "set_server_url", "server", server);
+                RemoteAccessEnabled = true;
+            }
+            else
+            {
+                dynamic result = await ExecuteAsync("cnCloud", "set_server_url", "server", "bogus.server.com");
+                RemoteAccessEnabled = false;
+            }
         }
     }
 }

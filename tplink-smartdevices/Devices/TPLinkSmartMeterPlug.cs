@@ -25,8 +25,8 @@ namespace TPLinkSmartDevices.Devices
 
         public new async Task Refresh()
         {
-            CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"), HardwareVersion);
-            _gainData = await Execute("emeter", "get_vgain_igain");
+            CurrentPowerUsage = new PowerData(await ExecuteAsync("emeter", "get_realtime"), HardwareVersion);
+            _gainData = await ExecuteAsync("emeter", "get_vgain_igain");
             await base.Refresh();
         }
 
@@ -37,7 +37,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("emeter", "erase_emeter_stat");
+                await ExecuteAsync("emeter", "erase_emeter_stat");
             });
         }
 
@@ -49,7 +49,7 @@ namespace TPLinkSmartDevices.Devices
         /// <param name = "year" ></param>
         public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
         {
-            dynamic result = await Execute("emeter", "get_daystat", new JObject
+            dynamic result = await ExecuteAsync("emeter", "get_daystat", new JObject
                 {
                     new JProperty("month", month),
                     new JProperty("year", year)
@@ -70,7 +70,7 @@ namespace TPLinkSmartDevices.Devices
         public async Task<Dictionary<int, int>> GetYearStats(int year)
         {
             //TODO: check if year is correct
-            dynamic result = await Execute("emeter", "get_monthstat", "year", year);
+            dynamic result = await ExecuteAsync("emeter", "get_monthstat", "year", year);
             var stats = new Dictionary<int, int>();
             foreach (dynamic month_stat in result.month_list)
             {

@@ -22,9 +22,9 @@ namespace TPLinkSmartDevices.Devices
 
         public string[] Features { get; private set; }
 
-        public TPLinkSmartPlug(string hostname, int port=9999) : base(hostname,port)
+        public TPLinkSmartPlug(string hostname, int port = 9999) : base(hostname, port)
         {
-            Task.Run(() => Refresh()).GetAwaiter().GetResult();
+            Task.Run(async () => await Refresh().ConfigureAwait(false)).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -32,13 +32,10 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");
+            dynamic sysInfo = await ExecuteAsync("system", "get_sysinfo");
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
-            if ((int)sysInfo.on_time == 0)
-                PoweredOnSince = default(DateTime);
-            else
-                PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
+            PoweredOnSince = (int)sysInfo.on_time == 0 ? default : DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
             await Refresh(sysInfo);
         }
@@ -46,25 +43,19 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which changes power state to plug
         /// </summary>
-        public void SetOutletPowered(bool value)
+        public async Task SetOutletPoweredAsync(bool value)
         {
-            Task.Run(async() =>
-            {
-                await Execute("system", "set_relay_state", "state", value ? 1 : 0);
-                this.OutletPowered = value;
-            });
+            await ExecuteAsync("system", "set_relay_state", "state", value ? 1 : 0);
+            OutletPowered = value;
         }
 
         /// <summary>
         /// Send command which enables or disables night mode (LED state)
         /// </summary>
-        public void SetLedOn(bool value)
+        public async Task SetLedOnAsync(bool value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("system", "set_led_off", "off", value ? 0 : 1);
-                this.LedOn = value;
-            });
+            await ExecuteAsync("system", "set_led_off", "off", value ? 0 : 1);
+            LedOn = value;
         }
     }
 }
