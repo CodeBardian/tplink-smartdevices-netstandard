@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Devices;
@@ -29,27 +30,32 @@ namespace TPLinkSmartDevices
             DiscoveredDevices = new List<TPLinkSmartDevice>();
         }
 
-        public async Task<List<TPLinkSmartDevice>> DiscoverAsync(int port = 9999, int timeout = 5000)
+        public async Task<List<TPLinkSmartDevice>> DiscoverAsync(int port = 9999, int waitTimeOutInMs = 5000)
         {
             discoveryComplete = false;
             DiscoveredDevices.Clear();
             PORT_NUMBER = port;
             await SendDiscoveryRequestAsync().ConfigureAwait(false);
-            await ReceiveAsync().ConfigureAwait(false);
+            await ReceiveAsync(waitTimeOutInMs).ConfigureAwait(false);
             return DiscoveredDevices;
         }
 
-        private async Task ReceiveAsync()
+        private async Task ReceiveAsync(int waitTimeOutInMs)
         {
             if (discoveryComplete) //Prevent ObjectDisposedException/NullReferenceException when the Close() function is called
             {
                 return;
             }
 
-            var udpListener = new UdpClient(PORT_NUMBER) { EnableBroadcast = true };
-            UdpReceiveResult response = await udpListener.ReceiveAsync().ConfigureAwait(false);
-            IPEndPoint ip = response.RemoteEndPoint;
-            var message = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(response.Buffer));
+            // force async
+            await Task.Yield();
+
+            UdpClient udpListener = new UdpClient(PORT_NUMBER) { EnableBroadcast = true };
+            // set timeout
+            udpListener.Client.ReceiveTimeout = Math.Max(waitTimeOutInMs, 100);
+            IPEndPoint ip = default;
+            byte[] buffer = udpListener.Receive(ref ip);
+            string message = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(buffer));
 
             try
             {
@@ -59,15 +65,15 @@ namespace TPLinkSmartDevices
 
                 if (model != null)
                 {
-                    if (model.StartsWith("HS110"))
+                    if (model.StartsWith("HS110", StringComparison.OrdinalIgnoreCase))
                     {
                         device = new TPLinkSmartMeterPlug(ip.Address.ToString());
                     }
-                    else if (model.StartsWith("HS"))
+                    else if (model.StartsWith("HS", StringComparison.OrdinalIgnoreCase))
                     {
                         device = new TPLinkSmartPlug(ip.Address.ToString());
                     }
-                    else if (model.StartsWith("KL") || model.StartsWith("LB"))
+                    else if (model.StartsWith("KL", StringComparison.OrdinalIgnoreCase) || model.StartsWith("LB", StringComparison.OrdinalIgnoreCase))
                     {
                         device = new TPLinkSmartBulb(ip.Address.ToString());
                     }
