@@ -118,7 +118,7 @@ namespace TPLinkSmartDevices.Devices
             bool isKlOrLbModel = Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase);
 
             // validate arguments
-            if (isKlOrLbModel && (hsv.Hue > 100 || hsv.Hue < 0))
+            if (hsv.Hue < 0)
             {
                 throw new InvalidOperationException("hue cannot be < 0 or > 100");
             }
@@ -134,6 +134,11 @@ namespace TPLinkSmartDevices.Devices
             // tp-link kl model doesn't support sending entire json object
             if (isKlOrLbModel)
             {
+                if (hsv.Hue > 360)
+                {
+                    throw new InvalidOperationException(nameof(hsv.Hue));
+                }
+
                 // the mode is always set to normal when allowing color changing
                 await ExecuteAsync(system, command, "mode", "normal").ConfigureAwait(false);
                 await Task.Delay(100).ConfigureAwait(false);
@@ -160,6 +165,11 @@ namespace TPLinkSmartDevices.Devices
             }
             else
             {
+                if (hsv.Hue > 100)
+                {
+                    throw new InvalidOperationException(nameof(hsv.Hue));
+                }
+
                 await ExecuteAsync(system, command, "light_state", new JObject
                 {
                     new JProperty("hue", hsv.Hue),
