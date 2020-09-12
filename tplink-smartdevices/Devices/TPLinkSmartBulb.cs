@@ -115,10 +115,10 @@ namespace TPLinkSmartDevices.Devices
                 throw new NotSupportedException("Bulb does not support color changes.");
             }
 
-            bool isKLModel = Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase);
+            bool isKlOrLbModel = Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase);
 
             // validate arguments
-            if (isKLModel && (hsv.Hue > 100 || hsv.Hue < 0))
+            if (isKlOrLbModel && (hsv.Hue > 100 || hsv.Hue < 0))
             {
                 throw new InvalidOperationException("hue cannot be < 0 or > 100");
             }
@@ -132,7 +132,7 @@ namespace TPLinkSmartDevices.Devices
             const string command = "transition_light_state";
 
             // tp-link kl model doesn't support sending entire json object
-            if (isKLModel)
+            if (isKlOrLbModel)
             {
                 // the mode is always set to normal when allowing color changing
                 await ExecuteAsync(system, command, "mode", "normal").ConfigureAwait(false);
@@ -147,7 +147,7 @@ namespace TPLinkSmartDevices.Devices
                     await Task.Delay(100).ConfigureAwait(false);
                 }
 
-                if (true)
+                if (Saturation != hsv.Saturation)
                 {
                     await ExecuteAsync(system, command, "saturation", hsv.Saturation).ConfigureAwait(false);
                     await Task.Delay(100).ConfigureAwait(false);
