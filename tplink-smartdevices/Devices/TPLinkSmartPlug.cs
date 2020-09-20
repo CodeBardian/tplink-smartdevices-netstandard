@@ -37,7 +37,7 @@ namespace TPLinkSmartDevices.Devices
             LedOn = !(bool)sysInfo.led_off;
             PoweredOnSince = (int)sysInfo.on_time == 0 ? default : DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
-            await Refresh(sysInfo);
+            await RefreshAsync(sysInfo);
         }
 
         /// <summary>

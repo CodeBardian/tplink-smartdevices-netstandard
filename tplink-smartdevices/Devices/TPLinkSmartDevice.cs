@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Net;
+﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Messaging;
 
@@ -10,29 +9,29 @@ namespace TPLinkSmartDevices.Devices
     {
         const byte INITIALIZATION_VECTOR = 171;
 
-        public string Hostname { get; private set; }
-        public int Port { get; private set; }
+        public string Hostname { get; protected set; }
+        public int Port { get; protected set; }
 
         public IMessageCache MessageCache { get; } = new TimeGatedMessageCache(2);
 
-        public string SoftwareVersion { get; private set; }
-        public string HardwareVersion { get; private set; }
-        public string Type { get; private set; }
-        public string Model { get; private set; }
-        public string MacAddress { get; private set; }
-        public string DevName { get; private set; }
-        public string HardwareId { get; private set; }
-        public string FirmwareId { get; private set; }
-        public string DeviceId { get; private set; }
-        public string OemId { get; private set; }
-        public string CloudServer { get; private set; }
-        public bool RemoteAccessEnabled { get; set; }
-        public int RSSI { get; private set; }
-        public double[] LocationLatLong { get; private set; }
+        public string SoftwareVersion { get; protected set; }
+        public string HardwareVersion { get; protected set; }
+        public string Type { get; protected set; }
+        public string Model { get; protected set; }
+        public string MacAddress { get; protected set; }
+        public string DevName { get; protected set; }
+        public string HardwareId { get; protected set; }
+        public string FirmwareId { get; protected set; }
+        public string DeviceId { get; protected set; }
+        public string OemId { get; protected set; }
+        public string CloudServer { get; protected set; }
+        public bool RemoteAccessEnabled { get; protected set; }
+        public int RSSI { get; protected set; }
+        public double[] LocationLatLong { get; protected set; }
 
-        public string Alias { get; private set; }
+        public string Alias { get; protected set; }
 
-        private DateTime CurrentTime { get; set; }
+        protected DateTime CurrentTime { get; set; }
 
         protected TPLinkSmartDevice(string hostname, int port = 9999)
         {
@@ -43,12 +42,12 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public async Task Refresh(dynamic sysInfo = null)
+        public virtual async Task RefreshAsync(dynamic sysInfo)
         {
-            await GetCloudInfo();
+            //await GetCloudInfo().ConfigureAwait(false);
             if (sysInfo == null)
             {
-                sysInfo = await ExecuteAsync("system", "get_sysinfo");
+                sysInfo = await ExecuteAsync("system", "get_sysinfo").ConfigureAwait(false);
             }
 
             SoftwareVersion = sysInfo.sw_ver;
@@ -63,6 +62,7 @@ namespace TPLinkSmartDevices.Devices
             DeviceId = sysInfo.deviceId;
             OemId = sysInfo.oemId;
             RSSI = sysInfo.rssi;
+            Model = sysInfo.model;
 
             if (sysInfo.latitude != null)
             {
@@ -77,10 +77,13 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Sends command to device and returns answer 
         /// </summary>
-        protected async Task<dynamic> ExecuteAsync(string system, string command, object argument = null, object value = null)
+        protected async Task<JsonElement> ExecuteAsync(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
-            return await MessageCache.Request(message, Hostname, Port);
+            JsonElement result = await MessageCache.Request(message, Hostname, Port);
+
+            return result;
+            //return JsonDocument.Parse(result).RootElement;
         }
 
         public Task SetAlias(string value)
@@ -91,16 +94,28 @@ namespace TPLinkSmartDevices.Devices
 
         public async Task<DateTime> GetTimeAsync()  //refactor needed
         {
-            dynamic rawTime = await ExecuteAsync("time", "get_time");
-            return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
+            var rawTime = await ExecuteAsync("time", "get_time");
+            int year = rawTime.GetProperty("year").GetInt32();
+            int month = rawTime.GetProperty("month").GetInt32();
+            int day = rawTime.GetProperty("day").GetInt32(); // todo: use mday?
+            int hour = rawTime.GetProperty("hour").GetInt32();
+            int min = rawTime.GetProperty("min").GetInt32();
+            int sec = rawTime.GetProperty("sec").GetInt32();
+            return new DateTime(year, month, day, hour, min, sec);
         }
 
         public async Task GetCloudInfo()
         {
-           
-                dynamic cloudInfo = await ExecuteAsync("cnCloud", "get_info");
-                CloudServer = cloudInfo.server;
-                RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
+            try
+            {
+                var cloudInfo = await ExecuteAsync("cnCloud", "get_info").ConfigureAwait(false);
+                CloudServer = cloudInfo.GetProperty("server").GetString();
+                RemoteAccessEnabled = cloudInfo.GetProperty("binded").GetBoolean();
+            }
+            catch (Exception)
+            {
+                RemoteAccessEnabled = false;
+            }
         }
 
         /// <summary>
@@ -110,16 +125,16 @@ namespace TPLinkSmartDevices.Devices
         {
             if (!RemoteAccessEnabled)
             {
-                await SetRemoteAccessEnabledAsync(true);
+                await SetRemoteAccessEnabledAsync(true).ConfigureAwait(false);
             }
 
             try
             {
-                dynamic result = await ExecuteAsync("cnCloud", "bind", new JObject
+                await ExecuteAsync("cnCloud", "bind", new
                 {
-                    new JProperty("username", username),
-                    new JProperty("password", password)
-                }, null);
+                    username = username,
+                    password = password
+                }, null).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -141,7 +156,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task UnbindRemoteAccess()
         {
-            dynamic result = await ExecuteAsync("cnCloud", "unbind");
+            await ExecuteAsync("cnCloud", "unbind").ConfigureAwait(false);
             await SetRemoteAccessEnabledAsync(false);
         }
 
@@ -149,12 +164,12 @@ namespace TPLinkSmartDevices.Devices
         {
             if (enabled)
             {
-                dynamic result = await ExecuteAsync("cnCloud", "set_server_url", "server", server);
+                await ExecuteAsync("cnCloud", "set_server_url", "server", server).ConfigureAwait(false);
                 RemoteAccessEnabled = true;
             }
             else
             {
-                dynamic result = await ExecuteAsync("cnCloud", "set_server_url", "server", "bogus.server.com");
+                await ExecuteAsync("cnCloud", "set_server_url", "server", "bogus.server.com").ConfigureAwait(false);
                 RemoteAccessEnabled = false;
             }
         }

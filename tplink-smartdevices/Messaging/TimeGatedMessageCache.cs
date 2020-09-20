@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TPLinkSmartDevices.Messaging
@@ -16,7 +17,7 @@ namespace TPLinkSmartDevices.Messaging
             TimeGateResetSeconds = resetTimeSeconds;
         }
 
-        public override async Task<dynamic> Request(SmartHomeProtocolMessage message, string hostname, int port)
+        public override async Task<JsonElement> Request(SmartHomeProtocolMessage message, string hostname, int port)
         {
             var cachedMessage = _cache.FirstOrDefault(c => c.Matches(message, hostname, port));
 
@@ -41,7 +42,7 @@ namespace TPLinkSmartDevices.Messaging
             internal dynamic MessageResult { get; set; }
             internal DateTime Cached { get; set; }
 
-            internal MessageCacheItem(dynamic messageResult, string hostname, int port)
+            internal MessageCacheItem(JsonElement messageResult, string hostname, int port)
             {
                 MessageResult = messageResult;
                 Hostname = hostname;

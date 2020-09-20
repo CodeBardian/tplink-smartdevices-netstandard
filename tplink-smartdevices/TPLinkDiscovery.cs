@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Devices;
 using TPLinkSmartDevices.Events;
@@ -35,6 +36,7 @@ namespace TPLinkSmartDevices
             discoveryComplete = false;
             DiscoveredDevices.Clear();
             PORT_NUMBER = port;
+
             await SendDiscoveryRequestAsync().ConfigureAwait(false);
             await ReceiveAsync(waitTimeOutInMs).ConfigureAwait(false);
             return DiscoveredDevices;
@@ -48,14 +50,18 @@ namespace TPLinkSmartDevices
             }
 
             // force async
-            await Task.Yield();
+            //await Task.Yield(); // force main thread to return and do async work
 
             UdpClient udpListener = new UdpClient(PORT_NUMBER) { EnableBroadcast = true };
+
             // set timeout
-            udpListener.Client.ReceiveTimeout = Math.Max(waitTimeOutInMs, 100);
-            IPEndPoint ip = default;
-            byte[] buffer = udpListener.Receive(ref ip);
-            string message = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(buffer));
+            //udpListener.Client.ReceiveTimeout = Math.Max(waitTimeOutInMs, 100);
+            //IPEndPoint ip = default;
+            //byte[] buffer = udpListener.Receive(ref ip);
+
+            UdpReceiveResult response = await udpListener.ReceiveAsync().ConfigureAwait(false);
+            IPEndPoint ip = response.RemoteEndPoint;
+            var message = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(response.Buffer));
 
             try
             {
@@ -75,7 +81,8 @@ namespace TPLinkSmartDevices
                     }
                     else if (model.StartsWith("KL", StringComparison.OrdinalIgnoreCase) || model.StartsWith("LB", StringComparison.OrdinalIgnoreCase))
                     {
-                        device = new TPLinkSmartBulb(ip.Address.ToString());
+                        device = await TPLinkKL130.CreateNew(ip.Address.ToString());
+                        //device = new TPLinkSmartBulb(ip.Address.ToString());
                     }
 
                     // new device found, store in list and raise event

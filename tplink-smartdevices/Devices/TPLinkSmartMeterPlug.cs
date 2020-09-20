@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
@@ -17,9 +15,9 @@ namespace TPLinkSmartDevices.Devices
 
         public TPLinkSmartMeterPlug(string hostname) : base(hostname)
         {
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
-                await Refresh();   
+                await Refresh();
             }).GetAwaiter().GetResult();
         }
 
@@ -49,13 +47,12 @@ namespace TPLinkSmartDevices.Devices
         /// <param name = "year" ></param>
         public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
         {
-            dynamic result = await ExecuteAsync("emeter", "get_daystat", new JObject
-                {
-                    new JProperty("month", month),
-                    new JProperty("year", year)
-                }, null);
+            var result = await ExecuteAsync("emeter", "get_daystat", new { month, year }, null);
             var stats = new Dictionary<DateTime, int>();
-            foreach (dynamic day_stat in result.day_list)
+
+            // TODO: include
+            //foreach (dynamic day_stat in result.GetProperty("day_list").EnumerateObject())
+            foreach (dynamic day_stat in result.GetProperty("day_list").EnumerateArray())
             {
                 stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (int)day_stat.energy);
             }

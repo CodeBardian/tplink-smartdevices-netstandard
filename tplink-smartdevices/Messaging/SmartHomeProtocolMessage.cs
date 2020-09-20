@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TPLinkSmartDevices.Messaging
@@ -39,9 +40,18 @@ namespace TPLinkSmartDevices.Messaging
             {
                 object argObject;
                 if (Value != null)
+                {
                     argObject = new JObject { new JProperty(Argument.ToString(), Value) };
+                    // todo: how to handle this (extrat object name from property dynamically)
+                    //argObject = new object
+                    //{
+                    //    Argument.ToString() = Value,
+                    //};
+                }
                 else
+                {
                     argObject = Argument;
+                }
 
                 var root = new JObject { new JProperty(System, new JObject { new JProperty(Command, argObject) }) };
 
@@ -62,7 +72,7 @@ namespace TPLinkSmartDevices.Messaging
             Value = value;
         }
 
-        internal async Task<dynamic> Execute(string hostname, int port)
+        internal async Task<JsonElement> Execute(string hostname, int port)
         {
             var messageToSend = SmartHomeProtocolEncoder.Encrypt(JSON);
 
@@ -71,7 +81,7 @@ namespace TPLinkSmartDevices.Messaging
 
             if (!client.Connected)
             {
-                return null;
+                return default(JsonElement);
             }
 
             byte[] packet = new byte[0];
@@ -90,7 +100,7 @@ namespace TPLinkSmartDevices.Messaging
                     if (!buffer.Any())
                     {
                         var lengthBytes = chunk.Take(4).ToArray();
-                        if (BitConverter.IsLittleEndian) 
+                        if (BitConverter.IsLittleEndian)
                             lengthBytes = lengthBytes.Reverse().ToArray();
                         targetSize = (int)BitConverter.ToUInt32(lengthBytes, 0);
                     }
@@ -106,11 +116,23 @@ namespace TPLinkSmartDevices.Messaging
 
             var decrypted = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(packet)).Trim('\0');
 
-            var subResult = (dynamic)((JObject)JObject.Parse(decrypted)[System])[Command];
-            if (subResult["err_code"] != null && subResult.err_code != 0)
-                throw new Exception($"Protocol error {subResult.err_code} ({subResult.err_msg})");
+            JsonDocument jdoc = JsonDocument.Parse(decrypted);
+            JsonElement root = jdoc.RootElement;
 
-            return subResult;
+            if (root.GetProperty("system").TryGetProperty(Command, out JsonElement commandEl))
+            {
+                if (commandEl.TryGetProperty("err_code", out JsonElement errCode) && errCode.GetInt32() != 0)
+                {
+                    throw new Exception($"Protocol error {errCode.GetInt32()} ({commandEl.GetProperty("err_msg").GetString()})");
+                }
+            }
+
+            //var subResult = (dynamic)((JObject)JObject.Parse(decrypted)[System])[Command];
+            //if (subResult["err_code"] != null && subResult.err_code != 0)
+            //    throw new Exception($"Protocol error {subResult.err_code} ({subResult.err_msg})");
+
+
+            return commandEl;
         }
     }
 }
