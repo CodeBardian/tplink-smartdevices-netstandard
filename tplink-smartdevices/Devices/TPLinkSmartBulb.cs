@@ -65,7 +65,7 @@ namespace TPLinkSmartDevices.Devices
 
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
-            Task.Run(() => Refresh()).GetAwaiter().GetResult();
+            Task.Run(async() => await Refresh()).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -79,14 +79,14 @@ namespace TPLinkSmartDevices.Devices
             IsVariableColorTemperature = (bool)sysInfo.is_variable_color_temp;
 
             dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state"); //
-            _poweredOn = lightState.on_off;
+            _poweredOn = (bool)lightState.on_off;
 
             if (!_poweredOn)
                 lightState = lightState.dft_on_state;
             
-            _hsv = new BulbHSV() { Hue = lightState.hue, Saturation = lightState.saturation, Value = lightState.brightness * 255 / 100 };
-            _colorTemp = lightState.color_temp;
-            _brightness = lightState.brightness;
+            _hsv = new BulbHSV() { Hue = (int)lightState.hue, Saturation = (int)lightState.saturation, Value = (int)lightState.brightness };
+            _colorTemp = (int)lightState.color_temp;
+            _brightness = (int)lightState.brightness;
             
             await Refresh(sysInfo);
         }
@@ -138,11 +138,11 @@ namespace TPLinkSmartDevices.Devices
             {
                 Task.Run(async () =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
+                    dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
                     {
                         new JProperty("hue", hsv.Hue),
                         new JProperty("saturation", hsv.Saturation),
-                        new JProperty("brightness", (int)(hsv.Value * 100 / 255)),
+                        new JProperty("brightness", hsv.Value),
                     }, null);
                     _hsv = hsv;
                 });
