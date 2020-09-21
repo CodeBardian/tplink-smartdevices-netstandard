@@ -7,102 +7,132 @@ namespace TPLinkSmartDevices.Devices
 {
     public partial class TPLinkSmartBulb : TPLinkSmartDevice
     {
-        private bool _poweredOn;
-        private BulbHSV _hsv;
-        private int _colorTemp;
-        private int _brightness;
+        protected bool _poweredOn;
+        protected BulbHSV _hsv;
+        protected int _colorTemp;
+        protected int _brightness;
 
-        public bool IsColor { get; private set; }
-        public bool IsDimmable { get; private set; }
-        public bool IsVariableColorTemperature { get; private set; }
+        public bool IsColor { get; protected set; }
+        public bool IsDimmable { get; protected set; }
+        public bool IsVariableColorTemperature { get; protected set; }
 
         /// <summary>
         /// If the bulb is powered on or not
         /// </summary>
-        public bool PoweredOn { get; private set; }
+        public bool PoweredOn { get; protected set; }
 
         /// <summary>
         /// Bulb color defined by HSV and color temp
         /// </summary>
-        public BulbHSV HSV
-        {
-            get
-            {
-                if (!IsColor)
-                    throw new NotSupportedException("Bulb does not support color changes.");
-                return _hsv;
-            }
-            private set { }
-        }
+        public BulbHSV HSV => !IsColor ? throw new NotSupportedException("Bulb does not support color changes.") : _hsv;
 
         /// <summary>
         /// Color temperature in Kelvin
         /// </summary>
-        public int ColorTemperature
-        {
-            get
-            {
-                if (!IsVariableColorTemperature)
-                    throw new NotSupportedException("Bulb does not support color temperature changes.");
-                return _colorTemp;
-            }
-            private set { }
-        }
+        public virtual int ColorTemperature => !IsVariableColorTemperature
+                    ? throw new NotSupportedException("Bulb does not support color temperature changes.")
+                    : _colorTemp;
 
         /// <summary>
         /// Bulb brightness in percent
         /// </summary>
-        public int Brightness
-        {
-            get
-            {
-                if (!IsDimmable)
-                    throw new NotSupportedException("Bulb does not support dimming.");
-                return _brightness;
-            }
-            private set { }
-        }
+        public int Brightness => !IsDimmable ? throw new NotSupportedException("Bulb does not support dimming.") : _brightness;
 
-        public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
+        public TPLinkSmartBulb(string hostName, int port = 9999) : base(hostName, port)
         {
-            Task.Run(() => Refresh()).GetAwaiter().GetResult();
+            //Task.Run(async () => await RefreshAsync()).GetAwaiter().GetResult();
         }
 
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public async Task Refresh()
+        public virtual async Task RefreshAsync()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");//
-            IsColor = (bool)sysInfo.is_color;
-            IsDimmable = (bool)sysInfo.is_dimmable;
-            IsVariableColorTemperature = (bool)sysInfo.is_variable_color_temp;
+            //var sysInfo = await ExecuteAsync("system", "get_sysinfo").ConfigureAwait(false);
+            //IsColor = (bool)sysInfo.is_color;
+            //IsDimmable = (bool)sysInfo.is_dimmable;
+            //IsVariableColorTemperature = (bool)sysInfo.is_variable_color_temp;
 
-            dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state"); //
-            _poweredOn = lightState.on_off;
+            //try
+            //{
+            //    // not supported by all smart bulb - so that exception is very likely to happen
+            //    Saturation = (int)sysInfo.light_state.saturation;
+            //}
+            //catch
+            //{
+            //    Saturation = 0;
+            //}
 
-            if (!_poweredOn)
-                lightState = lightState.dft_on_state;
-            
-            _hsv = new BulbHSV() { Hue = lightState.hue, Saturation = lightState.saturation, Value = lightState.brightness * 255 / 100 };
-            _colorTemp = lightState.color_temp;
-            _brightness = lightState.brightness;
-            
-            await Refresh(sysInfo);
+            //// todo: retrive the information in lightstate from sysinfo instead (tested in model kl)
+            //var lightState = await ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "get_light_state").ConfigureAwait(false);
+
+            ////_poweredOn = lightState.on_off;
+            //_poweredOn = sysInfo.light_state.on_off;
+
+
+            ///*{{
+            //  "on_off": 0,
+            //  "dft_on_state": {
+            //    "mode": "normal",
+            //    "hue": 270,
+            //    "saturation": 100,
+            //    "color_temp": 5750,
+            //    "brightness": 100
+            //  },
+            //  "err_code": 0
+            //}}*/
+
+            //try
+            //{
+            //    _colorTemp = lightState.color_temp;
+            //}
+            //catch
+            //{
+
+            //}
+
+            //_brightness = lightState.brightness;
+
+            //if (!_poweredOn)
+            //{
+            //    lightState = lightState.dft_on_state;
+            //}
+
+            //// TODO: ADD configureaAwait();
+            ////await RefreshAsync(sysInfo)
+            ////await RefreshAsync().ConfigureAwait(false);
+            //await RefreshAsync(sysInfo).ConfigureAwait(false);
+
+            //// todo: don't use the factor of 255 / 100 for kl/lb models
+            //if (Model != null && (Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase)))
+            //{
+            //    _hsv = new BulbHSV()
+            //    {
+            //        Hue = lightState.hue,
+            //        Saturation = lightState.saturation,
+            //        Value = lightState.brightness <= 100 ? lightState.brightness : lightState.brightness * 100 / 255
+            //    };
+            //}
+            //else
+            //{
+            //    _hsv = new BulbHSV()
+            //    {
+            //        Hue = lightState.hue,
+            //        Saturation = lightState.saturation,
+            //        Value = lightState.brightness * 255 / 100
+            //    };
+            //}
         }
 
         /// <summary>
         /// Set Bulb brightness in percent
         /// </summary>
-        public void SetBrightness(int brightness)
+        public virtual Task SetBrightnessAsync(int brightness)
         {
             if (IsDimmable)
             {
-                Task.Run(async() =>
-                {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "brightness", brightness);
-                    _brightness = brightness;
-                });
+                _brightness = brightness;
+                return ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "brightness", brightness);
             }
             else
             {
@@ -113,15 +143,12 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set Color Temp in Kelvin
         /// </summary>
-        public void SetColorTemp(int colortemp)
+        public virtual Task SetColorTempAsync(int colortemp)
         {
             if (IsVariableColorTemperature)
             {
-                Task.Run(async () =>
-                {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "color_temp", colortemp);
-                    _colorTemp = colortemp;
-                });
+                _colorTemp = colortemp;
+                return ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "color_temp", colortemp);
             }
             else
             {
@@ -132,38 +159,56 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set HSV color
         /// </summary>
-        public void SetHSV(BulbHSV hsv)
+        public virtual async Task SetHSVAsync(BulbHSV hsv)
         {
-            if (IsColor)
+            ValidateHsv(hsv);
+
+            const string system = "smartlife.iot.smartbulb.lightingservice";
+            const string command = "transition_light_state";
+
+            if (hsv.Hue > 100)
             {
-                Task.Run(async () =>
-                {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "light_state", new JObject
-                    {
-                        new JProperty("hue", hsv.Hue),
-                        new JProperty("saturation", hsv.Saturation),
-                        new JProperty("brightness", (int)(hsv.Value * 100 / 255)),
-                        new JProperty("color_temp", 0)
-                    });
-                    _hsv = hsv;
-                });
+                throw new InvalidOperationException(nameof(hsv.Hue));
             }
-            else
+
+            await ExecuteAsync(system, command, "light_state", new JObject
+            {
+                new JProperty("hue", hsv.Hue),
+                new JProperty("saturation", hsv.Saturation),
+                new JProperty("brightness", hsv.Value * 100 / 255),
+                new JProperty("color_temp", 0)
+            }).ConfigureAwait(false);
+
+            _hsv = hsv;
+        }
+
+        protected void ValidateHsv(BulbHSV hsv)
+        {
+            if (!IsColor)
             {
                 throw new NotSupportedException("Bulb does not support color changes.");
+            }
+
+            // validate arguments
+            if (hsv.Hue < 0)
+            {
+                throw new InvalidOperationException("hue cannot be < 0 or > 100");
+            }
+
+            if (hsv.Saturation > 100 || hsv.Saturation < 0)
+            {
+                throw new InvalidOperationException("saturation cannot be < 0 or > 100");
             }
         }
 
         /// <summary>
         /// Set power state of bulb
         /// </summary>
-        public void SetPoweredOn(bool value)
+        public virtual async Task SetPoweredOn(bool value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0);
-                _poweredOn = value;
-            });
+            await ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0);
+            _poweredOn = value;
         }
+
     }
 }

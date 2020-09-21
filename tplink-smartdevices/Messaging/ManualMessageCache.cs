@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TPLinkSmartDevices.Messaging
@@ -13,12 +14,12 @@ namespace TPLinkSmartDevices.Messaging
             _cache.Clear();
         }
 
-        public override async Task<dynamic> Request(SmartHomeProtocolMessage message, string hostname, int port = 9999)
+        public override async Task<JsonElement> Request(SmartHomeProtocolMessage message, string hostname, int port = 9999)
         {
             var cachedMessage = _cache.FirstOrDefault(c => c.Matches(message, hostname, port));
 
             if (cachedMessage != null)
-                return cachedMessage;
+                return cachedMessage.MessageResult;
 
             var result = await message.Execute(hostname, port);
             _cache.Add(new MessageCacheItem(result, hostname, port));
