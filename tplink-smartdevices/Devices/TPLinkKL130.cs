@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
@@ -9,7 +10,6 @@ namespace TPLinkSmartDevices.Devices
     public class TPLinkKL130 : TPLinkSmartBulb
     {
         public int Saturation { get; protected set; }
-
         public override int ColorTemperature => _colorTemp;
         public string ActiveMode { get; private set; }
         public string Mode { get; protected set; }
@@ -42,27 +42,35 @@ namespace TPLinkSmartDevices.Devices
             IsDimmable = Convert.ToBoolean(sysInfo.GetProperty("is_dimmable").GetInt32());
             IsVariableColorTemp = Convert.ToBoolean(sysInfo.GetProperty("is_variable_color_temp").GetInt32());
             IsVariableColorTemperature = Convert.ToBoolean(sysInfo.GetProperty("is_variable_color_temp").GetInt32());
-            _poweredOn = Convert.ToBoolean(sysInfo.GetProperty("light_state").GetProperty("on_off").GetInt32());
-            _brightness = sysInfo.GetProperty("light_state").GetProperty("brightness").GetInt32();
-            Saturation = sysInfo.GetProperty("light_state").GetProperty("saturation").GetInt32();
-            _colorTemp = sysInfo.GetProperty("light_state").GetProperty("color_temp").GetInt32();
-            Mode = sysInfo.GetProperty("light_state").GetProperty("mode").GetString();
+
+            JsonElement lightState = sysInfo.GetProperty("light_state");
+            _poweredOn = Convert.ToBoolean(lightState.GetProperty("on_off").GetInt32());
+
+            // when on off state the object changes
+            if (!_poweredOn)
+            {
+                lightState = lightState.GetProperty("dft_on_state");
+            }
+
+            // load light state
+            Saturation = lightState.GetProperty("saturation").GetInt32();
+            _brightness = lightState.GetProperty("brightness").GetInt32();
+            _colorTemp = lightState.GetProperty("color_temp").GetInt32();
+            Mode = lightState.GetProperty("mode").GetString();
             Description = sysInfo.GetProperty("description").GetString();
             ActiveMode = sysInfo.GetProperty("active_mode").GetString();
             IsFactory = sysInfo.GetProperty("is_factory").GetBoolean();
 
-            // TODO: does this object change when the light is off? will we have this prop "dft_on_state"?
-            /*{{
-              "on_off": 0,
-              "dft_on_state": {
-                "mode": "normal",
-                "hue": 270,
-                "saturation": 100,
-                "color_temp": 5750,
-                "brightness": 100
-              },
-              "err_code": 0
-            }}*/
+            // load prefered light states
+            PreferedLightStates = sysInfo.GetProperty("preferred_state").EnumerateArray().Select(obj => new PreferedLightState
+            {
+                Index = obj.GetProperty("index").GetInt32(),
+                Hue = obj.GetProperty("hue").GetInt32(),
+                Saturation = obj.GetProperty("saturation").GetInt32(),
+                ColorTemp = obj.GetProperty("color_temp").GetInt32(),
+                Brightness = obj.GetProperty("brightness").GetInt32(),
+            }).ToList<IPreferedLIghtState>();
+
 
             //// todo: don't use the factor of 255 / 100 for kl/lb models
             //if (Model != null && (Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase)))
@@ -85,16 +93,43 @@ namespace TPLinkSmartDevices.Devices
             //}
         }
 
-        public override Task SetHSVAsync(BulbHSV hsv)
+        public async override Task SetHSVAsync(BulbHSV hsv)
         {
-            return base.SetHSVAsync(hsv);
+            // validate hsv model
+            ValidateHsv(hsv);
+
+            // validate heu (this is represented in degrees)
+            if (hsv.Hue > 360)
+            {
+                throw new InvalidOperationException(nameof(hsv.Hue));
+            }
+
+            const string system = "smartlife.iot.smartbulb.lightingservice";
+            const string command = "transition_light_state";
+
+            // the mode is always set to normal when allowing color changing
+            await ExecuteAsync(system, command, "mode", "normal").ConfigureAwait(false);
+            await Task.Delay(100).ConfigureAwait(false);
+            await ExecuteAsync(system, command, "color_temp", 0).ConfigureAwait(false);
+            await Task.Delay(100).ConfigureAwait(false);
+            if (Brightness != hsv.Brightness)
+            {
+                await ExecuteAsync(system, command, "brightness", hsv.Brightness).ConfigureAwait(false);
+                await Task.Delay(100).ConfigureAwait(false);
+            }
+            if (Saturation != hsv.Saturation)
+            {
+                await ExecuteAsync(system, command, "saturation", hsv.Saturation).ConfigureAwait(false);
+                await Task.Delay(100).ConfigureAwait(false);
+            }
+            if (_hsv.Hue != hsv.Hue)
+            {
+                await ExecuteAsync(system, command, "hue", hsv.Hue).ConfigureAwait(false);
+            }
         }
 
-        // TODO!
         public static async Task<TPLinkKL130> CreateNew(string hostname)
         {
-            // get data from the buld
-            // init new buld instance
             var smartBulb = new TPLinkKL130(hostname);
             await smartBulb.RefreshAsync().ConfigureAwait(false);
             return smartBulb;
@@ -122,27 +157,19 @@ namespace TPLinkSmartDevices.Devices
 
     public class LightState : ILightState
     {
-        public bool OnOff => throw new NotImplementedException();
-
-        public int Hue => throw new NotImplementedException();
-
-        public int Saturation => throw new NotImplementedException();
-
-        public int ColorTemp => throw new NotImplementedException();
-
-        public int Brightness => throw new NotImplementedException();
+        public int Hue { get; set; }
+        public int Saturation { get; set; }
+        public int ColorTemp { get; set; }
+        public int Brightness { get; set; }
+        public bool OnOff { get; set; }
     }
 
     public class PreferedLightState : IPreferedLIghtState
     {
-        public int Index => throw new NotImplementedException();
-
-        public int Hue => throw new NotImplementedException();
-
-        public int Saturation => throw new NotImplementedException();
-
-        public int ColorTemp => throw new NotImplementedException();
-
-        public int Brightness => throw new NotImplementedException();
+        public int Index { get; set; }
+        public int Hue { get; set; }
+        public int Saturation { get; set; }
+        public int ColorTemp { get; set; }
+        public int Brightness { get; set; }
     }
 }

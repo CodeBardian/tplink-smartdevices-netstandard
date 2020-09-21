@@ -161,12 +161,33 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public virtual async Task SetHSVAsync(BulbHSV hsv)
         {
+            ValidateHsv(hsv);
+
+            const string system = "smartlife.iot.smartbulb.lightingservice";
+            const string command = "transition_light_state";
+
+            if (hsv.Hue > 100)
+            {
+                throw new InvalidOperationException(nameof(hsv.Hue));
+            }
+
+            await ExecuteAsync(system, command, "light_state", new JObject
+            {
+                new JProperty("hue", hsv.Hue),
+                new JProperty("saturation", hsv.Saturation),
+                new JProperty("brightness", hsv.Value * 100 / 255),
+                new JProperty("color_temp", 0)
+            }).ConfigureAwait(false);
+
+            _hsv = hsv;
+        }
+
+        protected void ValidateHsv(BulbHSV hsv)
+        {
             if (!IsColor)
             {
                 throw new NotSupportedException("Bulb does not support color changes.");
             }
-
-            bool isKlOrLbModel = Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase);
 
             // validate arguments
             if (hsv.Hue < 0)
@@ -178,61 +199,6 @@ namespace TPLinkSmartDevices.Devices
             {
                 throw new InvalidOperationException("saturation cannot be < 0 or > 100");
             }
-
-            const string system = "smartlife.iot.smartbulb.lightingservice";
-            const string command = "transition_light_state";
-
-            // tp-link kl model doesn't support sending entire json object
-            if (isKlOrLbModel)
-            {
-                if (hsv.Hue > 360)
-                {
-                    throw new InvalidOperationException(nameof(hsv.Hue));
-                }
-
-                // the mode is always set to normal when allowing color changing
-                await ExecuteAsync(system, command, "mode", "normal").ConfigureAwait(false);
-                await Task.Delay(100).ConfigureAwait(false);
-
-                //await ExecuteAsync(system, command, "color_temp", 0).ConfigureAwait(false);
-                //await Task.Delay(100).ConfigureAwait(false);
-
-                if (Brightness != hsv.Brightness)
-                {
-                    await ExecuteAsync(system, command, "brightness", hsv.Brightness).ConfigureAwait(false);
-                    await Task.Delay(100).ConfigureAwait(false);
-                }
-
-                // TODO: INCLUDE
-                //if (Saturation != hsv.Saturation)
-                //{
-                //    await ExecuteAsync(system, command, "saturation", hsv.Saturation).ConfigureAwait(false);
-                //    await Task.Delay(100).ConfigureAwait(false);
-                //}
-
-                if (_hsv.Hue != hsv.Hue)
-                {
-                    await ExecuteAsync(system, command, "hue", hsv.Hue).ConfigureAwait(false);
-                }
-            }
-            else
-            {
-                if (hsv.Hue > 100)
-                {
-                    throw new InvalidOperationException(nameof(hsv.Hue));
-                }
-
-                // TODO: INCLUDE
-                //await ExecuteAsync(system, command, "light_state", new JObject
-                //{
-                //    new JProperty("hue", hsv.Hue),
-                //    new JProperty("saturation", hsv.Saturation),
-                //    new JProperty("brightness", hsv.Value * 100 / 255),
-                //    new JProperty("color_temp", 0)
-                //}).ConfigureAwait(false);
-            }
-
-            _hsv = hsv;
         }
 
         /// <summary>

@@ -80,10 +80,7 @@ namespace TPLinkSmartDevices.Devices
         protected async Task<JsonElement> ExecuteAsync(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
-            JsonElement result = await MessageCache.Request(message, Hostname, Port);
-
-            return result;
-            //return JsonDocument.Parse(result).RootElement;
+            return await MessageCache.Request(message, Hostname, Port);
         }
 
         public Task SetAlias(string value)
