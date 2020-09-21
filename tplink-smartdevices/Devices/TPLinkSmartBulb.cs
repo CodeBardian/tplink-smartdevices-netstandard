@@ -138,13 +138,12 @@ namespace TPLinkSmartDevices.Devices
             {
                 Task.Run(async () =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "light_state", new JObject
+                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
                     {
                         new JProperty("hue", hsv.Hue),
                         new JProperty("saturation", hsv.Saturation),
                         new JProperty("brightness", (int)(hsv.Value * 100 / 255)),
-                        new JProperty("color_temp", 0)
-                    });
+                    }, null);
                     _hsv = hsv;
                 });
             }
