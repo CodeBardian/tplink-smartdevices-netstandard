@@ -143,6 +143,7 @@ namespace TPLinkSmartDevices.Devices
                         new JProperty("hue", hsv.Hue),
                         new JProperty("saturation", hsv.Saturation),
                         new JProperty("brightness", hsv.Value),
+                        new JProperty("color_temp", 0)
                     }, null);
                     _hsv = hsv;
                 });
