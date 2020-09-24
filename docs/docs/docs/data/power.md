@@ -22,7 +22,7 @@ public double Amperage { get; private set; }
 public double Power { get; private set; }
 ```
 
-### `Power`
+### `Total`
 : Total power consumption in kilowatthours
 ``` csharp
 public double Total { get; private set; }
