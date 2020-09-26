@@ -1,5 +1,17 @@
 ## Changelog
 
+### [1.0.4] - unreleased
+
+#### Added
+
+- light details of smart bulbs
+
+#### Changed
+
+#### Fixed
+- color changing of kl-130 model
+- exception on discovering kl-130 model
+
 ### [1.0.3] - 2020-08-08
 
 #### Added

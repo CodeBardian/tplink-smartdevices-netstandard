@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
@@ -11,6 +12,8 @@ namespace TPLinkSmartDevices.Devices
         private BulbHSV _hsv;
         private int _colorTemp;
         private int _brightness;
+        
+        public LightDetails LightDetails { get; private set; }
 
         public bool IsColor { get; private set; }
         public bool IsDimmable { get; private set; }
@@ -87,8 +90,20 @@ namespace TPLinkSmartDevices.Devices
             _hsv = new BulbHSV() { Hue = (int)lightState.hue, Saturation = (int)lightState.saturation, Value = (int)lightState.brightness };
             _colorTemp = (int)lightState.color_temp;
             _brightness = (int)lightState.brightness;
-            
+
+            dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details");
+            LightDetails = JsonConvert.DeserializeObject<LightDetails>(Convert.ToString(lightDetails));
+
             await Refresh(sysInfo);
+        }
+
+        public void GetLightDetails()
+        {
+            Task.Run(async () =>
+            {
+                dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details");
+                var test = lightDetails.test;
+            });
         }
 
         /// <summary>
