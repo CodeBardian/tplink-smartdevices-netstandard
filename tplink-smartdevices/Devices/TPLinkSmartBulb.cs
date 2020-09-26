@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
 
@@ -12,7 +14,8 @@ namespace TPLinkSmartDevices.Devices
         private BulbHSV _hsv;
         private int _colorTemp;
         private int _brightness;
-        
+        private List<PreferredLightState> _preferredLightStates;
+
         public LightDetails LightDetails { get; private set; }
 
         public bool IsColor { get; private set; }
@@ -66,6 +69,8 @@ namespace TPLinkSmartDevices.Devices
             private set { }
         }
 
+        private List<PreferredLightState> PreferredLightStates => _preferredLightStates;
+
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
             Task.Run(async() => await Refresh()).GetAwaiter().GetResult();
@@ -93,6 +98,8 @@ namespace TPLinkSmartDevices.Devices
 
             dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details");
             LightDetails = JsonConvert.DeserializeObject<LightDetails>(Convert.ToString(lightDetails));
+
+            await RetrievePresets();
 
             await Refresh(sysInfo);
         }
@@ -179,6 +186,40 @@ namespace TPLinkSmartDevices.Devices
                 await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0);
                 _poweredOn = value;
             });
+        }
+
+        /// <summary>
+        /// Operate bulb on one of four presets
+        /// </summary>
+        /// <param name = "presetIndex" >Index of the four presets, ranging from 0 to 3</param>
+        //public void ApplyPreset(int presetIndex)
+        //{
+        //    Task.Run(async () =>
+        //    {
+        //        dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
+        //            {
+        //                new JProperty("mode", "customize_preset"),
+        //                //new JProperty("index", presetIndex),
+        //            }, null);
+        //    });
+        //}
+
+        async Task RetrievePresets()
+        {
+            dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "get_preferred_state");
+            JArray presets = JArray.Parse(Convert.ToString(result.states));
+            _preferredLightStates = presets.Select(x => new PreferredLightState
+            {
+                ColorTemperature = (int)x["color_temp"],
+                HSV = new BulbHSV() { Hue = (int)x["hue"], Saturation = (int)x["saturation"], Value = (int)x["brightness"] }
+            }).ToList();
+        }
+
+
+        private class PreferredLightState
+        {
+            public BulbHSV HSV { get; set; }
+            public int ColorTemperature { get; set; }
         }
     }
 }
