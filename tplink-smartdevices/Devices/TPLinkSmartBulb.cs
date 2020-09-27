@@ -104,15 +104,6 @@ namespace TPLinkSmartDevices.Devices
             await Refresh(sysInfo);
         }
 
-        public void GetLightDetails()
-        {
-            Task.Run(async () =>
-            {
-                dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details");
-                var test = lightDetails.test;
-            });
-        }
-
         /// <summary>
         /// Set Bulb brightness in percent
         /// </summary>

@@ -53,12 +53,6 @@ public BulbHSV HSV { get; private set; }
 public bool PoweredOn { get; private set; }
 ```
 
-### `PoweredOn`
-: Returns whether bulb is powered on 
-``` csharp
-public bool PoweredOn { get; private set; }
-```
-
 ### `PreferredLightStates`
 : Returns collection of the four light state preset configurations
 ``` csharp
@@ -130,7 +124,7 @@ public List<PreferredLightState> PreferredLightStates { get; }
   ```
 
     __Parameters__
-    : * `#!csharp BulbHSV hsv`: color in HSV color scheme, see [`BulbHSV`](/docs/data/hsv) reference
+    : * `#!csharp BulbHSV hsv`: color in HSV color scheme, see [`BulbHSV`](/docs/data/hsv.md) reference
 
     __Exceptions__
     : * `#!csharp NotSupportedException`: the bulb does not support color changes
