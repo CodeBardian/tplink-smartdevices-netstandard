@@ -192,17 +192,23 @@ namespace TPLinkSmartDevices.Devices
         /// Operate bulb on one of four presets
         /// </summary>
         /// <param name = "presetIndex" >Index of the four presets, ranging from 0 to 3</param>
-        //public void ApplyPreset(int presetIndex)
-        //{
-        //    Task.Run(async () =>
-        //    {
-        //        dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
-        //            {
-        //                new JProperty("mode", "customize_preset"),
-        //                //new JProperty("index", presetIndex),
-        //            }, null);
-        //    });
-        //}
+        public void ApplyPreset(int presetIndex)
+        {
+            if (presetIndex < 0 || presetIndex > 3) throw new ArgumentOutOfRangeException("preset index needs to be between 0 and 3");
+
+            if (PreferredLightStates.Count == 0) throw new Exception("no light state presets found");
+
+            PreferredLightState preset = PreferredLightStates[presetIndex];
+            if (preset.ColorTemperature != 0)
+            {
+                SetColorTemp(preset.ColorTemperature);
+                SetBrightness(preset.HSV.Value);
+            }
+            else
+            {
+                SetHSV(preset.HSV);
+            }
+        }
 
         async Task RetrievePresets()
         {
