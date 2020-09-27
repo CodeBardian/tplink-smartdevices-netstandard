@@ -69,7 +69,7 @@ namespace TPLinkSmartDevices.Devices
             private set { }
         }
 
-        private List<PreferredLightState> PreferredLightStates => _preferredLightStates;
+        public List<PreferredLightState> PreferredLightStates => _preferredLightStates;
 
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
@@ -222,7 +222,7 @@ namespace TPLinkSmartDevices.Devices
         }
 
 
-        private class PreferredLightState
+        public class PreferredLightState
         {
             public BulbHSV HSV { get; set; }
             public int ColorTemperature { get; set; }

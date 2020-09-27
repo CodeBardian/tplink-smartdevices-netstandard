@@ -14,3 +14,4 @@
 | :---------------------------- | :----------------------------------- |
 | [`BulbHSV`](data/hsv.md)      | represents a single color in the HSV color model to change a smart bulbs color  |
 | [`PowerData`](data/power.md)  | Encapsulates JSON data structure for current energy use as metered by the HS110 Smart Energy Meter |
+| [`LightDetails`](data/light-details.md)  | Encapsulates JSON data structure for specific hardware properties of smart bulbs |

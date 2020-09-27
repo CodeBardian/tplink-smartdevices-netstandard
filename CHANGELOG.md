@@ -5,6 +5,7 @@
 #### Added
 
 - light details of smart bulbs
+- apply the four preset light states 
 
 #### Changed
 

@@ -12,6 +12,7 @@ nav:
       - Data:
         - 'BulbHSV': 'docs/data/hsv.md'
         - 'PowerData': 'docs/data/power.md'
+        - 'LightDetails': 'docs/data/light-details.md'
 theme:
   name: material
   favicon: assets/icon.png

@@ -35,6 +35,12 @@ public int Brightness { get; private set; }
 public int ColorTemperature { get; private set; }
 ```
 
+### `LightDetails`
+: Contains further hardware specifications of this bulb, , see [`LightDetails`](/docs/data/light-details.md) reference
+``` csharp
+public LightDetails LightDetails { get; private set; }
+```
+
 ### `HSV`
 : Returns bulb color in HSV scheme 
 ``` csharp
@@ -45,6 +51,18 @@ public BulbHSV HSV { get; private set; }
 : Returns whether bulb is powered on 
 ``` csharp
 public bool PoweredOn { get; private set; }
+```
+
+### `PoweredOn`
+: Returns whether bulb is powered on 
+``` csharp
+public bool PoweredOn { get; private set; }
+```
+
+### `PreferredLightStates`
+: Returns collection of the four light state preset configurations
+``` csharp
+public List<PreferredLightState> PreferredLightStates { get; }
 ```
 
 ## Constructors
@@ -116,4 +134,16 @@ public bool PoweredOn { get; private set; }
 
     __Exceptions__
     : * `#!csharp NotSupportedException`: the bulb does not support color changes
+   
+### `ApplyPreset(int)`
+: Operate smart bulb on one of the four light state presets
+  ``` csharp
+  public void ApplyPreset(int presetIndex)
+  ```
+
+    __Parameters__
+    : * `#!csharp int presetIndex`: index of the four presets, ranging from `0` to `3`
+
+    __Exceptions__
+    : * `#!csharp ArgumentOutOfRangeException`: `presetIndex` only allows values between `0` and `3`
     
