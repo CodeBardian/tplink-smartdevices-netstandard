@@ -69,7 +69,8 @@ namespace TPLinkSmartDevices.Devices
         /// <param name = "year" >year of stats</param>
         public async Task<Dictionary<int, int>> GetYearStats(int year)
         {
-            //TODO: check if year is correct
+            if (year > DateTime.Now.Year || year < 2010) throw new ArgumentOutOfRangeException($"Can't get stats for {year}. Invalid year!");
+
             dynamic result = await Execute("emeter", "get_monthstat", "year", year);
             var stats = new Dictionary<int, int>();
             foreach (dynamic month_stat in result.month_list)

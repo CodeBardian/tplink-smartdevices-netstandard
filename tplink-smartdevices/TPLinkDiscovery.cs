@@ -122,12 +122,15 @@ namespace TPLinkSmartDevices
         public async Task Associate(string ssid, string password, int type = 3)
         {
             dynamic scan = await new SmartHomeProtocolMessage("netif","get_scaninfo","refresh","1").Execute("192.168.0.1", 9999);
-            //TODO: use scan to get type of user specified network
 
             if (scan == null || !scan.ToString().Contains(ssid))
             {
                 throw new Exception("Couldn't find network!");
             }
+
+            JArray networks = JArray.Parse(Convert.ToString(scan.ap_list));
+            JToken network = networks.First(n => n["ssid"].ToString() == ssid);
+            type = (int)network["key_type"];
 
             dynamic result = await new SmartHomeProtocolMessage("netif", "set_stainfo", new JObject
                 {
