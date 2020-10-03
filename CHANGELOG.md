@@ -5,7 +5,8 @@
 #### Added
 
 - light details of smart bulbs
-- apply the four preset light states 
+- apply the four preset light states of smart bulbs
+- add transition time between light states for smart bulbs
 
 #### Changed
 

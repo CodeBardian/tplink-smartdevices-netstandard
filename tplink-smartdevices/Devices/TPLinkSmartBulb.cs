@@ -107,13 +107,19 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set Bulb brightness in percent
         /// </summary>
-        public void SetBrightness(int brightness)
+        public void SetBrightness(int brightness, int transition_period = 0)
         {
+            if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
+
             if (IsDimmable)
             {
                 Task.Run(async() =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "brightness", brightness);
+                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
+                    {
+                        new JProperty("brightness", brightness),
+                        new JProperty("transition_period", transition_period)
+                    }, null); ;
                     _brightness = brightness;
                 });
             }
@@ -126,13 +132,19 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set Color Temp in Kelvin
         /// </summary>
-        public void SetColorTemp(int colortemp)
+        public void SetColorTemp(int colortemp, int transition_period = 0)
         {
+            if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
+
             if (IsVariableColorTemperature)
             {
                 Task.Run(async () =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "color_temp", colortemp);
+                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
+                    {
+                        new JProperty("color_temp", colortemp),
+                        new JProperty("transition_period", transition_period)
+                    }, null);
                     _colorTemp = colortemp;
                 });
             }
@@ -145,10 +157,12 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set HSV color
         /// </summary>
-        public void SetHSV(BulbHSV hsv)
+        public void SetHSV(BulbHSV hsv, int transition_period = 0)
         {
+            if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
+
             if (IsColor)
-            {
+            {      
                 Task.Run(async () =>
                 {
                     dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
@@ -156,7 +170,8 @@ namespace TPLinkSmartDevices.Devices
                         new JProperty("hue", hsv.Hue),
                         new JProperty("saturation", hsv.Saturation),
                         new JProperty("brightness", hsv.Value),
-                        new JProperty("color_temp", 0)
+                        new JProperty("color_temp", 0),
+                        new JProperty("transition_period", transition_period)
                     }, null);
                     _hsv = hsv;
                 });
