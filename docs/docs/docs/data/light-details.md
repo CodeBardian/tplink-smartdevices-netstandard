@@ -26,11 +26,13 @@ public int LampBeamAngle { get; set; }
 : maximum brightness of bulb in lumens
 ``` csharp
 public int MaxLumens { get; set; }
+```
 
 ### `MaxVoltage`
 : maximum operating voltage
 ``` csharp
 public int MaxVoltage { get; set; }
+```
 
 ### `MinVoltage`
 : minimum operating voltage 
@@ -42,3 +44,4 @@ public int MinVoltage { get; set; }
 : energy usage of bulb in watt
 ``` csharp
 public int Wattage { get; set; }
+```
