@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TPLinkSmartDevices.Devices
@@ -33,8 +34,16 @@ namespace TPLinkSmartDevices.Devices
         public async Task Refresh()
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
+
+            Type typeOfDynamic = sysInfo.GetType();
+            bool hasChildren = typeOfDynamic.GetProperties().Any(p => p.Name.Equals("children"));
+
+            if (hasChildren) throw new Exception("This plug has several outlets. Use TPLinkSmartMultiPlug instead");
+
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
+            OutletPowered = (int)sysInfo.relay_state == 1;
+
             if ((int)sysInfo.on_time == 0)
                 PoweredOnSince = default(DateTime);
             else
