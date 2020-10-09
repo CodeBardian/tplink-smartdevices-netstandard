@@ -25,7 +25,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// If the bulb is powered on or not
         /// </summary>
-        public bool PoweredOn { get; private set; }
+        public bool PoweredOn => _poweredOn;
 
         /// <summary>
         /// Bulb color defined by HSV and color temp

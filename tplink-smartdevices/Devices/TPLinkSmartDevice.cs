@@ -76,6 +76,12 @@ namespace TPLinkSmartDevices.Devices
             return await MessageCache.Request(message, Hostname, Port);
         }
 
+        protected async Task<dynamic> Execute(string json)
+        {
+            var message = new SmartHomeProtocolMessage(json);
+            return await MessageCache.Request(message, Hostname, Port);
+        }
+
         public void SetAlias(string value)
         {
             Task.Run(async () =>

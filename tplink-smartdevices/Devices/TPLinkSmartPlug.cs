@@ -1,4 +1,7 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +26,11 @@ namespace TPLinkSmartDevices.Devices
 
         public string[] Features { get; private set; }
 
-        public TPLinkSmartPlug(string hostname, int port=9999) : base(hostname,port)
+        public int OutletCount { get; private set; }
+
+        public Outlet[] Outlets { get; private set; }
+
+        public TPLinkSmartPlug(string hostname, int port = 9999) : base(hostname, port)
         {
             Task.Run(() => Refresh()).GetAwaiter().GetResult();
         }
@@ -35,19 +42,25 @@ namespace TPLinkSmartDevices.Devices
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
 
-            Type typeOfDynamic = sysInfo.GetType();
-            bool hasChildren = typeOfDynamic.GetProperties().Any(p => p.Name.Equals("children"));
+            JObject info = new JObject(sysInfo);
+            bool hasChildren = info["children"] != null;
 
-            if (hasChildren) throw new Exception("This plug has several outlets. Use TPLinkSmartMultiPlug instead");
+            if (hasChildren)
+            {
+                OutletCount = (int)sysInfo.child_num;
+            }
+            else
+            {
+                OutletCount = 1;
+                OutletPowered = (int)sysInfo.relay_state == 1;
+                if ((int)sysInfo.on_time == 0)
+                    PoweredOnSince = default(DateTime);
+                else
+                    PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
+            }
 
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
-            OutletPowered = (int)sysInfo.relay_state == 1;
-
-            if ((int)sysInfo.on_time == 0)
-                PoweredOnSince = default(DateTime);
-            else
-                PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
             await Refresh(sysInfo);
         }
@@ -55,13 +68,33 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which changes power state to plug
         /// </summary>
-        public void SetOutletPowered(bool value)
+        public void SetOutletPowered(bool value, int outletId = -1)
         {
-            Task.Run(async() =>
+            if (outletId > OutletCount - 1) throw new ArgumentException("Plug does not have a outlet with specified id");
+
+            Task.Run(async () =>
             {
-                await Execute("system", "set_relay_state", "state", value ? 1 : 0);
-                this.OutletPowered = value;
+                //toggle all outlets of plug
+                if (OutletCount == 1 || outletId == -1)
+                {
+                    await Execute("system", "set_relay_state", "state", value ? 1 : 0);
+                    this.OutletPowered = value;
+                }
+                //toggle specific outlet
+                else
+                {
+                    JObject root = new JObject { new JProperty("context", new JObject { new JProperty("child_ids", GetPlugID(outletId)) }), 
+                        new JProperty("system", new JObject { new JProperty("set_relay_state", new JObject { new JProperty("state", value ? 1 : 0) }) }) };
+
+                    string message = root.ToString(Formatting.None);
+                    await Execute(message);
+                }
             });
+        }
+
+        private object GetPlugID(int outletId)
+        {
+            return JArray.FromObject(new [] {$"{HardwareId}0{outletId}"});
         }
 
         /// <summary>
@@ -74,6 +107,12 @@ namespace TPLinkSmartDevices.Devices
                 await Execute("system", "set_led_off", "off", value ? 0 : 1);
                 this.LedOn = value;
             });
+        }
+
+        public class Outlet
+        {
+            public string Id { get; private set; }
+
         }
     }
 }

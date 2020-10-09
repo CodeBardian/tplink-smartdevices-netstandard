@@ -49,10 +49,12 @@ namespace TPLinkSmartDevices.Messaging
             }
         }
 
-        public string System { get; set; }
-        public string Command { get; set; }
-        public object Argument { get; set; }
-        public object Value { get; set; }
+        public string Message { get; private set; }
+
+        public string System { get; private set; }
+        public string Command { get; private set; }
+        public object Argument { get; private set; }
+        public object Value { get; private set; }
 
         internal SmartHomeProtocolMessage(string system, string command, object argument, object value)
         {
@@ -62,9 +64,14 @@ namespace TPLinkSmartDevices.Messaging
             Value = value;
         }
 
+        internal SmartHomeProtocolMessage(string json)
+        {
+            Message = json;
+        }
+
         internal async Task<dynamic> Execute(string hostname, int port)
         {
-            var messageToSend = SmartHomeProtocolEncoder.Encrypt(JSON);
+            var messageToSend = SmartHomeProtocolEncoder.Encrypt(Message ?? JSON);
 
             var client = new TcpClient();
             client.ConnectAsync(hostname, port).Wait(2000);
