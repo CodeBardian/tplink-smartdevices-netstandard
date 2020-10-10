@@ -42,7 +42,7 @@ namespace TPLinkSmartDevices.Devices
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo");
 
-            JObject info = new JObject(sysInfo);
+            JObject info = JObject.Parse(Convert.ToString(sysInfo));
             bool hasChildren = info["children"] != null;
 
             if (hasChildren)
