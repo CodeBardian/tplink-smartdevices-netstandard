@@ -106,8 +106,8 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(async () =>
             {
                 dynamic cloudInfo = await Execute("cnCloud", "get_info");
-                CloudServer = cloudInfo.server;
-                RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
+                CloudServer = (string)cloudInfo.server;
+                RemoteAccessEnabled = Convert.ToBoolean((int)cloudInfo.binded);
             });
         }
 

@@ -14,7 +14,7 @@ namespace TPLinkSmartDevices.Messaging
         {
             get
             {
-                var data = Encoding.ASCII.GetBytes(JSON);
+                var data = Encoding.ASCII.GetBytes(Message ?? JSON);
                 unchecked
                 {
                     const int p = 16777619;

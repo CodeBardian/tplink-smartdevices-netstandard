@@ -48,6 +48,7 @@ namespace TPLinkSmartDevices.Devices
             if (hasChildren)
             {
                 OutletCount = (int)sysInfo.child_num;
+                Outlets = JsonConvert.DeserializeObject<List<Outlet>>(Convert.ToString(sysInfo.children)).ToArray();
             }
             else
             {
@@ -94,7 +95,7 @@ namespace TPLinkSmartDevices.Devices
 
         private object GetPlugID(int outletId)
         {
-            return JArray.FromObject(new [] {$"{HardwareId}0{outletId}"});
+            return JArray.FromObject(new [] {$"{DeviceId}0{outletId}"});
         }
 
         /// <summary>
@@ -111,8 +112,17 @@ namespace TPLinkSmartDevices.Devices
 
         public class Outlet
         {
+            [JsonProperty("id")]
             public string Id { get; private set; }
 
+            [JsonProperty("state")]
+            public int State { get; private set; }
+
+            [JsonProperty("alias")]
+            public string Alias { get; private set; }
+
+            [JsonProperty("on_time")]
+            public int OnTime { get; private set; }
         }
     }
 }
