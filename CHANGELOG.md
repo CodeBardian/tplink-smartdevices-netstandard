@@ -7,6 +7,7 @@
 - light details of smart bulbs
 - apply the four preset light states of smart bulbs
 - add transition time between light states for smart bulbs
+- add support for multi-outlet plugs (HS300, KP303?)
 
 #### Changed
 

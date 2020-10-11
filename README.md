@@ -27,7 +27,7 @@ Note that the device running the program needs to be connected to the network wh
 ## Usage
 Use NuGet package manager to add a reference to this project, for example with dotnet cli:
 ```
-> dotnet add package tplink-smartdevices --version 1.0.3
+> dotnet add package tplink-smartdevices --version 1.0.4
 ```
 
 ### Discovery

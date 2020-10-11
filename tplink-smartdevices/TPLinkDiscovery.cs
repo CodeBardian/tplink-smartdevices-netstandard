@@ -72,6 +72,8 @@ namespace TPLinkSmartDevices
                 {
                     if (model.StartsWith("HS110"))
                         device = new TPLinkSmartMeterPlug(ip.Address.ToString());
+                    else if (model.StartsWith("HS300") || model.StartsWith("KP303"))
+                        device = new TPLinkSmartMultiPlug(ip.Address.ToString());
                     else if (model.StartsWith("HS"))
                         device = new TPLinkSmartPlug(ip.Address.ToString());
                     else if (model.StartsWith("KL") || model.StartsWith("LB"))
