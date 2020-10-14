@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,6 +45,7 @@ namespace TPLinkSmartDevices.Devices
             
             OutletCount = (int)sysInfo.child_num;
             Outlets = JsonConvert.DeserializeObject<List<Outlet>>(Convert.ToString(sysInfo.children)).ToArray();
+            this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
 
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
@@ -56,7 +58,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public void SetOutletPowered(bool value, int outletId = -1)
         {
-            if (outletId > OutletCount - 1) throw new ArgumentException("Plug does not have a outlet with specified id");
+            if (outletId > OutletCount - 1 || outletId < -1) throw new ArgumentException("Plug does not have a outlet with specified id");
 
             Task.Run(async () =>
             {
@@ -69,11 +71,18 @@ namespace TPLinkSmartDevices.Devices
                 //toggle specific outlet
                 else
                 {
-                    JObject root = new JObject { new JProperty("context", new JObject { new JProperty("child_ids", GetPlugID(outletId)) }),
-                        new JProperty("system", new JObject { new JProperty("set_relay_state", new JObject { new JProperty("state", value ? 1 : 0) }) }) };
+                    JObject root = new JObject { 
+                        new JProperty("context", new JObject { new JProperty("child_ids", GetPlugID(outletId)) }),
+                        new JProperty("system", new JObject { 
+                            new JProperty("set_relay_state", 
+                            new JObject { new JProperty("state", value ? 1 : 0) }) 
+                        }) 
+                    };
 
                     string message = root.ToString(Formatting.None);
                     await Execute(message);
+                    this.Outlets[outletId].OutletPowered = value;
+                    this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
                 }
             });
         }
@@ -101,7 +110,7 @@ namespace TPLinkSmartDevices.Devices
             public string Id { get; private set; }
 
             [JsonProperty("state")]
-            public bool OutletPowered { get; private set; }
+            public bool OutletPowered { get; set; }
 
             [JsonProperty("alias")]
             public string Alias { get; private set; }
