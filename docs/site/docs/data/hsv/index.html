@@ -10,7 +10,7 @@
       
       
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../assets/icon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.3">
     
     
@@ -51,6 +51,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#bulbhsv-class" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -306,6 +311,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../devices/multi-plug/" title="TPLinkSmartMultiPlug" class="md-nav__link">
+      TPLinkSmartMultiPlug
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -349,10 +366,72 @@
     
     <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        BulbHSV
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
     
     <a href="./" title="BulbHSV" class="md-nav__link md-nav__link--active">
       BulbHSV
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hue" class="md-nav__link">
+    Hue
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#saturation" class="md-nav__link">
+    Saturation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value" class="md-nav__link">
+    Value
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -365,6 +444,18 @@
   <li class="md-nav__item">
     <a href="../power/" title="PowerData" class="md-nav__link">
       PowerData
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../light-details/" title="LightDetails" class="md-nav__link">
+      LightDetails
     </a>
   </li>
 
@@ -386,6 +477,65 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hue" class="md-nav__link">
+    Hue
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#saturation" class="md-nav__link">
+    Saturation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value" class="md-nav__link">
+    Value
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -395,9 +545,28 @@
                   
                 
                 
-                  <h1>BulbHSV</h1>
-                
-                
+                <h1 id="bulbhsv-class">BulbHSV Class</h1>
+<p><small>Namespace: TPLinkSmartDevices.Data</small><br/><br/>
+represents a single color in the HSV color model to change a smart bulbs color</p>
+<h2 id="properties">Properties</h2>
+<h3 id="hue"><code>Hue</code></h3>
+<dl>
+<dd>Angular dimension representing color, <code>0°/360°</code> red, <code>120°</code> green, <code>240°</code> blue
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">int</span> <span class="n">Hue</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="saturation"><code>Saturation</code></h3>
+<dl>
+<dd>Resembles various tints of color. Accepts values from 0-100.
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">int</span> <span class="n">Saturation</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="value"><code>Value</code></h3>
+<dl>
+<dd>Brightness of color (mixture of hue with varying amounts of black or white paint). Accepts values from 0-100.
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">int</span> <span class="n">Value</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
                 
               
               
@@ -416,7 +585,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../devices/bulb/" title="TPLinkSmartBulb" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../devices/multi-plug/" title="TPLinkSmartMultiPlug" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -425,7 +594,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                TPLinkSmartBulb
+                TPLinkSmartMultiPlug
               </div>
             </div>
           </a>

@@ -9,6 +9,7 @@
 | [`TPLinkSmartPlug`](devices/plug.md)      | encloses plug specific system information and plug controls |
 | [`TPLinkSmartMeterPlug`](devices/smartmeter-plug.md) | provides data on power consumption of comsumers connected to a HS110 plug |
 | [`TPLinkSmartBulb`](devices/bulb.md)      | encloses bulb specific system information and bulb controls |
+| [`TPLinkSmartMultiPlug`](devices/multi-plug.md)      | encloses plug specific system information and controls for plugs with multiple outlets |
 
 | TPLinkSmartDevice.Data        | Description                          |
 | :---------------------------- | :----------------------------------- |

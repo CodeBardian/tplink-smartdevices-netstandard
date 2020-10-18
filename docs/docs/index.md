@@ -5,6 +5,8 @@ Visit the project at [github](https://www.github.com/CodeBardian/tplink-smartdev
 
 ### Ready to dive in ?
 
-* [getting started](getting-started.md)
-* [full documentation](docs/index.md)
-* [common issues](https://www.github.com/CodeBardian/tplink-smartdevices-netstandard)
+[Get Started](getting-started.md){: .md-button .md-button--primary }
+[Full Documentation](docs/index.md){: .md-button }
+<br/>
+* [Common Issues](https://www.github.com/CodeBardian/tplink-smartdevices-netstandard)
+* [Changelog](https://github.com/CodeBardian/tplink-smartdevices-netstandard/blob/master/CHANGELOG.md)

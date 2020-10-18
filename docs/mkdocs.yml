@@ -9,6 +9,7 @@ nav:
         - 'TPLinkSmartPlug': 'docs/devices/plug.md'
         - 'TPLinkSmartMeterPlug': 'docs/devices/smartmeter-plug.md'
         - 'TPLinkSmartBulb': 'docs/devices/bulb.md'
+        - 'TPLinkSmartMultiPlug': 'docs/devices/multi-plug.md'
       - Data:
         - 'BulbHSV': 'docs/data/hsv.md'
         - 'PowerData': 'docs/data/power.md'
@@ -24,6 +25,7 @@ repo_url: https://www.github.com/CodeBardian/tplink-smartdevices-netstandard
 repo_name: CodeBardian/tplink-smartdevices-netstandard
 markdown_extensions:
   - admonition
+  - attr_list
   - def_list
   - pymdownx.tabbed
   - pymdownx.superfences
