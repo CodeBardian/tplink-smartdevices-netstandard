@@ -51,10 +51,10 @@ public uint VGain { get; private set; }
   ```
 
 
-### `GetMonthStats(int, int)`
-: Queries collected usage statistics from a specific month. Returns a `#!csharp Dictionary<DateTime, int>` of each day in a month and energy consumption of that day (in watt hours (?))
+### `GetMonthStats(DateTime, float)`
+: Queries collected usage statistics from a specific month. Returns a `#!csharp Dictionary<DateTime, float>` of each day in a month and energy consumption of that day in kWh)
   ``` csharp
-  public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
+  public async Task<Dictionary<DateTime, float>> GetMonthStats(int month, int year)
   ```
 
     __Parameters__
@@ -63,10 +63,10 @@ public uint VGain { get; private set; }
 
 !!! tip "Method is awaitable" 
 
-### `GetYearStats(int)`
-: Queries collected usage statistics for a whole year. Returns a `#!csharp Dictionary<int, int>` of each month and energy consumption of month (in watt hours (?))
+### `GetYearStats(int, float)`
+: Queries collected usage statistics for a whole year. Returns a `#!csharp Dictionary<int, float>` of each month and energy consumption of that month in kWh)
   ``` csharp
-  public async Task<Dictionary<int, int>> GetYearStats(int year)
+  public async Task<Dictionary<int, float>> GetYearStats(int year)
   ```
 
     __Parameters__

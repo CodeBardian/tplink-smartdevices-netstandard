@@ -44,7 +44,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Query collected usage statistics from a specific month
         /// </summary>
-        /// <returns><c>Dictionary&lt;DateTime, int&gt;</c> of each day in a month and energy consumption of that day (in watt hours (?))</returns>
+        /// <returns><c>Dictionary&lt;DateTime, float&gt;</c> of each day in a month and energy consumption of that day in kWh</returns>
         /// <param name = "month" >month of <paramref name="year"/>: ranging from 1(january) to 12(december)</param>
         /// <param name = "year" ></param>
         public async Task<Dictionary<DateTime, float>> GetMonthStats(int month, int year)
@@ -65,7 +65,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Query collected usage statistics over the course of a year
         /// </summary>
-        /// <returns><c>Dictionary&lt;int, int&gt;</c> of months and energy consumption</returns>
+        /// <returns><c>Dictionary&lt;int, float&gt;</c> of months and energy consumption in kWh</returns>
         /// <param name = "year" >year of stats</param>
         public async Task<Dictionary<int, float>> GetYearStats(int year)
         {
