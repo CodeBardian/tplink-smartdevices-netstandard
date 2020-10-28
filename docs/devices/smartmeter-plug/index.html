@@ -403,15 +403,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#getmonthstatsint-int" class="md-nav__link">
-    GetMonthStats(int, int)
+  <a href="#getmonthstatsdatetime-float" class="md-nav__link">
+    GetMonthStats(DateTime, float)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getyearstatsint" class="md-nav__link">
-    GetYearStats(int)
+  <a href="#getyearstatsint-float" class="md-nav__link">
+    GetYearStats(int, float)
   </a>
   
 </li>
@@ -600,15 +600,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#getmonthstatsint-int" class="md-nav__link">
-    GetMonthStats(int, int)
+  <a href="#getmonthstatsdatetime-float" class="md-nav__link">
+    GetMonthStats(DateTime, float)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getyearstatsint" class="md-nav__link">
-    GetYearStats(int)
+  <a href="#getyearstatsint-float" class="md-nav__link">
+    GetYearStats(int, float)
   </a>
   
 </li>
@@ -687,11 +687,11 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
   <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">EraseStats</span><span class="p">()</span>
 </code></pre></div></dd>
 </dl>
-<h3 id="getmonthstatsint-int"><code>GetMonthStats(int, int)</code></h3>
+<h3 id="getmonthstatsdatetime-float"><code>GetMonthStats(DateTime, float)</code></h3>
 <dl>
 <dd>
-<p>Queries collected usage statistics from a specific month. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span></code> of each day in a month and energy consumption of that day (in watt hours (?))
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">GetMonthStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
+<p>Queries collected usage statistics from a specific month. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">float</span><span class="p">&gt;</span></code> of each day in a month and energy consumption of that day in kWh)
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">float</span><span class="p">&gt;&gt;</span> <span class="n">GetMonthStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
@@ -707,11 +707,11 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
 <div class="admonition tip">
 <p class="admonition-title">Method is awaitable</p>
 </div>
-<h3 id="getyearstatsint"><code>GetYearStats(int)</code></h3>
+<h3 id="getyearstatsint-float"><code>GetYearStats(int, float)</code></h3>
 <dl>
 <dd>
-<p>Queries collected usage statistics for a whole year. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span></code> of each month and energy consumption of month (in watt hours (?))
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">GetYearStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
+<p>Queries collected usage statistics for a whole year. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">float</span><span class="p">&gt;</span></code> of each month and energy consumption of that month in kWh)
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">float</span><span class="p">&gt;&gt;</span> <span class="n">GetYearStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
