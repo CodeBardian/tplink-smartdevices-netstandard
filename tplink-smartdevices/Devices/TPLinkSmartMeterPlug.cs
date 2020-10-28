@@ -47,17 +47,17 @@ namespace TPLinkSmartDevices.Devices
         /// <returns><c>Dictionary&lt;DateTime, int&gt;</c> of each day in a month and energy consumption of that day (in watt hours (?))</returns>
         /// <param name = "month" >month of <paramref name="year"/>: ranging from 1(january) to 12(december)</param>
         /// <param name = "year" ></param>
-        public async Task<Dictionary<DateTime, int>> GetMonthStats(int month, int year)
+        public async Task<Dictionary<DateTime, float>> GetMonthStats(int month, int year)
         {
             dynamic result = await Execute("emeter", "get_daystat", new JObject
                 {
                     new JProperty("month", month),
                     new JProperty("year", year)
                 }, null);
-            var stats = new Dictionary<DateTime, int>();
+            var stats = new Dictionary<DateTime, float>();
             foreach (dynamic day_stat in result.day_list)
             {
-                stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (int) (day_stat.energy ?? (day_stat.energy_wh / WATTS_IN_KILOWATT)));
+                stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (float)(day_stat.energy ?? (day_stat.energy_wh / WATTS_IN_KILOWATT)));
             }
             return stats;
         }
@@ -67,14 +67,14 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         /// <returns><c>Dictionary&lt;int, int&gt;</c> of months and energy consumption</returns>
         /// <param name = "year" >year of stats</param>
-        public async Task<Dictionary<int, int>> GetYearStats(int year)
+        public async Task<Dictionary<int, float>> GetYearStats(int year)
         {
             //TODO: check if year is correct
             dynamic result = await Execute("emeter", "get_monthstat", "year", year);
-            var stats = new Dictionary<int, int>();
+            var stats = new Dictionary<int, float>();
             foreach (dynamic month_stat in result.month_list)
             {
-                stats.Add((int)month_stat.month, (int)(month_stat.energy ?? (month_stat.energy_wh / WATTS_IN_KILOWATT)));
+                stats.Add((int)month_stat.month, (float)(month_stat.energy ?? (month_stat.energy_wh / WATTS_IN_KILOWATT)));
             }
             return stats;
         }
