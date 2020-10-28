@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartMeterPlug : TPLinkSmartPlug
     {
+        private const double  WATTS_IN_KILOWATT = 1000d;
         private dynamic _gainData;
 
         public PowerData CurrentPowerUsage { get; private set; }
@@ -57,7 +57,7 @@ namespace TPLinkSmartDevices.Devices
             var stats = new Dictionary<DateTime, int>();
             foreach (dynamic day_stat in result.day_list)
             {
-                stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (int)day_stat.energy);
+                stats.Add(new DateTime((int)day_stat.year, (int)day_stat.month, (int)day_stat.day), (int) (day_stat.energy ?? (day_stat.energy_wh / WATTS_IN_KILOWATT)));
             }
             return stats;
         }
@@ -74,7 +74,7 @@ namespace TPLinkSmartDevices.Devices
             var stats = new Dictionary<int, int>();
             foreach (dynamic month_stat in result.month_list)
             {
-                stats.Add((int)month_stat.month, (int)month_stat.energy);
+                stats.Add((int)month_stat.month, (int)(month_stat.energy ?? (month_stat.energy_wh / WATTS_IN_KILOWATT)));
             }
             return stats;
         }
