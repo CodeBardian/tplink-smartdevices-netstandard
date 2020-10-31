@@ -12,17 +12,22 @@ public List<TPLinkSmartDevice> DiscoveredDevices { get; private set; }
 
 ## Methods
 
-### `Discover(int, int)`
+### `Discover(int, int, string)` {: #discover }
 : Discovers smart devices within the network of the host via UDP broadcast. Returns a list of [`TPLinkSmartDevice`](devices/device.md)'s.
   ``` csharp
-  public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=5000)
+  public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=5000, string target="255.255.255.255")
   ```
 
     __Parameters__
     : * `#!csharp int port`: Listen to broadcast responses on this port, defaults to `9999`
       * `#!csharp int timeout`: Timespan after which the discovery finishes, defaults to `5000`(5 seconds)
+      * `#!csharp string target`: ip address of discovery broadcast, defaults to `255.255.255.255`
 
 !!! tip "Method is awaitable" 
+
+!!! tip 
+    The discovery of devices within a network fails under certain circumstances. Some routers seem to block udp packets to the broadcast address (255.255.255.255), which is used to send out a discovery request.
+    In case of using different subnet's, what seems to resolve the issue is broadcasting to the subnet's local broadcast IP (such as 192.168.0.255, if IP is 192.168.0.X with a subnet mask of 255.255.255.0)
 
 ### `Associate(string, string, int)`
 : Makes smart device connect to specified network credentials

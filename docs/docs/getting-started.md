@@ -52,7 +52,7 @@ Smart devices which are already connected to the same network as the host device
     ``` csharp
     var discoveredDevices = await new TPLinkDiscovery().Discover();
     ```
-    <small> Full reference for [`TPLinkDiscovery.Discover()`](docs/discovery.md#discoverint-int)</small>
+    <small> Full reference for [`TPLinkDiscovery.Discover()`](docs/discovery.md#discover)</small>
 === "With event"
     ``` csharp
     TPLinkDiscovery discovery = new TPLinkDiscovery();

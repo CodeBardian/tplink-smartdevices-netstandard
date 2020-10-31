@@ -30,14 +30,14 @@ namespace TPLinkSmartDevices
             DiscoveredDevices = new List<TPLinkSmartDevice>();
         }
 
-        public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=5000)
+        public async Task<List<TPLinkSmartDevice>> Discover(int port=9999, int timeout=5000, string target = "255.255.255.255")
         {
             discoveryComplete = false;
 
             DiscoveredDevices.Clear();
             PORT_NUMBER = port;
 
-            await SendDiscoveryRequestAsync();
+            await SendDiscoveryRequestAsync(target);
             
             udp = new UdpClient(PORT_NUMBER);
             IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
@@ -92,10 +92,10 @@ namespace TPLinkSmartDevices
                 Receive();
         }
 
-        private async Task SendDiscoveryRequestAsync()
+        private async Task SendDiscoveryRequestAsync(string target)
         {
             UdpClient client = new UdpClient(PORT_NUMBER);
-            IPEndPoint ip = new IPEndPoint(IPAddress.Broadcast, PORT_NUMBER);
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse(target), PORT_NUMBER);
 
             var discoveryJson = JObject.FromObject(new
             {
