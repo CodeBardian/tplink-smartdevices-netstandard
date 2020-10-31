@@ -38,58 +38,60 @@ namespace TPLinkSmartDevices
             PORT_NUMBER = port;
 
             await SendDiscoveryRequestAsync(target);
-            
-            udp = new UdpClient(PORT_NUMBER);
-            IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
-            udp.EnableBroadcast = true;
-            Receive();
 
-            return await Task.Delay(timeout).ContinueWith(t =>
+            udp = new UdpClient(PORT_NUMBER)
+            {
+                EnableBroadcast = true
+            };
+
+            return await Task.WhenAny(Task.Delay(timeout), Receive()).ContinueWith(t =>
             {
                 discoveryComplete = true;
+                udp.Close();
                 udp = null;
 
                 return DiscoveredDevices;
             });
         }
 
-        private async void Receive()
+        private async Task Receive()
         {
-            if (discoveryComplete) //Prevent ObjectDisposedException/NullReferenceException when the Close() function is called
-                return;
-
-            IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
-            UdpReceiveResult result = await udp.ReceiveAsync();
-            ip = result.RemoteEndPoint;
-            var message = Encoding.ASCII.GetString(Messaging.SmartHomeProtocolEncoder.Decrypt(result.Buffer));
-
-            TPLinkSmartDevice device = null;
-            try
+            while (true)
             {
-                dynamic sys_info = ((dynamic)JObject.Parse(message)).system.get_sysinfo;
-                string model = (string)sys_info.model;
-                if (model != null)
+                if (discoveryComplete) //Prevent ObjectDisposedException/NullReferenceException when the Close() function is called
+                    return;
+
+                IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
+                UdpReceiveResult result = await udp.ReceiveAsync();
+                ip = result.RemoteEndPoint;
+                var message = Encoding.ASCII.GetString(Messaging.SmartHomeProtocolEncoder.Decrypt(result.Buffer));
+
+                TPLinkSmartDevice device = null;
+                try
                 {
-                    if (model.StartsWith("HS110"))
-                        device = new TPLinkSmartMeterPlug(ip.Address.ToString());
-                    else if (model.StartsWith("HS"))
-                        device = new TPLinkSmartPlug(ip.Address.ToString());
-                    else if (model.StartsWith("KL") || model.StartsWith("LB"))
-                        device = new TPLinkSmartBulb(ip.Address.ToString());
+                    dynamic sys_info = ((dynamic)JObject.Parse(message)).system.get_sysinfo;
+                    string model = (string)sys_info.model;
+                    if (model != null)
+                    {
+                        if (model.StartsWith("HS110"))
+                            device = new TPLinkSmartMeterPlug(ip.Address.ToString());
+                        else if (model.StartsWith("HS"))
+                            device = new TPLinkSmartPlug(ip.Address.ToString());
+                        else if (model.StartsWith("KL") || model.StartsWith("LB"))
+                            device = new TPLinkSmartBulb(ip.Address.ToString());
+                    }
+                }
+                catch (RuntimeBinderException)
+                {
+                    //discovered wrong device
+                }
+
+                if (device != null)
+                {
+                    DiscoveredDevices.Add(device);
+                    OnDeviceFound(device);
                 }
             }
-            catch (RuntimeBinderException)
-            {
-                //discovered wrong device
-            }
-
-            if (device != null)
-            {
-                DiscoveredDevices.Add(device);
-                OnDeviceFound(device);
-            }
-            if (udp != null)
-                Receive();
         }
 
         private async Task SendDiscoveryRequestAsync(string target)
