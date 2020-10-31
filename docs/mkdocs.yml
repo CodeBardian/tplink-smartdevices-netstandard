@@ -23,6 +23,7 @@ repo_url: https://www.github.com/CodeBardian/tplink-smartdevices-netstandard
 repo_name: CodeBardian/tplink-smartdevices-netstandard
 markdown_extensions:
   - admonition
+  - attr_list
   - def_list
   - pymdownx.tabbed
   - pymdownx.superfences
