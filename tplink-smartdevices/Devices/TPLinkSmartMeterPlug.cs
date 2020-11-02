@@ -23,6 +23,15 @@ namespace TPLinkSmartDevices.Devices
             }).GetAwaiter().GetResult();
         }
 
+        private TPLinkSmartMeterPlug() {  }
+
+        public static new async Task<TPLinkSmartMeterPlug> Create(string hostname, int port = 9999)
+        {
+            var p = new TPLinkSmartMeterPlug() { Hostname = hostname, Port = port };
+            await p.Refresh();
+            return p;
+        }
+
         public new async Task Refresh()
         {
             CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"), HardwareVersion);

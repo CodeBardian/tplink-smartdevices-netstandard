@@ -27,6 +27,15 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(() => Refresh()).GetAwaiter().GetResult();
         }
 
+        protected TPLinkSmartPlug() { }
+
+        public static async Task<TPLinkSmartPlug> Create(string hostname, int port = 9999)
+        {
+            var p = new TPLinkSmartPlug() { Hostname = hostname, Port = port };
+            await p.Refresh();
+            return p;
+        }
+
         /// <summary>
         /// Refresh device information
         /// </summary>

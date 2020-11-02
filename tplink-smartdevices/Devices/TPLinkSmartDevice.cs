@@ -9,8 +9,8 @@ namespace TPLinkSmartDevices.Devices
     {
         const byte INITIALIZATION_VECTOR = 171;
 
-        public string Hostname { get; private set; }
-        public int Port { get; private set; }
+        public string Hostname { get; protected set; }
+        public int Port { get; protected set; }
 
         public IMessageCache MessageCache { get; set; } = new TimeGatedMessageCache(2);
 
@@ -38,6 +38,8 @@ namespace TPLinkSmartDevices.Devices
             Hostname = hostname;
             Port = port;
         }
+
+        protected TPLinkSmartDevice() { }
 
         /// <summary>
         /// Refresh device information

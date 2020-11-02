@@ -74,11 +74,11 @@ namespace TPLinkSmartDevices
                     if (model != null)
                     {
                         if (model.StartsWith("HS110"))
-                            device = new TPLinkSmartMeterPlug(ip.Address.ToString());
+                            device = await TPLinkSmartMeterPlug.Create(ip.Address.ToString());
                         else if (model.StartsWith("HS"))
-                            device = new TPLinkSmartPlug(ip.Address.ToString());
+                            device = await TPLinkSmartPlug.Create(ip.Address.ToString());
                         else if (model.StartsWith("KL") || model.StartsWith("LB"))
-                            device = new TPLinkSmartBulb(ip.Address.ToString());
+                            device = await TPLinkSmartBulb.Create(ip.Address.ToString());
                     }
                 }
                 catch (RuntimeBinderException)

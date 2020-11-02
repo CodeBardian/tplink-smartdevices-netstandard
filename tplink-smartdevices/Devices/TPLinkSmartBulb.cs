@@ -68,6 +68,15 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(async() => await Refresh()).GetAwaiter().GetResult();
         }
 
+        private TPLinkSmartBulb() { }
+
+        public static async Task<TPLinkSmartBulb> Create(string hostname, int port = 9999)
+        {
+            var b = new TPLinkSmartBulb() { Hostname = hostname, Port = port };
+            await b.Refresh();
+            return b;
+        }
+
         /// <summary>
         /// Refresh device information
         /// </summary>
