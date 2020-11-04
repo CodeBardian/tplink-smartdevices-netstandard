@@ -37,21 +37,23 @@ namespace TPLinkSmartDevices
             DiscoveredDevices.Clear();
             PORT_NUMBER = port;
 
-            await SendDiscoveryRequestAsync(target);
+            await SendDiscoveryRequestAsync(target).ConfigureAwait(false);
 
             udp = new UdpClient(PORT_NUMBER)
             {
                 EnableBroadcast = true
             };
 
-            return await Task.WhenAny(Task.Delay(timeout), Receive()).ContinueWith(t =>
-            {
-                discoveryComplete = true;
-                udp.Close();
-                udp = null;
+            return await Task.WhenAny(Task.Delay(timeout), Receive())
+                .ContinueWith(t =>
+                {
+                    discoveryComplete = true;
+                    udp.Close();
+                    udp = null;
 
-                return DiscoveredDevices;
-            });
+                    return DiscoveredDevices;
+                })
+                .ConfigureAwait(false);
         }
 
         private async Task Receive()
@@ -62,7 +64,7 @@ namespace TPLinkSmartDevices
                     return;
 
                 IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
-                UdpReceiveResult result = await udp.ReceiveAsync();
+                UdpReceiveResult result = await udp.ReceiveAsync().ConfigureAwait(false);
                 ip = result.RemoteEndPoint;
                 var message = Encoding.ASCII.GetString(Messaging.SmartHomeProtocolEncoder.Decrypt(result.Buffer));
 
@@ -74,11 +76,11 @@ namespace TPLinkSmartDevices
                     if (model != null)
                     {
                         if (model.StartsWith("HS110"))
-                            device = await TPLinkSmartMeterPlug.Create(ip.Address.ToString());
+                            device = await TPLinkSmartMeterPlug.Create(ip.Address.ToString()).ConfigureAwait(false);
                         else if (model.StartsWith("HS"))
-                            device = await TPLinkSmartPlug.Create(ip.Address.ToString());
+                            device = await TPLinkSmartPlug.Create(ip.Address.ToString()).ConfigureAwait(false);
                         else if (model.StartsWith("KL") || model.StartsWith("LB"))
-                            device = await TPLinkSmartBulb.Create(ip.Address.ToString());
+                            device = await TPLinkSmartBulb.Create(ip.Address.ToString()).ConfigureAwait(false);
                     }
                 }
                 catch (RuntimeBinderException)
@@ -108,7 +110,7 @@ namespace TPLinkSmartDevices
 
             var bytes = discoveryPacket.Skip(4).ToArray();
             client.EnableBroadcast = true;
-            await client.SendAsync(bytes, bytes.Length, ip);
+            await client.SendAsync(bytes, bytes.Length, ip).ConfigureAwait(false);
             client.Close();
             client.Dispose();
         }
@@ -123,7 +125,7 @@ namespace TPLinkSmartDevices
         /// </summary>
         public async Task Associate(string ssid, string password, int type = 3)
         {
-            dynamic scan = await new SmartHomeProtocolMessage("netif","get_scaninfo","refresh","1").Execute("192.168.0.1", 9999);
+            dynamic scan = await new SmartHomeProtocolMessage("netif","get_scaninfo","refresh","1").Execute("192.168.0.1", 9999).ConfigureAwait(false);
             //TODO: use scan to get type of user specified network
 
             if (scan == null || !scan.ToString().Contains(ssid))
@@ -136,7 +138,7 @@ namespace TPLinkSmartDevices
                     new JProperty("ssid", ssid),
                     new JProperty("password", password),
                     new JProperty("key_type", type)
-                }, null).Execute("192.168.0.1", 9999);
+                }, null).Execute("192.168.0.1", 9999).ConfigureAwait(false);
 
             if (result == null)
             {

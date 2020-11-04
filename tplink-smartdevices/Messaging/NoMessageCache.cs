@@ -6,7 +6,7 @@ namespace TPLinkSmartDevices.Messaging
     {
         public override async Task<dynamic> Request(SmartHomeProtocolMessage message, string hostname, int port = 9999)
         {
-            return await message.Execute(hostname, port);
+            return await message.Execute(hostname, port).ConfigureAwait(false);
         }
     }
 }

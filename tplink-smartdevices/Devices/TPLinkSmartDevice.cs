@@ -48,7 +48,7 @@ namespace TPLinkSmartDevices.Devices
         {
             GetCloudInfo();
             if (sysInfo == null)
-                sysInfo = await Execute("system", "get_sysinfo");
+                sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);
 
             SoftwareVersion = sysInfo.sw_ver;
             HardwareVersion = sysInfo.hw_ver;
@@ -75,14 +75,14 @@ namespace TPLinkSmartDevices.Devices
         protected async Task<dynamic> Execute(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
-            return await MessageCache.Request(message, Hostname, Port);
+            return await MessageCache.Request(message, Hostname, Port).ConfigureAwait(false);
         }
 
         public void SetAlias(string value)
         {
             Task.Run(async () =>
             {
-                await Execute("system", "set_dev_alias", "alias", value);
+                await Execute("system", "set_dev_alias", "alias", value).ConfigureAwait(false);
                 this.Alias = value;
             });
         }
@@ -91,7 +91,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                dynamic rawTime = await Execute("time", "get_time");
+                dynamic rawTime = await Execute("time", "get_time").ConfigureAwait(false);
                 return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
             });
             return default;
@@ -101,7 +101,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                dynamic cloudInfo = await Execute("cnCloud", "get_info");
+                dynamic cloudInfo = await Execute("cnCloud", "get_info").ConfigureAwait(false);
                 CloudServer = cloudInfo.server;
                 RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
             });
@@ -119,7 +119,7 @@ namespace TPLinkSmartDevices.Devices
                     {
                         new JProperty("username", username),
                         new JProperty("password", password)
-                    }, null);
+                    }, null).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -143,7 +143,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                dynamic result = await Execute("cnCloud", "unbind");
+                dynamic result = await Execute("cnCloud", "unbind").ConfigureAwait(false);
                 SetRemoteAccessEnabled(false);
             });
         }
@@ -154,12 +154,12 @@ namespace TPLinkSmartDevices.Devices
             {
                 if (enabled)
                 {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", server);
+                    dynamic result = await Execute("cnCloud", "set_server_url", "server", server).ConfigureAwait(false);
                     RemoteAccessEnabled = true;
                 }
                 else
                 {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com");
+                    dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com").ConfigureAwait(false);
                     RemoteAccessEnabled = false;
                 }
             });

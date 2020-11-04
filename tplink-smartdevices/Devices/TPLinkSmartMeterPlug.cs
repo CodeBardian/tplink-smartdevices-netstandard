@@ -28,15 +28,16 @@ namespace TPLinkSmartDevices.Devices
         public static new async Task<TPLinkSmartMeterPlug> Create(string hostname, int port = 9999)
         {
             var p = new TPLinkSmartMeterPlug() { Hostname = hostname, Port = port };
-            await p.Refresh();
+            await p.Refresh().ConfigureAwait(false);
             return p;
         }
 
         public new async Task Refresh()
         {
-            CurrentPowerUsage = new PowerData(await Execute("emeter", "get_realtime"), HardwareVersion);
-            _gainData = await Execute("emeter", "get_vgain_igain");
-            await base.Refresh();
+            dynamic powerdata = await Execute("emeter", "get_realtime").ConfigureAwait(false);
+            CurrentPowerUsage = new PowerData(powerdata , HardwareVersion);
+            _gainData = await Execute("emeter", "get_vgain_igain").ConfigureAwait(false);
+            await base.Refresh().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("emeter", "erase_emeter_stat");
+                await Execute("emeter", "erase_emeter_stat").ConfigureAwait(false);
             });
         }
 
@@ -62,7 +63,7 @@ namespace TPLinkSmartDevices.Devices
                 {
                     new JProperty("month", month),
                     new JProperty("year", year)
-                }, null);
+                }, null).ConfigureAwait(false);
             var stats = new Dictionary<DateTime, float>();
             foreach (dynamic day_stat in result.day_list)
             {
@@ -79,7 +80,7 @@ namespace TPLinkSmartDevices.Devices
         public async Task<Dictionary<int, float>> GetYearStats(int year)
         {
             //TODO: check if year is correct
-            dynamic result = await Execute("emeter", "get_monthstat", "year", year);
+            dynamic result = await Execute("emeter", "get_monthstat", "year", year).ConfigureAwait(false);
             var stats = new Dictionary<int, float>();
             foreach (dynamic month_stat in result.month_list)
             {
