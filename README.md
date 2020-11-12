@@ -48,11 +48,11 @@ with event handler:
 	    
 
 ### Example Usage
-    var smartPlug = new TPLinkSmartPlug("100.10.4.1");
+    var smartPlug = await TPLinkSmartPlug.Create("100.10.4.1");
     smartPlug.SetOutletPowered(true); // Turn on relay
     smartPlug.SetOutletPowered(false); // Turn off relay
 
-    var smartBulb = new TPLinkSmartBulb("100.10.4.2");
+    var smartBulb = await TPLinkSmartBulb.Create("100.10.4.2");
     smartBulb.SetPoweredOn(true); // Turn on bulb
     smartBulb.SetPoweredOn(false); // Turn off bulb
  
