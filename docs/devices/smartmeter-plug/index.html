@@ -8,8 +8,9 @@
       
       
       
+      
       <link rel="shortcut icon" href="../../../assets/icon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.2">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.4">
     
     
       
@@ -17,10 +18,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.19190aaf.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.358818c7.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.24b84193.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.f0267088.min.css">
         
       
     
@@ -389,6 +390,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    Create(string, int)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#refresh" class="md-nav__link">
     Refresh()
   </a>
@@ -586,6 +594,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    Create(string, int)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#refresh" class="md-nav__link">
     Refresh()
   </a>
@@ -672,6 +687,26 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
 </dd>
 </dl>
 <h2 id="methods">Methods</h2>
+<h3 id="create"><code>Create(string, int)</code></h3>
+<dl>
+<dd>
+<p>Factory instantiation method. Returns a new instance of this type.
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">static</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">TPLinkSmartMeterPlug</span><span class="p">&gt;</span> <span class="n">Create</span><span class="p">(</span><span class="kt">string</span> <span class="n">hostname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span> <span class="p">=</span> <span class="m">9999</span><span class="p">)</span>
+</code></pre></div></p>
+<dl>
+<dt><strong>Parameters</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="kt">string</span> <span class="n">hostname</span></code>: ip-address of of this plug</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">port</span></code>: plug communicates on this port, defaults to <code>9999</code></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Method is awaitable</p>
+</div>
 <h3 id="refresh"><code>Refresh()</code></h3>
 <dl>
 <dd>Updates current power usage, gain data and all other properties of this plug (includes a call to <a href="../plug/#refresh"><code>TPLinkSmartPlug.Refresh()</code></a> for the common device information)
@@ -806,7 +841,7 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
     </div>
     
       <script src="../../../assets/javascripts/vendor.7e0ee788.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.c1ccee15.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../../../assets/javascripts/bundle.b3a72adc.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
