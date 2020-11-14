@@ -68,17 +68,26 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(async() => await Refresh()).GetAwaiter().GetResult();
         }
 
+        private TPLinkSmartBulb() { }
+
+        public static async Task<TPLinkSmartBulb> Create(string hostname, int port = 9999)
+        {
+            var b = new TPLinkSmartBulb() { Hostname = hostname, Port = port };
+            await b.Refresh().ConfigureAwait(false);
+            return b;
+        }
+
         /// <summary>
         /// Refresh device information
         /// </summary>
         public async Task Refresh()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");//
+            dynamic sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);//
             IsColor = (bool)sysInfo.is_color;
             IsDimmable = (bool)sysInfo.is_dimmable;
             IsVariableColorTemperature = (bool)sysInfo.is_variable_color_temp;
 
-            dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state"); //
+            dynamic lightState = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_state").ConfigureAwait(false); //
             _poweredOn = (bool)lightState.on_off;
 
             if (!_poweredOn)
@@ -87,8 +96,8 @@ namespace TPLinkSmartDevices.Devices
             _hsv = new BulbHSV() { Hue = (int)lightState.hue, Saturation = (int)lightState.saturation, Value = (int)lightState.brightness };
             _colorTemp = (int)lightState.color_temp;
             _brightness = (int)lightState.brightness;
-            
-            await Refresh(sysInfo);
+
+            await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -100,7 +109,7 @@ namespace TPLinkSmartDevices.Devices
             {
                 Task.Run(async() =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "brightness", brightness);
+                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "brightness", brightness).ConfigureAwait(false);
                     _brightness = brightness;
                 });
             }
@@ -119,7 +128,7 @@ namespace TPLinkSmartDevices.Devices
             {
                 Task.Run(async () =>
                 {
-                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "color_temp", colortemp);
+                    await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "color_temp", colortemp).ConfigureAwait(false);
                     _colorTemp = colortemp;
                 });
             }
@@ -144,7 +153,7 @@ namespace TPLinkSmartDevices.Devices
                         new JProperty("saturation", hsv.Saturation),
                         new JProperty("brightness", hsv.Value),
                         new JProperty("color_temp", 0)
-                    }, null);
+                    }, null).ConfigureAwait(false);
                     _hsv = hsv;
                 });
             }
@@ -161,7 +170,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0);
+                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0).ConfigureAwait(false);
                 _poweredOn = value;
             });
         }

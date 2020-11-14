@@ -43,6 +43,18 @@ public DateTime PoweredOnSince { get; private set; }
 
 ## Methods
 
+### `Create(string, int)` {: #create }
+: Factory instantiation method. Returns a new instance of this type.
+  ``` csharp
+  public static async Task<TPLinkSmartPlug> Create(string hostname, int port = 9999)
+  ```
+
+    __Parameters__
+    : * `#!csharp string hostname`: ip-address of of this plug
+      * `#!csharp int port`: plug communicates on this port, defaults to `9999`
+
+!!! tip "Method is awaitable" 
+
 ### `Refresh()`
 : Refreshes all properties of this plug (includes a call to [`TPLinkSmartDevice.Refresh(dynamic)`](device.md#refreshdynamic) for the common device information)
   ``` csharp
