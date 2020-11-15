@@ -45,7 +45,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");
+            dynamic sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);
 
             JObject info = JObject.Parse(Convert.ToString(sysInfo));
             bool hasChildren = info["children"] != null;
@@ -59,7 +59,7 @@ namespace TPLinkSmartDevices.Devices
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
 
-            await Refresh(sysInfo);
+            await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace TPLinkSmartDevices.Devices
                 //toggle all outlets of plug
                 if (OutletCount == 1 || outletId == -1)
                 {
-                    await Execute("system", "set_relay_state", "state", value ? 1 : 0);
+                    await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
                     this.AllOutletsPowered = value;
                 }
                 //toggle specific outlet
@@ -89,7 +89,7 @@ namespace TPLinkSmartDevices.Devices
                     };
 
                     string message = root.ToString(Formatting.None);
-                    await Execute(message);
+                    await Execute(message).ConfigureAwait(false);
                     this.Outlets[outletId].OutletPowered = value;
                     this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
                 }
@@ -108,7 +108,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("system", "set_led_off", "off", value ? 0 : 1);
+                await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
                 this.LedOn = value;
             });
         }
