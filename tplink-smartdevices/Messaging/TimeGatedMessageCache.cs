@@ -28,7 +28,7 @@ namespace TPLinkSmartDevices.Messaging
                     return cachedMessage.MessageResult;
             }
 
-            var result = await message.Execute(hostname, port);
+            var result = await message.Execute(hostname, port).ConfigureAwait(false);
             _cache.Add(new MessageCacheItem(result, hostname, port));
             return result;
         }

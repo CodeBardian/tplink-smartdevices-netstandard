@@ -53,7 +53,7 @@ Smart devices which are already connected to the same network as the host device
     ``` csharp
     var discoveredDevices = await new TPLinkDiscovery().Discover();
     ```
-    <small> Full reference for [`TPLinkDiscovery.Discover()`](docs/discovery.md#discoverint-int)</small>
+    <small> Full reference for [`TPLinkDiscovery.Discover()`](docs/discovery.md#discover)</small>
 === "With event"
     ``` csharp
     TPLinkDiscovery discovery = new TPLinkDiscovery();
@@ -65,11 +65,12 @@ Smart devices which are already connected to the same network as the host device
     var discoveredDevices = await discovery.Discover();
     ```
     <small> Full reference for [`TPLinkDiscovery.DeviceFound`](docs/discovery.md#devicefound)</small>
-=== "Manually"
+=== "Manual instantiation"
     ``` csharp
+    //with constructor (blocking!)
     var smartPlug = new TPLinkSmartPlug("100.10.4.1");
-    //or
-    var smartBulb = new TPLinkSmartBulb("100.10.4.2");
+    //or with async factory method
+    var smartBulb = await TPLinkSmartPlug.Create("100.10.4.1");
     ```
     <small> Full reference for [`TPLinkSmartPlug`](docs/devices/plug.md) and [`TPLinkSmartBulb`](docs/devices/bulb.md)</small>
 

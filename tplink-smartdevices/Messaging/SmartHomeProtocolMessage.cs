@@ -74,25 +74,19 @@ namespace TPLinkSmartDevices.Messaging
             var messageToSend = SmartHomeProtocolEncoder.Encrypt(Message ?? JSON);
 
             var client = new TcpClient();
-            client.ConnectAsync(hostname, port).Wait(2000);
-
-            if (!client.Connected)
-            {
-                return null;
-            }
+            await client.ConnectAsync(hostname, port).ConfigureAwait(false);
 
             byte[] packet = new byte[0];
             using (var stream = client.GetStream())
             {
-                await stream.WriteAsync(messageToSend, 0, messageToSend.Length);
-                //stream.Write(messageToSend, 0, messageToSend.Length);
+                await stream.WriteAsync(messageToSend, 0, messageToSend.Length).ConfigureAwait(false);
 
                 int targetSize = 0;
                 var buffer = new List<byte>();
                 while (true)
                 {
                     var chunk = new byte[1024];
-                    var bytesReceived = stream.Read(chunk, 0, chunk.Length);
+                    var bytesReceived = await stream.ReadAsync(chunk, 0, chunk.Length).ConfigureAwait(false);
 
                     if (!buffer.Any())
                     {

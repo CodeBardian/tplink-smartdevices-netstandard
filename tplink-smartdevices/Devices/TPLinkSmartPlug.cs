@@ -31,12 +31,21 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(() => Refresh()).GetAwaiter().GetResult();
         }
 
+        protected TPLinkSmartPlug() { }
+
+        public static async Task<TPLinkSmartPlug> Create(string hostname, int port = 9999)
+        {
+            var p = new TPLinkSmartPlug() { Hostname = hostname, Port = port };
+            await p.Refresh().ConfigureAwait(false);
+            return p;
+        }
+
         /// <summary>
         /// Refresh device information
         /// </summary>
         public async Task Refresh()
         {
-            dynamic sysInfo = await Execute("system", "get_sysinfo");
+            dynamic sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);
 
             JObject info = JObject.Parse(Convert.ToString(sysInfo));
             bool hasChildren = info["children"] != null;
@@ -52,7 +61,7 @@ namespace TPLinkSmartDevices.Devices
             Features = ((string)sysInfo.feature).Split(':');
             LedOn = !(bool)sysInfo.led_off;
 
-            await Refresh(sysInfo);
+            await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -62,7 +71,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("system", "set_relay_state", "state", value ? 1 : 0);
+                await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
                 this.OutletPowered = value;
             });
         }
@@ -79,7 +88,7 @@ namespace TPLinkSmartDevices.Devices
         {
             Task.Run(async () =>
             {
-                await Execute("system", "set_led_off", "off", value ? 0 : 1);
+                await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
                 this.LedOn = value;
             });
         }
