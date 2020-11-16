@@ -104,13 +104,12 @@ namespace TPLinkSmartDevices.Devices
             _hsv = new BulbHSV() { Hue = (int)lightState.hue, Saturation = (int)lightState.saturation, Value = (int)lightState.brightness };
             _colorTemp = (int)lightState.color_temp;
             _brightness = (int)lightState.brightness;
-
-            dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details");
+            
+            dynamic lightDetails = await Execute("smartlife.iot.smartbulb.lightingservice", "get_light_details").ConfigureAwait(false);
             LightDetails = JsonConvert.DeserializeObject<LightDetails>(Convert.ToString(lightDetails));
 
             await RetrievePresets();
-
-            await Refresh(sysInfo).ConfigureAwait(false);
+            await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -154,6 +153,7 @@ namespace TPLinkSmartDevices.Devices
                         new JProperty("color_temp", colortemp),
                         new JProperty("transition_period", transition_period)
                     }, null).ConfigureAwait(false);
+
                     _colorTemp = colortemp;
                 });
             }

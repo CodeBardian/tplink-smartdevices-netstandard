@@ -53,13 +53,13 @@ namespace TPLinkSmartDevices.Devices
             if (hasChildren) throw new Exception("this plug has multiple outlets. use TPLinkSmartMultiPlug instead!");
 
             OutletPowered = (int)sysInfo.relay_state == 1;
+            Features = ((string)sysInfo.feature).Split(':');
+            LedOn = !(bool)sysInfo.led_off;
+            
             if ((int)sysInfo.on_time == 0)
                 PoweredOnSince = default(DateTime);
             else
                 PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
-
-            Features = ((string)sysInfo.feature).Split(':');
-            LedOn = !(bool)sysInfo.led_off;
 
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
