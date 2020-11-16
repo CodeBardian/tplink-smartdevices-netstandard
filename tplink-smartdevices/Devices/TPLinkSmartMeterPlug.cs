@@ -82,7 +82,7 @@ namespace TPLinkSmartDevices.Devices
             if (year > DateTime.Now.Year || year < 2010) throw new ArgumentOutOfRangeException($"Can't get stats for {year}. Invalid year!");
 
             dynamic result = await Execute("emeter", "get_monthstat", "year", year).ConfigureAwait(false);
-            var stats = new Dictionary<int, int>();
+            var stats = new Dictionary<int, float>();
             foreach (dynamic month_stat in result.month_list)
             {
                 stats.Add((int)month_stat.month, (float)(month_stat.energy ?? (month_stat.energy_wh / WATTS_IN_KILOWATT)));
