@@ -1,19 +1,23 @@
 ## Changelog
 
-### [1.0.4] - unreleased
+### [1.0.4] - 2020-11-16
 
 #### Added
 
-- light details of smart bulbs
-- apply the four preset light states of smart bulbs
-- add transition time between light states for smart bulbs
-- add support for multi-outlet plugs (HS300, HS107, KP303?)
+- light details of smart bulbs ([#af850dd](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/af850dd))
+- apply the four preset light states of smart bulbs ([#03e83c9](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/03e83c9) + [#e68bed7](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/e68bed7))
+- transition time between light states for smart bulbs ([#db66403](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/db66403))
+- support for multi-outlet plugs (HS300, HS107, KP303?)
+- ConfigureAwait(false) on awaiting tasks ([#16](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/16))
 
 #### Changed
+- avoid blocking in async methods ([#16](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/16))
+- discovery now accepts broadcast address parameter ([#15](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/15))
 
 #### Fixed
-- color changing of kl-130 model
+- color changing of kl-130 model ([#9](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/16))
 - exception on discovering kl-130 model
+- exception on energy stat parsing ([#12](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/12))
 
 ### [1.0.3] - 2020-08-08
 
