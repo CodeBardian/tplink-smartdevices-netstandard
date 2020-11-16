@@ -10,7 +10,7 @@
       
       
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../assets/icon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.3">
     
     
@@ -51,6 +51,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#powerdata-class" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -306,6 +311,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../devices/multi-plug/" title="TPLinkSmartMultiPlug" class="md-nav__link">
+      TPLinkSmartMultiPlug
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -361,11 +378,92 @@
     
     <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        PowerData
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
     
     <a href="./" title="PowerData" class="md-nav__link md-nav__link--active">
       PowerData
     </a>
     
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voltage" class="md-nav__link">
+    Voltage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amperage" class="md-nav__link">
+    Amperage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power" class="md-nav__link">
+    Power
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#total" class="md-nav__link">
+    Total
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../light-details/" title="LightDetails" class="md-nav__link">
+      LightDetails
+    </a>
   </li>
 
         
@@ -386,6 +484,72 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voltage" class="md-nav__link">
+    Voltage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amperage" class="md-nav__link">
+    Amperage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power" class="md-nav__link">
+    Power
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#total" class="md-nav__link">
+    Total
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
@@ -395,9 +559,34 @@
                   
                 
                 
-                  <h1>PowerData</h1>
-                
-                
+                <h1 id="powerdata-class">PowerData Class</h1>
+<p><small>Namespace: TPLinkSmartDevices.Data</small><br/><br/>
+Encapsulates JSON data structure for current energy use as metered by the HS110 Smart Energy Meter.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="voltage"><code>Voltage</code></h3>
+<dl>
+<dd>Currently measured voltage in volts
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">double</span> <span class="n">Voltage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="amperage"><code>Amperage</code></h3>
+<dl>
+<dd>Currently measured current in amperes
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">double</span> <span class="n">Amperage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="power"><code>Power</code></h3>
+<dl>
+<dd>Currently measured power in watts
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">double</span> <span class="n">Power</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="total"><code>Total</code></h3>
+<dl>
+<dd>Total power consumption in kilowatthours
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">double</span> <span class="n">Total</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
                 
               
               
@@ -430,6 +619,20 @@
             </div>
           </a>
         
+        
+          <a href="../light-details/" title="LightDetails" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                LightDetails
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
         
       </nav>
     </div>

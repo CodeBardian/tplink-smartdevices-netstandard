@@ -9,8 +9,10 @@
 | [`TPLinkSmartPlug`](devices/plug.md)      | encloses plug specific system information and plug controls |
 | [`TPLinkSmartMeterPlug`](devices/smartmeter-plug.md) | provides data on power consumption of comsumers connected to a HS110 plug |
 | [`TPLinkSmartBulb`](devices/bulb.md)      | encloses bulb specific system information and bulb controls |
+| [`TPLinkSmartMultiPlug`](devices/multi-plug.md)      | encloses plug specific system information and controls for plugs with multiple outlets |
 
 | TPLinkSmartDevice.Data        | Description                          |
 | :---------------------------- | :----------------------------------- |
 | [`BulbHSV`](data/hsv.md)      | represents a single color in the HSV color model to change a smart bulbs color  |
 | [`PowerData`](data/power.md)  | Encapsulates JSON data structure for current energy use as metered by the HS110 Smart Energy Meter |
+| [`LightDetails`](data/light-details.md)  | Encapsulates JSON data structure for specific hardware properties of smart bulbs |

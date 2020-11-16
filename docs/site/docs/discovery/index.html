@@ -10,7 +10,7 @@
       
       
       
-      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../assets/icon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.3">
     
     
@@ -413,6 +413,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../devices/multi-plug/" title="TPLinkSmartMultiPlug" class="md-nav__link">
+      TPLinkSmartMultiPlug
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -463,6 +475,18 @@
   <li class="md-nav__item">
     <a href="../data/power/" title="PowerData" class="md-nav__link">
       PowerData
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../data/light-details/" title="LightDetails" class="md-nav__link">
+      LightDetails
     </a>
   </li>
 
@@ -626,7 +650,7 @@ handles discovery of new smart devices and connection of factory new devices to 
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="kt">string</span> <span class="n">ssid</span></code>: <em>Service Set Identifier</em>(name) of network to connect to</li>
+<li><code class="highlight"><span class="kt">string</span> <span class="n">ssid</span></code>: <em>Service Set Identifier</em> (name) of network to connect to</li>
 <li><code class="highlight"><span class="kt">string</span> <span class="n">password</span></code>: password of network to connect to</li>
 <li><code class="highlight"><span class="kt">int</span> <span class="n">type</span></code>: network protection level, defaults to <code>3</code> indicating WPA2</li>
 </ul>
@@ -637,6 +661,9 @@ handles discovery of new smart devices and connection of factory new devices to 
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Host who runs the application needs to be connected to the open configuration network! (TP-Link_Smart Plug_XXXX or similar)</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Method is awaitable</p>
 </div>
 <h2 id="events">Events</h2>
 <h3 id="devicefound"><code>DeviceFound</code></h3>

@@ -28,6 +28,7 @@ Use NuGet package manager to add a reference to this project
 | `TPLinkSmartPlug`       |  HS100            | HS105                             |
 | `TPLinkSmartMeterPlug`  |  HS110            |                                   |
 | `TPLinkSmartBulb`       | KL100/KL110/KL130 | KL50/KL60/LB100/LB110/LB120/LB130 |
+| `TPLinkSmartMultiPlug`  |  HS300/HS107      | KP200/KP303/KP400                 |
 
 ## Usage
 

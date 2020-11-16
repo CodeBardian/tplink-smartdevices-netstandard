@@ -10,7 +10,7 @@
       
       
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../assets/icon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.3">
     
     
@@ -385,6 +385,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#lightdetails" class="md-nav__link">
+    LightDetails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hsv" class="md-nav__link">
     HSV
   </a>
@@ -394,6 +401,13 @@
           <li class="md-nav__item">
   <a href="#poweredon" class="md-nav__link">
     PoweredOn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preferredlightstates" class="md-nav__link">
+    PreferredLightStates
   </a>
   
 </li>
@@ -446,22 +460,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setbrightnessint" class="md-nav__link">
-    SetBrightness(int)
+  <a href="#setbrightnessint-int" class="md-nav__link">
+    SetBrightness(int, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempint" class="md-nav__link">
-    SetColorTemp(int)
+  <a href="#setcolortempint-int" class="md-nav__link">
+    SetColorTemp(int, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempbulbhsv" class="md-nav__link">
-    SetColorTemp(BulbHSV)
+  <a href="#setcolortempbulbhsv-int" class="md-nav__link">
+    SetColorTemp(BulbHSV, int)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applypresetint" class="md-nav__link">
+    ApplyPreset(int)
   </a>
   
 </li>
@@ -475,6 +496,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../multi-plug/" title="TPLinkSmartMultiPlug" class="md-nav__link">
+      TPLinkSmartMultiPlug
+    </a>
   </li>
 
         
@@ -528,6 +561,18 @@
   <li class="md-nav__item">
     <a href="../../data/power/" title="PowerData" class="md-nav__link">
       PowerData
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../data/light-details/" title="LightDetails" class="md-nav__link">
+      LightDetails
     </a>
   </li>
 
@@ -611,6 +656,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#lightdetails" class="md-nav__link">
+    LightDetails
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hsv" class="md-nav__link">
     HSV
   </a>
@@ -620,6 +672,13 @@
           <li class="md-nav__item">
   <a href="#poweredon" class="md-nav__link">
     PoweredOn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preferredlightstates" class="md-nav__link">
+    PreferredLightStates
   </a>
   
 </li>
@@ -672,22 +731,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setbrightnessint" class="md-nav__link">
-    SetBrightness(int)
+  <a href="#setbrightnessint-int" class="md-nav__link">
+    SetBrightness(int, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempint" class="md-nav__link">
-    SetColorTemp(int)
+  <a href="#setcolortempint-int" class="md-nav__link">
+    SetColorTemp(int, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempbulbhsv" class="md-nav__link">
-    SetColorTemp(BulbHSV)
+  <a href="#setcolortempbulbhsv-int" class="md-nav__link">
+    SetColorTemp(BulbHSV, int)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applypresetint" class="md-nav__link">
+    ApplyPreset(int)
   </a>
   
 </li>
@@ -748,6 +814,12 @@ encloses bulb specific system information and bulb controls</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">int</span> <span class="n">ColorTemperature</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></dd>
 </dl>
+<h3 id="lightdetails"><code>LightDetails</code></h3>
+<dl>
+<dd>Contains further hardware specifications of this bulb, , see <a href="/docs/data/light-details.md"><code>LightDetails</code></a> reference
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="n">LightDetails</span> <span class="n">LightDetails</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
 <h3 id="hsv"><code>HSV</code></h3>
 <dl>
 <dd>Returns bulb color in HSV scheme 
@@ -758,6 +830,12 @@ encloses bulb specific system information and bulb controls</p>
 <dl>
 <dd>Returns whether bulb is powered on 
 <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">bool</span> <span class="n">PoweredOn</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="preferredlightstates"><code>PreferredLightStates</code></h3>
+<dl>
+<dd>Returns collection of the four light state preset configurations
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">PreferredLightState</span><span class="p">&gt;</span> <span class="n">PreferredLightStates</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></dd>
 </dl>
 <h2 id="constructors">Constructors</h2>
@@ -804,33 +882,49 @@ encloses bulb specific system information and bulb controls</p>
 </dl>
 </dd>
 </dl>
-<h3 id="setbrightnessint"><code>SetBrightness(int)</code></h3>
+<h3 id="setbrightnessint-int"><code>SetBrightness(int, int)</code></h3>
 <dl>
 <dd>
 <p>Change the bulbs brightness
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetBrightness</span><span class="p">(</span><span class="kt">int</span> <span class="n">brightness</span><span class="p">)</span>
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetBrightness</span><span class="p">(</span><span class="kt">int</span> <span class="n">brightness</span><span class="p">,</span> <span class="kt">int</span> <span class="n">transition_period</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
 <li><code class="highlight"><span class="kt">int</span> <span class="n">brightness</span></code>: brightness value in percent</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">transition_period</span></code> (optional): time in milliseconds in which the bulb transitions from old to new brightness. Allowed values between <code>0</code> and <code>10000</code></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="n">NotSupportedException</span></code>: the bulb does not support dimming</li>
+<li><code class="highlight"><span class="n">ArgumentException</span></code>: <code>transition_period</code> only allows values between <code>0</code> and <code>10000</code></li>
 </ul>
 </dd>
 </dl>
 </dd>
 </dl>
-<h3 id="setcolortempint"><code>SetColorTemp(int)</code></h3>
+<h3 id="setcolortempint-int"><code>SetColorTemp(int, int)</code></h3>
 <dl>
 <dd>
 <p>Change the bulbs color temperature
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetColorTemp</span><span class="p">(</span><span class="kt">int</span> <span class="n">colortemp</span><span class="p">)</span>
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetColorTemp</span><span class="p">(</span><span class="kt">int</span> <span class="n">colortemp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">transition_period</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="kt">int</span> <span class="n">colortemp</span></code>: color temperature in kelvin, common values ranging between 2700K(soft light) to 6500K(bright daylight)</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">colortemp</span></code>: color temperature in kelvin, common values ranging between 2700K (soft light) to 6500K (bright daylight)</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">transition_period</span></code> (optional): time in milliseconds in which the bulb transitions from old to new brightness. Allowed values between <code>0</code> and <code>10000</code></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="n">NotSupportedException</span></code>: the bulb does not support color temperature changes</li>
+<li><code class="highlight"><span class="n">ArgumentException</span></code>: <code>transition_period</code> only allows values between <code>0</code> and <code>10000</code></li>
 </ul>
 </dd>
 </dl>
@@ -840,17 +934,47 @@ encloses bulb specific system information and bulb controls</p>
 <p class="admonition-title">Note</p>
 <p>Color temperature values depend on device model, for instance KL120 supports 2500K-5000K and KL130 2700K-9000K!</p>
 </div>
-<h3 id="setcolortempbulbhsv"><code>SetColorTemp(BulbHSV)</code></h3>
+<h3 id="setcolortempbulbhsv-int"><code>SetColorTemp(BulbHSV, int)</code></h3>
 <dl>
 <dd>
 <p>Change the bulbs color 
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetHSV</span><span class="p">(</span><span class="n">BulbHSV</span> <span class="n">hsv</span><span class="p">)</span>
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetHSV</span><span class="p">(</span><span class="n">BulbHSV</span> <span class="n">hsv</span><span class="p">,</span> <span class="kt">int</span> <span class="n">transition_period</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="n">BulbHSV</span> <span class="n">hsv</span></code>: color in HSV color scheme, see <a href="/docs/data/hsv"><code>BulbHSV</code></a> reference</li>
+<li><code class="highlight"><span class="n">BulbHSV</span> <span class="n">hsv</span></code>: color in HSV color scheme, see <a href="/docs/data/hsv.md"><code>BulbHSV</code></a> reference</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">transition_period</span></code> (optional): time in milliseconds in which the bulb transitions from old to new brightness. Allowed values between <code>0</code> and <code>10000</code></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="n">NotSupportedException</span></code>: the bulb does not support color changes</li>
+<li><code class="highlight"><span class="n">ArgumentException</span></code>: <code>transition_period</code> only allows values between <code>0</code> and <code>10000</code></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<h3 id="applypresetint"><code>ApplyPreset(int)</code></h3>
+<dl>
+<dd>
+<p>Operate smart bulb on one of the four light state presets
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">ApplyPreset</span><span class="p">(</span><span class="kt">int</span> <span class="n">presetIndex</span><span class="p">)</span>
+</code></pre></div></p>
+<dl>
+<dt><strong>Parameters</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">presetIndex</span></code>: index of the four presets, ranging from <code>0</code> to <code>3</code></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="n">ArgumentOutOfRangeException</span></code>: <code>presetIndex</code> only allows values between <code>0</code> and <code>3</code></li>
 </ul>
 </dd>
 </dl>
@@ -889,13 +1013,13 @@ encloses bulb specific system information and bulb controls</p>
           </a>
         
         
-          <a href="../../data/hsv/" title="BulbHSV" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../multi-plug/" title="TPLinkSmartMultiPlug" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                BulbHSV
+                TPLinkSmartMultiPlug
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

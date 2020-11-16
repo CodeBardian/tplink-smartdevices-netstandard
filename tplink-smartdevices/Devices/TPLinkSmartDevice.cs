@@ -78,6 +78,12 @@ namespace TPLinkSmartDevices.Devices
             return await MessageCache.Request(message, Hostname, Port).ConfigureAwait(false);
         }
 
+        protected async Task<dynamic> Execute(string json)
+        {
+            var message = new SmartHomeProtocolMessage(json);
+            return await MessageCache.Request(message, Hostname, Port);
+        }
+
         public void SetAlias(string value)
         {
             Task.Run(async () =>
@@ -102,8 +108,8 @@ namespace TPLinkSmartDevices.Devices
             Task.Run(async () =>
             {
                 dynamic cloudInfo = await Execute("cnCloud", "get_info").ConfigureAwait(false);
-                CloudServer = cloudInfo.server;
-                RemoteAccessEnabled = Convert.ToBoolean(cloudInfo.binded);
+                CloudServer = (string)cloudInfo.server;
+                RemoteAccessEnabled = Convert.ToBoolean((int)cloudInfo.binded);
             });
         }
 

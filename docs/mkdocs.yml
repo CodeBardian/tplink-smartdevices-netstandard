@@ -9,9 +9,11 @@ nav:
         - 'TPLinkSmartPlug': 'docs/devices/plug.md'
         - 'TPLinkSmartMeterPlug': 'docs/devices/smartmeter-plug.md'
         - 'TPLinkSmartBulb': 'docs/devices/bulb.md'
+        - 'TPLinkSmartMultiPlug': 'docs/devices/multi-plug.md'
       - Data:
         - 'BulbHSV': 'docs/data/hsv.md'
         - 'PowerData': 'docs/data/power.md'
+        - 'LightDetails': 'docs/data/light-details.md'
 theme:
   name: material
   favicon: assets/icon.png

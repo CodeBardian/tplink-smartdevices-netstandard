@@ -15,7 +15,7 @@
     
     
       
-        <title>TPLinkSmartMeterPlug - tplink-smartdevices-docs</title>
+        <title>TPLinkSmartMultiPlug - tplink-smartdevices-docs</title>
       
     
     
@@ -53,7 +53,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tplinksmartmeterplug-class" class="md-skip">
+        <a href="#tplinksmartmultiplug-class" class="md-skip">
           Skip to content
         </a>
       
@@ -81,7 +81,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              TPLinkSmartMeterPlug
+              TPLinkSmartMultiPlug
             
           </span>
         </div>
@@ -293,6 +293,30 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../smartmeter-plug/" title="TPLinkSmartMeterPlug" class="md-nav__link">
+      TPLinkSmartMeterPlug
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bulb/" title="TPLinkSmartBulb" class="md-nav__link">
+      TPLinkSmartBulb
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -304,14 +328,14 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        TPLinkSmartMeterPlug
+        TPLinkSmartMultiPlug
         <span class="md-nav__icon md-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
         </span>
       </label>
     
-    <a href="./" title="TPLinkSmartMeterPlug" class="md-nav__link md-nav__link--active">
-      TPLinkSmartMeterPlug
+    <a href="./" title="TPLinkSmartMultiPlug" class="md-nav__link md-nav__link--active">
+      TPLinkSmartMultiPlug
     </a>
     
       
@@ -338,22 +362,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#currentpowerusage" class="md-nav__link">
-    CurrentPowerUsage
+  <a href="#alloutletspowered" class="md-nav__link">
+    AllOutletsPowered
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#igain" class="md-nav__link">
-    IGain
+  <a href="#features" class="md-nav__link">
+    Features
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#vgain" class="md-nav__link">
-    VGain
+  <a href="#ledon" class="md-nav__link">
+    LedOn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outletcount" class="md-nav__link">
+    OutletCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outlets" class="md-nav__link">
+    Outlets
   </a>
   
 </li>
@@ -372,8 +410,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tplinksmartmeterplugstring" class="md-nav__link">
-    TPLinkSmartMeterPlug(string)
+  <a href="#tplinksmartmultiplugstring-int" class="md-nav__link">
+    TPLinkSmartMultiPlug(string, int)
   </a>
   
 </li>
@@ -399,22 +437,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#erasestats" class="md-nav__link">
-    EraseStats()
+  <a href="#setoutletpoweredbool-int" class="md-nav__link">
+    SetOutletPowered(bool, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getmonthstatsint-int" class="md-nav__link">
-    GetMonthStats(int, int)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#getyearstatsint" class="md-nav__link">
-    GetYearStats(int)
+  <a href="#setledonbool" class="md-nav__link">
+    SetLedOn(bool)
   </a>
   
 </li>
@@ -428,30 +459,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../bulb/" title="TPLinkSmartBulb" class="md-nav__link">
-      TPLinkSmartBulb
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../multi-plug/" title="TPLinkSmartMultiPlug" class="md-nav__link">
-      TPLinkSmartMultiPlug
-    </a>
   </li>
 
         
@@ -565,22 +572,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#currentpowerusage" class="md-nav__link">
-    CurrentPowerUsage
+  <a href="#alloutletspowered" class="md-nav__link">
+    AllOutletsPowered
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#igain" class="md-nav__link">
-    IGain
+  <a href="#features" class="md-nav__link">
+    Features
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#vgain" class="md-nav__link">
-    VGain
+  <a href="#ledon" class="md-nav__link">
+    LedOn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outletcount" class="md-nav__link">
+    OutletCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outlets" class="md-nav__link">
+    Outlets
   </a>
   
 </li>
@@ -599,8 +620,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#tplinksmartmeterplugstring" class="md-nav__link">
-    TPLinkSmartMeterPlug(string)
+  <a href="#tplinksmartmultiplugstring-int" class="md-nav__link">
+    TPLinkSmartMultiPlug(string, int)
   </a>
   
 </li>
@@ -626,22 +647,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#erasestats" class="md-nav__link">
-    EraseStats()
+  <a href="#setoutletpoweredbool-int" class="md-nav__link">
+    SetOutletPowered(bool, int)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#getmonthstatsint-int" class="md-nav__link">
-    GetMonthStats(int, int)
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#getyearstatsint" class="md-nav__link">
-    GetYearStats(int)
+  <a href="#setledonbool" class="md-nav__link">
+    SetLedOn(bool)
   </a>
   
 </li>
@@ -667,41 +681,54 @@
                   
                 
                 
-                <h1 id="tplinksmartmeterplug-class">TPLinkSmartMeterPlug Class</h1>
+                <h1 id="tplinksmartmultiplug-class">TPLinkSmartMultiPlug Class</h1>
 <p><small>Namespace: TPLinkSmartDevices.Devices</small><br/>
-<small>Inheritance: TPLinkSmartPlug -&gt; TPLinkSmartMeterPlug</small><br/><br/>
-provides data on power consumption of comsumers connected to a HS110 plug</p>
+<small>Inheritance: TPLinkSmartDevice -&gt; TPLinkSmartMultiPlug</small><br/><br/>
+encloses plug specific system information and controls for plugs with multiple outlets</p>
 <h2 id="properties">Properties</h2>
-<h3 id="currentpowerusage"><code>CurrentPowerUsage</code></h3>
+<h3 id="alloutletspowered"><code>AllOutletsPowered</code></h3>
 <dl>
-<dd>Returns a <a href="/docs/data/power"><code>PowerData</code></a> object including power usage data from the latest call to the construtor or <a href="#refresh"><code>.Refresh()</code></a>
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="n">PowerData</span> <span class="n">CurrentPowerUsage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<dd>Returns whether all the plugs outlet relais are powered on
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">bool</span> <span class="n">AllOutletsPowered</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></dd>
 </dl>
-<h3 id="igain"><code>IGain</code></h3>
+<h3 id="features"><code>Features</code></h3>
 <dl>
-<dd>Returns ratio of output current to input current.
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">uint</span> <span class="n">IGain</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<dd>Returns the feature (capability) abbreviations for this plug
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">Features</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></dd>
 </dl>
-<h3 id="vgain"><code>VGain</code></h3>
+<h3 id="ledon"><code>LedOn</code></h3>
 <dl>
-<dd>Returns ratio of output voltage to input voltage.
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">uint</span> <span class="n">VGain</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<dd>If status led on smart plug is on 
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">bool</span> <span class="n">LedOn</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="outletcount"><code>OutletCount</code></h3>
+<dl>
+<dd>Returns number of outlets on this plug
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="kt">int</span> <span class="n">OutletCount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></dd>
+</dl>
+<h3 id="outlets"><code>Outlets</code></h3>
+<dl>
+<dd>Returns array of Outlets, containing id's, names and power states of each outlet
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="n">Outlet</span><span class="p">[]</span> <span class="n">Outlets</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></dd>
 </dl>
 <h2 id="constructors">Constructors</h2>
-<h3 id="tplinksmartmeterplugstring"><code>TPLinkSmartMeterPlug(string)</code></h3>
+<h3 id="tplinksmartmultiplugstring-int"><code>TPLinkSmartMultiPlug(string, int)</code></h3>
 <dl>
 <dd>
-<p>Creates a new object of this type, used for HS110 plug 
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="nf">TPLinkSmartMeterPlug</span><span class="p">(</span><span class="kt">string</span> <span class="n">hostname</span><span class="p">)</span>
+<p>Creates a new object of this type, used for HS300/HS107 plug 
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="nf">TPLinkSmartPlug</span><span class="p">(</span><span class="kt">string</span> <span class="n">hostname</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">=</span><span class="m">9999</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
 <li><code class="highlight"><span class="kt">string</span> <span class="n">hostname</span></code>: ip-address of of this plug</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">port</span></code>: plug communicates on this port, defaults to <code>9999</code></li>
 </ul>
 </dd>
 </dl>
@@ -710,58 +737,52 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
 <h2 id="methods">Methods</h2>
 <h3 id="refresh"><code>Refresh()</code></h3>
 <dl>
-<dd>Updates current power usage, gain data and all other properties of this plug (includes a call to <a href="../plug/#refresh"><code>TPLinkSmartPlug.Refresh()</code></a> for the common device information)
+<dd>Refreshes all properties of this plug (includes a call to <a href="../device/#refreshdynamic"><code>TPLinkSmartDevice.Refresh(dynamic)</code></a> for the common device information)
   <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span> <span class="nf">Refresh</span><span class="p">()</span>
 </code></pre></div></dd>
 </dl>
 <div class="admonition tip">
 <p class="admonition-title">Method is awaitable</p>
 </div>
-<h3 id="erasestats"><code>EraseStats()</code></h3>
-<dl>
-<dd>Erases all collected e-meter statistics of this plug
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">EraseStats</span><span class="p">()</span>
-</code></pre></div></dd>
-</dl>
-<h3 id="getmonthstatsint-int"><code>GetMonthStats(int, int)</code></h3>
+<h3 id="setoutletpoweredbool-int"><code>SetOutletPowered(bool, int)</code></h3>
 <dl>
 <dd>
-<p>Queries collected usage statistics from a specific month. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span></code> of each day in a month and energy consumption of that day (in watt hours (?))
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">GetMonthStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
+<p>Change the plugs outlet relay state
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetOutletPowered</span><span class="p">(</span><span class="kt">bool</span> <span class="k">value</span><span class="p">,</span> <span class="kt">int</span> <span class="n">outledId</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="kt">int</span> <span class="n">month</span></code>: month of year, ranging from <code>1</code>(January) to <code>12</code>(December)</li>
-<li><code class="highlight"><span class="kt">int</span> <span class="n">year</span></code>: </li>
+<li><code class="highlight"><span class="kt">bool</span> <span class="k">value</span></code>: <code>true</code> power on, <code>false</code> power off</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">outledId</span></code>: id of outlet to turn on/off (zero-based index of all outlets)</li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt>
+<dd>
+<ul>
+<li><code class="highlight"><span class="n">ArgumentException</span></code>: plug does not have a outlet with specified <code>outledId</code></li>
 </ul>
 </dd>
 </dl>
 </dd>
 </dl>
-<div class="admonition tip">
-<p class="admonition-title">Method is awaitable</p>
-</div>
-<h3 id="getyearstatsint"><code>GetYearStats(int)</code></h3>
+<h3 id="setledonbool"><code>SetLedOn(bool)</code></h3>
 <dl>
 <dd>
-<p>Queries collected usage statistics for a whole year. Returns a <code class="highlight"><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span></code> of each month and energy consumption of month (in watt hours (?))
-  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;&gt;</span> <span class="n">GetYearStats</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">)</span>
+<p>Change the plugs LED state; branded as night mode by tp-link :)
+  <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetLedOn</span><span class="p">(</span><span class="kt">bool</span> <span class="k">value</span><span class="p">)</span>
 </code></pre></div></p>
 <dl>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="kt">int</span> <span class="n">year</span></code>: </li>
+<li><code class="highlight"><span class="kt">bool</span> <span class="k">value</span></code>: <code>true</code> LED on (day mode), <code>false</code> LED off (night mode)</li>
 </ul>
 </dd>
 </dl>
 </dd>
 </dl>
-<div class="admonition tip">
-<p class="admonition-title">Method is awaitable</p>
-</div>
                 
               
               
@@ -780,7 +801,7 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../plug/" title="TPLinkSmartPlug" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../bulb/" title="TPLinkSmartBulb" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -789,19 +810,19 @@ provides data on power consumption of comsumers connected to a HS110 plug</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                TPLinkSmartPlug
+                TPLinkSmartBulb
               </div>
             </div>
           </a>
         
         
-          <a href="../bulb/" title="TPLinkSmartBulb" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../data/hsv/" title="BulbHSV" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                TPLinkSmartBulb
+                BulbHSV
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
