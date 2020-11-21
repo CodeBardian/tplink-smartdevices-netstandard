@@ -49,9 +49,6 @@ namespace TPLinkSmartDevices
                 return;
             }
 
-            // force async
-            //await Task.Yield(); // force main thread to return and do async work
-
             UdpClient udpListener = new UdpClient(PORT_NUMBER) { EnableBroadcast = true };
 
             // set timeout
@@ -82,7 +79,6 @@ namespace TPLinkSmartDevices
                     else if (model.StartsWith("KL", StringComparison.OrdinalIgnoreCase) || model.StartsWith("LB", StringComparison.OrdinalIgnoreCase))
                     {
                         device = await TPLinkKL130.CreateNew(ip.Address.ToString());
-                        //device = new TPLinkSmartBulb(ip.Address.ToString());
                     }
 
                     // new device found, store in list and raise event
@@ -120,7 +116,9 @@ namespace TPLinkSmartDevices
                 var discoveryPacket = SmartHomeProtocolEncoder.Encrypt(discoveryJson).ToArray();
 
                 var bytes = discoveryPacket.Skip(4).ToArray();
+
                 int sentBytes = await client.SendAsync(bytes, bytes.Length, new IPEndPoint(IPAddress.Broadcast, PORT_NUMBER)).ConfigureAwait(false);
+                //int sentBytes = client.Send(bytes, bytes.Length, new IPEndPoint(IPAddress.Broadcast, PORT_NUMBER));
 
                 // no bytes sents
                 if (sentBytes == 0)

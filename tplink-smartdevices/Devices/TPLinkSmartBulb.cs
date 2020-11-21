@@ -171,7 +171,7 @@ namespace TPLinkSmartDevices.Devices
                 throw new InvalidOperationException(nameof(hsv.Hue));
             }
 
-            await ExecuteAsync(system, command, "light_state", new JObject
+            await ExecuteAsync(system, command, new JObject
             {
                 new JProperty("hue", hsv.Hue),
                 new JProperty("saturation", hsv.Saturation),
@@ -206,7 +206,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public virtual async Task SetPoweredOn(bool value)
         {
-            await ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0);
+            await ExecuteAsync("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0).ConfigureAwait(false);
             _poweredOn = value;
         }
 

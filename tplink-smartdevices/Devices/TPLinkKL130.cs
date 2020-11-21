@@ -11,17 +11,17 @@ namespace TPLinkSmartDevices.Devices
     {
         public int Saturation { get; protected set; }
         public override int ColorTemperature => _colorTemp;
-        public string ActiveMode { get; private set; }
+        public string ActiveMode { get; protected set; }
         public string Mode { get; protected set; }
         public bool IsFactory { get; protected set; }
         public string Description { get; protected set; }
-        public bool IsVariableColorTemp { get; set; }
+        public bool IsVariableColorTemp { get; protected set; }
 
         public IList<IPreferedLIghtState> PreferedLightStates { get; protected set; }
 
         public ILightState LightState { get; set; }
 
-        private TPLinkKL130(string hostname) : base(hostname)
+        private TPLinkKL130(string ipAddress) : base(ipAddress)
         {
         }
 
@@ -71,7 +71,6 @@ namespace TPLinkSmartDevices.Devices
                 Brightness = obj.GetProperty("brightness").GetInt32(),
             }).ToList<IPreferedLIghtState>();
 
-
             //// todo: don't use the factor of 255 / 100 for kl/lb models
             //if (Model != null && (Model.StartsWith("kl", StringComparison.OrdinalIgnoreCase) || Model.StartsWith("lb", StringComparison.OrdinalIgnoreCase)))
             //{
@@ -98,7 +97,7 @@ namespace TPLinkSmartDevices.Devices
             // validate hsv model
             ValidateHsv(hsv);
 
-            // validate heu (this is represented in degrees)
+            // validate heu (it's represented in degrees)
             if (hsv.Hue > 360)
             {
                 throw new InvalidOperationException(nameof(hsv.Hue));
@@ -128,9 +127,9 @@ namespace TPLinkSmartDevices.Devices
             }
         }
 
-        public static async Task<TPLinkKL130> CreateNew(string hostname)
+        public static async Task<TPLinkKL130> CreateNew(string ipAddress)
         {
-            var smartBulb = new TPLinkKL130(hostname);
+            var smartBulb = new TPLinkKL130(ipAddress);
             await smartBulb.RefreshAsync().ConfigureAwait(false);
             return smartBulb;
         }
@@ -153,7 +152,6 @@ namespace TPLinkSmartDevices.Devices
     {
         int Index { get; }
     }
-
 
     public class LightState : ILightState
     {

@@ -24,6 +24,7 @@ namespace TPLinkSmartDevices.Devices
 
         public TPLinkSmartPlug(string hostname, int port = 9999) : base(hostname, port)
         {
+            // todo: remove!
             Task.Run(async () => await Refresh().ConfigureAwait(false)).GetAwaiter().GetResult();
         }
 

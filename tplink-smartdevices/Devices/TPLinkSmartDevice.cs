@@ -42,35 +42,40 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Refresh device information
         /// </summary>
-        public virtual async Task RefreshAsync(dynamic sysInfo)
+        public virtual async Task RefreshAsync(JsonElement sysInfo)
         {
             //await GetCloudInfo().ConfigureAwait(false);
-            if (sysInfo == null)
+            if (sysInfo.ValueKind == JsonValueKind.Null)
             {
                 sysInfo = await ExecuteAsync("system", "get_sysinfo").ConfigureAwait(false);
             }
 
-            SoftwareVersion = sysInfo.sw_ver;
-            HardwareVersion = sysInfo.hw_ver;
-            Type = sysInfo.type;
-            Model = sysInfo.model;
-            MacAddress = sysInfo.mac;
-            DevName = sysInfo.dev_name;
-            Alias = sysInfo.alias;
-            HardwareId = sysInfo.hwId;
-            FirmwareId = sysInfo.fwId;
-            DeviceId = sysInfo.deviceId;
-            OemId = sysInfo.oemId;
-            RSSI = sysInfo.rssi;
-            Model = sysInfo.model;
-
-            if (sysInfo.latitude != null)
+            if (sysInfo.ValueKind == JsonValueKind.Null)
             {
-                LocationLatLong = new double[2] { sysInfo.latitude, sysInfo.longitude };
+                throw new InvalidOperationException("invalid command");
             }
-            else if (sysInfo.latitude_i != null)
+
+            SoftwareVersion = sysInfo.GetProperty("sw_ver").GetString();
+            HardwareVersion = sysInfo.GetProperty("hw_ver").GetString();
+            Type = sysInfo.GetProperty("type").GetString();
+            Model = sysInfo.GetProperty("model").GetString();
+            MacAddress = sysInfo.GetProperty("mac").GetString();
+            DevName = sysInfo.GetProperty("dev_name").GetString();
+            Alias = sysInfo.GetProperty("alias").GetString();
+            HardwareId = sysInfo.GetProperty("hwId").GetString();
+            FirmwareId = sysInfo.GetProperty("fwId").GetString();
+            DeviceId = sysInfo.GetProperty("deviceId").GetString();
+            OemId = sysInfo.GetProperty("oemId").GetString();
+            RSSI = sysInfo.GetProperty("rssi").GetInt32();
+            Model = sysInfo.GetProperty("model").GetString();
+
+            if (sysInfo.TryGetProperty("latitude", out var latitude))
             {
-                LocationLatLong = new double[2] { sysInfo.latitude_i, sysInfo.longitude_i };
+                LocationLatLong = new double[2] { latitude.GetDouble(), sysInfo.GetProperty("longitude").GetDouble() };
+            }
+            else if (sysInfo.TryGetProperty("latitude", out var latitude_i))
+            {
+                LocationLatLong = new double[2] { latitude_i.GetDouble(), sysInfo.GetProperty("longitude_i").GetDouble() };
             }
         }
 
