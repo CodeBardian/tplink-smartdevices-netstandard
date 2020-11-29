@@ -133,7 +133,7 @@ public List<PreferredLightState> PreferredLightStates { get; }
 !!! note 
     Color temperature values depend on device model, for instance KL120 supports 2500K-5000K and KL130 2700K-9000K!
 
-### `SetColorTemp(BulbHSV, int)`
+### `SetHSV(BulbHSV, int)` {: #sethsv }
 : Change the bulbs color 
   ``` csharp
   public void SetHSV(BulbHSV hsv, int transition_period = 0)
@@ -146,6 +146,15 @@ public List<PreferredLightState> PreferredLightStates { get; }
     __Exceptions__
     : * `#!csharp NotSupportedException`: the bulb does not support color changes
       * `#!csharp ArgumentException`: `transition_period` only allows values between `0` and `10000`
+
+    __Example__
+    ```
+    BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0°, 100%, 100%)
+    BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60°, 100%, 100%)
+
+    //apply color
+    smartBulb.SetHSV(red);
+    ```
    
 ### `ApplyPreset(int)`
 : Operate smart bulb on one of the four light state presets

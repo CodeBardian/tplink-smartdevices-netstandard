@@ -83,7 +83,7 @@ smartDevice.ConfigureRemoteAccess("username", "password");
 ```
 <small> Full reference for [`TPLinkSmartDevice.ConfigureRemoteAccess(string, string)`](docs/devices/device.md#configureremoteaccessstring-string)</small>
 
-### Basic Usage Example 
+### Basic Usage Examples
 
 Following script is a basic example which describes the use-case of turning on all smart plugs in your current network:
 
@@ -98,4 +98,19 @@ foreach (var item in discoveredDevices)
     }
 }
 ```
-<small> Full reference for [`TPLinkSmartPlug.SetOutletPowered(bool)`](docs/devices/plug.md#setoutletpoweredbool)</small>
+<small> Full reference for [`TPLinkSmartPlug.SetOutletPowered(bool)`](docs/devices/plug.md#setoutletpoweredbool)</small></br>
+
+Changing color of a single smart bulb (LB130, KL130):
+
+``` csharp
+var smartBulb = await TPLinkSmartBulb.Create("100.10.4.1");
+
+BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0°, 100%, 100%)
+BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60°, 100%, 100%)
+
+//apply color (instant)
+smartBulb.SetHSV(red);
+//apply color with transition time
+smartBulb.SetHSV(yellow, 1000);
+```
+<small> Full reference for [`TPLinkSmartBulb.SetHSV(BulbHSV, int)`](docs/devices/bulb.md#sethsv)</small>
