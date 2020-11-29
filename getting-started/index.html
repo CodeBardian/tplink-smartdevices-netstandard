@@ -10,7 +10,7 @@
       
       
       <link rel="shortcut icon" href="../assets/icon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.5">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.6">
     
     
       
@@ -18,7 +18,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.21aed14c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6910b76c.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.196e0c26.min.css">
@@ -277,8 +277,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#basic-usage-example" class="md-nav__link">
-    Basic Usage Example
+  <a href="#basic-usage-examples" class="md-nav__link">
+    Basic Usage Examples
   </a>
   
 </li>
@@ -545,8 +545,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#basic-usage-example" class="md-nav__link">
-    Basic Usage Example
+  <a href="#basic-usage-examples" class="md-nav__link">
+    Basic Usage Examples
   </a>
   
 </li>
@@ -663,7 +663,7 @@
 <p><div class="highlight"><pre><span></span><code><span class="n">smartDevice</span><span class="p">.</span><span class="n">ConfigureRemoteAccess</span><span class="p">(</span><span class="s">&quot;username&quot;</span><span class="p">,</span> <span class="s">&quot;password&quot;</span><span class="p">);</span>
 </code></pre></div>
 <small> Full reference for <a href="../docs/devices/device/#configureremoteaccessstring-string"><code>TPLinkSmartDevice.ConfigureRemoteAccess(string, string)</code></a></small></p>
-<h3 id="basic-usage-example">Basic Usage Example</h3>
+<h3 id="basic-usage-examples">Basic Usage Examples</h3>
 <p>Following script is a basic example which describes the use-case of turning on all smart plugs in your current network:</p>
 <p><div class="highlight"><pre><span></span><code><span class="kt">var</span> <span class="n">discoveredDevices</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">TPLinkDiscovery</span><span class="p">().</span><span class="n">Discover</span><span class="p">();</span>
 
@@ -676,6 +676,18 @@
 <span class="p">}</span>
 </code></pre></div>
 <small> Full reference for <a href="../docs/devices/plug/#setoutletpoweredbool"><code>TPLinkSmartPlug.SetOutletPowered(bool)</code></a></small></p>
+<p>Changing color of a single smart bulb (LB130, KL130):</p>
+<p><div class="highlight"><pre><span></span><code><span class="kt">var</span> <span class="n">smartBulb</span> <span class="p">=</span> <span class="k">await</span> <span class="n">TPLinkSmartBulb</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;100.10.4.1&quot;</span><span class="p">);</span>
+
+<span class="n">BulbHSV</span> <span class="n">red</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BulbHSV</span> <span class="p">{</span> <span class="n">Hue</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">Saturation</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="m">255</span> <span class="p">};</span> <span class="c1">// red HSV(0, 100, 100)</span>
+<span class="n">BulbHSV</span> <span class="n">yellow</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BulbHSV</span> <span class="p">{</span> <span class="n">Hue</span> <span class="p">=</span> <span class="m">60</span><span class="p">,</span> <span class="n">Saturation</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="m">255</span> <span class="p">};</span>  <span class="c1">// yellow HSV(60, 100, 100)</span>
+
+<span class="c1">//apply color (instant)</span>
+<span class="n">smartBulb</span><span class="p">.</span><span class="n">SetHSV</span><span class="p">(</span><span class="n">red</span><span class="p">);</span>
+<span class="c1">//apply color with transition time</span>
+<span class="n">smartBulb</span><span class="p">.</span><span class="n">SetHSV</span><span class="p">(</span><span class="n">yellow</span><span class="p">,</span> <span class="m">1000</span><span class="p">);</span>
+</code></pre></div>
+<small> Full reference for <a href="../docs/devices/bulb/#sethsv"><code>TPLinkSmartBulb.SetHSV(BulbHSV, int)</code></a></small></p>
                 
               
               
@@ -755,8 +767,8 @@
       
     </div>
     
-      <script src="../assets/javascripts/vendor.7e0ee788.min.js"></script>
-      <script src="../assets/javascripts/bundle.b3a72adc.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.fd16492e.min.js"></script>
+      <script src="../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

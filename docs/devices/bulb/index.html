@@ -10,7 +10,7 @@
       
       
       <link rel="shortcut icon" href="../../../assets/icon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.5">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.6">
     
     
       
@@ -18,7 +18,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.21aed14c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6910b76c.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.196e0c26.min.css">
@@ -477,8 +477,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempbulbhsv-int" class="md-nav__link">
-    SetColorTemp(BulbHSV, int)
+  <a href="#sethsv" class="md-nav__link">
+    SetHSV(BulbHSV, int)
   </a>
   
 </li>
@@ -748,8 +748,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#setcolortempbulbhsv-int" class="md-nav__link">
-    SetColorTemp(BulbHSV, int)
+  <a href="#sethsv" class="md-nav__link">
+    SetHSV(BulbHSV, int)
   </a>
   
 </li>
@@ -867,8 +867,8 @@ encloses bulb specific system information and bulb controls</p>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="kt">string</span> <span class="n">hostname</span></code>: ip-address of of this plug</li>
-<li><code class="highlight"><span class="kt">int</span> <span class="n">port</span></code>: plug communicates on this port, defaults to <code>9999</code></li>
+<li><code class="highlight"><span class="kt">string</span> <span class="n">hostname</span></code>: ip-address of of this bulb</li>
+<li><code class="highlight"><span class="kt">int</span> <span class="n">port</span></code>: bulb communicates on this port, defaults to <code>9999</code></li>
 </ul>
 </dd>
 </dl>
@@ -954,7 +954,7 @@ encloses bulb specific system information and bulb controls</p>
 <p class="admonition-title">Note</p>
 <p>Color temperature values depend on device model, for instance KL120 supports 2500K-5000K and KL130 2700K-9000K!</p>
 </div>
-<h3 id="setcolortempbulbhsv-int"><code>SetColorTemp(BulbHSV, int)</code></h3>
+<h3 id="sethsv"><code>SetHSV(BulbHSV, int)</code></h3>
 <dl>
 <dd>
 <p>Change the bulbs color 
@@ -964,7 +964,7 @@ encloses bulb specific system information and bulb controls</p>
 <dt><strong>Parameters</strong></dt>
 <dd>
 <ul>
-<li><code class="highlight"><span class="n">BulbHSV</span> <span class="n">hsv</span></code>: color in HSV color scheme, see <a href="/docs/data/hsv.md"><code>BulbHSV</code></a> reference</li>
+<li><code class="highlight"><span class="n">BulbHSV</span> <span class="n">hsv</span></code>: color in HSV color scheme, see <a href="/docs/data/hsv"><code>BulbHSV</code></a> reference</li>
 <li><code class="highlight"><span class="kt">int</span> <span class="n">transition_period</span></code> (optional): time in milliseconds in which the bulb transitions from old to new brightness. Allowed values between <code>0</code> and <code>10000</code></li>
 </ul>
 </dd>
@@ -976,6 +976,13 @@ encloses bulb specific system information and bulb controls</p>
 </ul>
 </dd>
 </dl>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code><span class="n">BulbHSV</span> <span class="n">red</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BulbHSV</span> <span class="p">{</span> <span class="n">Hue</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">Saturation</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="m">255</span> <span class="p">};</span> <span class="c1">// red HSV(0, 100, 100)</span>
+<span class="n">BulbHSV</span> <span class="n">yellow</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BulbHSV</span> <span class="p">{</span> <span class="n">Hue</span> <span class="p">=</span> <span class="m">60</span><span class="p">,</span> <span class="n">Saturation</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="m">255</span> <span class="p">};</span>  <span class="c1">// yellow HSV(60, 100, 100)</span>
+
+<span class="c1">//apply color</span>
+<span class="n">smartBulb</span><span class="p">.</span><span class="n">SetHSV</span><span class="p">(</span><span class="n">red</span><span class="p">);</span>
+</code></pre></div></p>
 </dd>
 </dl>
 <h3 id="applypresetint"><code>ApplyPreset(int)</code></h3>
@@ -1079,8 +1086,8 @@ encloses bulb specific system information and bulb controls</p>
       
     </div>
     
-      <script src="../../../assets/javascripts/vendor.7e0ee788.min.js"></script>
-      <script src="../../../assets/javascripts/bundle.b3a72adc.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
