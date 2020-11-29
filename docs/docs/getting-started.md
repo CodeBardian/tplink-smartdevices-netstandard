@@ -98,15 +98,15 @@ foreach (var item in discoveredDevices)
     }
 }
 ```
-<small> Full reference for [`TPLinkSmartPlug.SetOutletPowered(bool)`](docs/devices/plug.md#setoutletpoweredbool)</small></br>
+<small> Full reference for [`TPLinkSmartPlug.SetOutletPowered(bool)`](docs/devices/plug.md#setoutletpoweredbool)</small>
 
 Changing color of a single smart bulb (LB130, KL130):
 
 ``` csharp
 var smartBulb = await TPLinkSmartBulb.Create("100.10.4.1");
 
-BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0°, 100%, 100%)
-BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60°, 100%, 100%)
+BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0, 100, 100)
+BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60, 100, 100)
 
 //apply color (instant)
 smartBulb.SetHSV(red);

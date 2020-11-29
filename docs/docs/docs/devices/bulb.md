@@ -80,8 +80,8 @@ public List<PreferredLightState> PreferredLightStates { get; }
   ```
 
     __Parameters__
-    : * `#!csharp string hostname`: ip-address of of this plug
-      * `#!csharp int port`: plug communicates on this port, defaults to `9999`
+    : * `#!csharp string hostname`: ip-address of of this bulb
+      * `#!csharp int port`: bulb communicates on this port, defaults to `9999`
 
 !!! tip "Method is awaitable" 
 
@@ -140,7 +140,7 @@ public List<PreferredLightState> PreferredLightStates { get; }
   ```
 
     __Parameters__
-    : * `#!csharp BulbHSV hsv`: color in HSV color scheme, see [`BulbHSV`](/docs/data/hsv.md) reference
+    : * `#!csharp BulbHSV hsv`: color in HSV color scheme, see [`BulbHSV`](/docs/data/hsv) reference
       * `#!csharp int transition_period` (optional): time in milliseconds in which the bulb transitions from old to new brightness. Allowed values between `0` and `10000`
 
     __Exceptions__
@@ -148,9 +148,9 @@ public List<PreferredLightState> PreferredLightStates { get; }
       * `#!csharp ArgumentException`: `transition_period` only allows values between `0` and `10000`
 
     __Example__
-    ```
-    BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0°, 100%, 100%)
-    BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60°, 100%, 100%)
+    ``` csharp
+    BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0, 100, 100)
+    BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60, 100, 100)
 
     //apply color
     smartBulb.SetHSV(red);
