@@ -13,6 +13,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <RootNamespace>TPLinkSmartDevices</RootNamespace>
     <Version>1.0.4</Version>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
