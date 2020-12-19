@@ -227,7 +227,7 @@ namespace TPLinkSmartDevices.Devices
 
         async Task RetrievePresets()
         {
-            dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "get_preferred_state");
+            dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "get_preferred_state").ConfigureAwait(false);
             JArray presets = JArray.Parse(Convert.ToString(result.states));
             _preferredLightStates = presets.Select(x => new PreferredLightState
             {

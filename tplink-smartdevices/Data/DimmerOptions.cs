@@ -1,6 +1,6 @@
 ﻿namespace TPLinkSmartDevices.Devices
 {
-    internal class DimmerOptions
+    public class DimmerOptions
     {
         public DimmerOptions()
         {
@@ -8,6 +8,8 @@
             FadeOffTime = 2000;
             GentleOnTime = 2000;
             GentleOffTime = 2000;
+            DoubleClickAction = DimmerMode.GentleOnOff;
+            LongPressAction = DimmerMode.GentleOnOff;
             Mode = DimmerMode.GentleOnOff;
         }
 
@@ -16,6 +18,8 @@
         public int GentleOnTime { get; set; }
         public int GentleOffTime { get; set; }
 
+        public DimmerMode DoubleClickAction { get; set; }
+        public DimmerMode LongPressAction { get; set; }
         public DimmerMode Mode { get; set; }
     }
 
