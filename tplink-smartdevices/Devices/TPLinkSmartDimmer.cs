@@ -69,7 +69,7 @@ namespace TPLinkSmartDevices.Devices
             await Execute("smartlife.iot.dimmer", "set_dimmer_transition", new JObject
             {
                 new JProperty("brightness", brightness),
-                new JProperty("mode", mode ?? _options.Mode),
+                new JProperty("mode", (mode ?? _options.Mode).ToStr()),
                 new JProperty("duration", duration ?? 1),
             }).ConfigureAwait(false);
             _brightness = brightness;
@@ -87,9 +87,53 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Configures change mode on double click of switch
         /// </summary>
-        public async Task SetDoubleClickAction(DimmerMode mode)
+        public async Task SetDoubleClickAction(DimmerMode mode, int index=0)
         {
-            await Execute("smartlife.iot.dimmer", "set_long_press_action", "mode", mode).ConfigureAwait(false);
+            if (mode == DimmerMode.Preset)
+            {
+                await Execute("smartlife.iot.dimmer", "set_long_press_action", new JObject
+                {
+                    new JProperty("mode", mode.ToStr()),
+                    new JProperty("index", index)
+                }).ConfigureAwait(false);
+            }
+            else 
+                await Execute("smartlife.iot.dimmer", "set_double_click_action", "mode", mode.ToStr()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Configures change mode on long press of switch
+        /// </summary>
+        public async Task SetLongPressAction(DimmerMode mode, int index=0)
+        {
+            if (mode == DimmerMode.Preset)
+            {
+                await Execute("smartlife.iot.dimmer", "set_long_press_action", new JObject
+                { 
+                    new JProperty("mode", mode.ToStr()),
+                    new JProperty("index", index)
+                }).ConfigureAwait(false);
+            }
+            else 
+                await Execute("smartlife.iot.dimmer", "set_long_press_action", "mode", mode.ToStr()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Configures speed of fade on transition
+        /// </summary>
+        public async Task SetFadeOnSpeed(int fadeOnTime)
+        {
+            await Execute("smartlife.iot.dimmer", "set_fade_on_time", "fadeTime", fadeOnTime).ConfigureAwait(false);
+            _options.FadeOnTime = fadeOnTime;
+        }
+
+        /// <summary>
+        /// Configures speed of fade off transition
+        /// </summary>
+        public async Task SetFadeOffSpeed(int fadeOffTime)
+        {
+            await Execute("smartlife.iot.dimmer", "set_fade_on_time", "fadeTime", fadeOffTime).ConfigureAwait(false);
+            _options.FadeOffTime = fadeOffTime;
         }
     }
 }

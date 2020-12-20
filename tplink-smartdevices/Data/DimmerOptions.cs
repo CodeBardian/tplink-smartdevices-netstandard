@@ -30,4 +30,19 @@
         Preset,
         None
     }
+
+    public static class DimmerModeExtensions
+    {
+        public static string ToStr(this DimmerMode mode)
+        {
+            return mode switch
+            {
+                DimmerMode.None => "none",
+                DimmerMode.GentleOnOff => "gentle_on_off",
+                DimmerMode.InstantOnOff => "instant_on_off",
+                DimmerMode.Preset => "customize_preset",
+                _ => "",
+            };
+        }
+    }
 }
