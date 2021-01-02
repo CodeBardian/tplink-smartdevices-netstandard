@@ -72,6 +72,8 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task TransitionBrightness(int brightness, DimmerMode? mode = null, int? duration = null)
         {
+            if (brightness < 0 || brightness > 100) throw new ArgumentException("brightness should be between 0 and 100");
+
             await Execute("smartlife.iot.dimmer", "set_dimmer_transition", new JObject
             {
                 new JProperty("brightness", brightness),
@@ -86,6 +88,8 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task SetBrightness(int brightness)
         {
+            if (brightness < 0 || brightness > 100) throw new ArgumentException("brightness should be between 0 and 100");
+
             await Execute("smartlife.iot.dimmer", "set_brightness", "brightness", brightness).ConfigureAwait(false);
             _brightness = brightness;
         }
@@ -129,6 +133,8 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task SetFadeOnSpeed(int fadeOnTime)
         {
+            if (fadeOnTime < 0) throw new ArgumentException("fadeOnTime should be a positive number");
+
             await Execute("smartlife.iot.dimmer", "set_fade_on_time", "fadeTime", fadeOnTime).ConfigureAwait(false);
             _options.FadeOnTime = fadeOnTime;
         }
@@ -138,6 +144,8 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task SetFadeOffSpeed(int fadeOffTime)
         {
+            if (fadeOffTime < 0) throw new ArgumentException("fadeOffTime should be a positive number");
+
             await Execute("smartlife.iot.dimmer", "set_fade_on_time", "fadeTime", fadeOffTime).ConfigureAwait(false);
             _options.FadeOffTime = fadeOffTime;
         }
