@@ -1,4 +1,6 @@
-﻿namespace TPLinkSmartDevices.Devices
+﻿using System;
+
+namespace TPLinkSmartDevices.Devices
 {
     public class DimmerOptions
     {
@@ -42,6 +44,18 @@
                 DimmerMode.InstantOnOff => "instant_on_off",
                 DimmerMode.Preset => "customize_preset",
                 _ => "",
+            };
+        }
+
+        public static DimmerMode ToDimmerMode(this string str)
+        {
+            return str switch
+            {
+                "none" => DimmerMode.None,
+                "gentle_on_off" => DimmerMode.GentleOnOff,
+                "instant_on_off" => DimmerMode.InstantOnOff,
+                "customize_preset" => DimmerMode.Preset,
+                _ => throw new ArgumentException($"can't parse {str} to DimmerMode"),
             };
         }
     }

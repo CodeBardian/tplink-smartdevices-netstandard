@@ -42,6 +42,12 @@ namespace TPLinkSmartDevices.Devices
             _poweredOn = (int)sysInfo.relay_state == 1;
             _brightness = (int)sysInfo.brightness;
 
+            dynamic defaultBehavior = await Execute("smartlife.iot.dimmer", "get_default_behavior").ConfigureAwait(false);
+            string long_press = (string)defaultBehavior.long_press.mode;
+            string double_click = (string)defaultBehavior.double_click.mode;
+            _options.LongPressAction = long_press.ToDimmerMode();
+            _options.DoubleClickAction = double_click.ToDimmerMode();
+
             RetrievePresets(sysInfo);
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
