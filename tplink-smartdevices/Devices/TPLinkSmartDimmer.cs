@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TPLinkSmartDevices.Devices
 {
-    public partial class TPLinkSmartDimmer : TPLinkSmartDevice
+    public partial class TPLinkSmartDimmer : TPLinkSmartPlug
     {
         private DimmerOptions _options;
         private bool _poweredOn;
@@ -15,6 +15,9 @@ namespace TPLinkSmartDevices.Devices
         private int[] _presets;
 
         public bool PoweredOn => _poweredOn;
+        public int Brightness => _brightness;
+        public int[] Presets => _presets;
+        public DimmerOptions Options => _options;
 
         [Obsolete("Use async factory method TPLinkSmartDimmer.Create() instead")]
         public TPLinkSmartDimmer(string hostName, int port = 9999, DimmerOptions opts = null) : base(hostName, port)
@@ -36,7 +39,7 @@ namespace TPLinkSmartDevices.Devices
             return d;
         }
 
-        public async Task Refresh()
+        public new async Task Refresh()
         {
             dynamic sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);
             _poweredOn = (int)sysInfo.relay_state == 1;
@@ -61,7 +64,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set power state of dimming switch
         /// </summary>
-        public async Task SetPoweredOn(bool value)
+        public override async Task SetPoweredOn(bool value)
         {
             await Execute("smartlife.iot.dimmer", "set_switch_state", "state", value ? 1 : 0).ConfigureAwait(false);
             _poweredOn = value;
@@ -101,7 +104,9 @@ namespace TPLinkSmartDevices.Devices
         {
             if (mode == DimmerMode.Preset)
             {
-                await Execute("smartlife.iot.dimmer", "set_long_press_action", new JObject
+                if (index < 0 || index > 3) throw new ArgumentException("index should be between 0 and 3");
+
+                await Execute("smartlife.iot.dimmer", "set_double_click_action", new JObject
                 {
                     new JProperty("mode", mode.ToStr()),
                     new JProperty("index", index)
@@ -109,6 +114,8 @@ namespace TPLinkSmartDevices.Devices
             }
             else 
                 await Execute("smartlife.iot.dimmer", "set_double_click_action", "mode", mode.ToStr()).ConfigureAwait(false);
+
+            _options.DoubleClickAction = mode;
         }
 
         /// <summary>
@@ -118,6 +125,8 @@ namespace TPLinkSmartDevices.Devices
         {
             if (mode == DimmerMode.Preset)
             {
+                if (index < 0 || index > 3) throw new ArgumentException("index should be between 0 and 3");
+
                 await Execute("smartlife.iot.dimmer", "set_long_press_action", new JObject
                 { 
                     new JProperty("mode", mode.ToStr()),
@@ -126,12 +135,14 @@ namespace TPLinkSmartDevices.Devices
             }
             else 
                 await Execute("smartlife.iot.dimmer", "set_long_press_action", "mode", mode.ToStr()).ConfigureAwait(false);
+
+            _options.LongPressAction = mode;
         }
 
         /// <summary>
         /// Configures speed of fade on transition
         /// </summary>
-        public async Task SetFadeOnSpeed(int fadeOnTime)
+        public async Task SetFadeOnTime(int fadeOnTime)
         {
             if (fadeOnTime < 0) throw new ArgumentException("fadeOnTime should be a positive number");
 
@@ -142,7 +153,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Configures speed of fade off transition
         /// </summary>
-        public async Task SetFadeOffSpeed(int fadeOffTime)
+        public async Task SetFadeOffTime(int fadeOffTime)
         {
             if (fadeOffTime < 0) throw new ArgumentException("fadeOffTime should be a positive number");
 
