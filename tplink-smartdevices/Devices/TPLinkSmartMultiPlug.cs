@@ -62,10 +62,16 @@ namespace TPLinkSmartDevices.Devices
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
+        public override async Task SetPoweredOn(bool value)
+        {
+            await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
+            this.AllOutletsPowered = value;
+        }
+
         /// <summary>
         /// Send command which changes power state to plug
         /// </summary>
-        public void SetOutletPowered(bool value, int outletId = -1)
+        public void SetPoweredOn(bool value, int outletId = -1)
         {
             if (outletId > OutletCount - 1 || outletId < -1) throw new ArgumentException("Plug does not have a outlet with specified id");
 

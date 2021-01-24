@@ -5,7 +5,7 @@ using TPLinkSmartDevices.Messaging;
 
 namespace TPLinkSmartDevices.Devices
 {
-    public class TPLinkSmartDevice
+    public abstract class TPLinkSmartDevice
     {
         const byte INITIALIZATION_VECTOR = 171;
 
@@ -170,5 +170,7 @@ namespace TPLinkSmartDevices.Devices
                 }
             });
         }
+
+        public abstract Task SetPoweredOn(bool value);
     }
 }

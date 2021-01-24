@@ -194,13 +194,10 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set power state of bulb
         /// </summary>
-        public void SetPoweredOn(bool value)
+        public override async Task SetPoweredOn(bool value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0).ConfigureAwait(false);
-                _poweredOn = value;
-            });
+            await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0).ConfigureAwait(false);
+            _poweredOn = value;
         }
 
         /// <summary>
@@ -235,7 +232,6 @@ namespace TPLinkSmartDevices.Devices
                 HSV = new BulbHSV() { Hue = (int)x["hue"], Saturation = (int)x["saturation"], Value = (int)x["brightness"] }
             }).ToList();
         }
-
 
         public class PreferredLightState
         {
