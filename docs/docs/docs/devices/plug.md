@@ -53,20 +53,16 @@ public DateTime PoweredOnSince { get; private set; }
     : * `#!csharp string hostname`: ip-address of of this plug
       * `#!csharp int port`: plug communicates on this port, defaults to `9999`
 
-!!! tip "Method is awaitable" 
-
 ### `Refresh()`
 : Refreshes all properties of this plug (includes a call to [`TPLinkSmartDevice.Refresh(dynamic)`](device.md#refreshdynamic) for the common device information)
   ``` csharp
   public async Task Refresh()
   ```
 
-!!! tip "Method is awaitable" 
-
-### `SetOutletPowered(bool)`
+### `SetPoweredOn(bool)` {: #power }
 : Change the plugs outlet relay state
   ``` csharp
-  public void SetOutletPowered(bool value)
+  public async Task SetPoweredOn(bool value)
   ```
 
     __Parameters__

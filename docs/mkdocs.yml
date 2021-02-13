@@ -10,6 +10,7 @@ nav:
         - 'TPLinkSmartMeterPlug': 'docs/devices/smartmeter-plug.md'
         - 'TPLinkSmartBulb': 'docs/devices/bulb.md'
         - 'TPLinkSmartMultiPlug': 'docs/devices/multi-plug.md'
+        - 'TPLinkSmartDimmer': 'docs/devices/dimmer.md'
       - Data:
         - 'BulbHSV': 'docs/data/hsv.md'
         - 'PowerData': 'docs/data/power.md'
@@ -20,7 +21,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/CodeBradian
+      link: https://github.com/CodeBardian
 repo_url: https://www.github.com/CodeBardian/tplink-smartdevices-netstandard
 repo_name: CodeBardian/tplink-smartdevices-netstandard
 markdown_extensions:
