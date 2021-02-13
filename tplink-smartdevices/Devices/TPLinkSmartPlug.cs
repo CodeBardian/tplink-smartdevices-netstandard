@@ -94,13 +94,10 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which enables or disables night mode (LED state)
         /// </summary>
-        public void SetLedOn(bool value)
+        public async Task SetLedOn(bool value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
-                this.LedOn = value;
-            });
+            await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
+            this.LedOn = value;
         }
     }
 }

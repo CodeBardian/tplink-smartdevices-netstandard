@@ -71,35 +71,32 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which changes power state to plug
         /// </summary>
-        public void SetPoweredOn(bool value, int outletId = -1)
+        public async Task SetPoweredOn(bool value, int outletId = -1)
         {
             if (outletId > OutletCount - 1 || outletId < -1) throw new ArgumentException("Plug does not have a outlet with specified id");
 
-            Task.Run(async () =>
+            //toggle all outlets of plug
+            if (OutletCount == 1 || outletId == -1)
             {
-                //toggle all outlets of plug
-                if (OutletCount == 1 || outletId == -1)
-                {
-                    await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
-                    this.AllOutletsPowered = value;
-                }
-                //toggle specific outlet
-                else
-                {
-                    JObject root = new JObject { 
-                        new JProperty("context", new JObject { new JProperty("child_ids", GetPlugID(outletId)) }),
-                        new JProperty("system", new JObject { 
-                            new JProperty("set_relay_state", 
-                            new JObject { new JProperty("state", value ? 1 : 0) }) 
-                        }) 
-                    };
+                await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
+                this.AllOutletsPowered = value;
+            }
+            //toggle specific outlet
+            else
+            {
+                JObject root = new JObject { 
+                    new JProperty("context", new JObject { new JProperty("child_ids", GetPlugID(outletId)) }),
+                    new JProperty("system", new JObject { 
+                        new JProperty("set_relay_state", 
+                        new JObject { new JProperty("state", value ? 1 : 0) }) 
+                    }) 
+                };
 
-                    string message = root.ToString(Formatting.None);
-                    await Execute(message).ConfigureAwait(false);
-                    this.Outlets[outletId].OutletPowered = value;
-                    this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
-                }
-            });
+                string message = root.ToString(Formatting.None);
+                await Execute(message).ConfigureAwait(false);
+                this.Outlets[outletId].OutletPowered = value;
+                this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
+            }
         }
 
         private object GetPlugID(int outletId)
@@ -110,13 +107,10 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which enables or disables night mode (LED state)
         /// </summary>
-        public void SetLedOn(bool value)
+        public async Task SetLedOn(bool value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
-                this.LedOn = value;
-            });
+            await Execute("system", "set_led_off", "off", value ? 0 : 1).ConfigureAwait(false);
+            this.LedOn = value;
         }
 
         public class Outlet

@@ -46,7 +46,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task Refresh(dynamic sysInfo = null)
         {
-            GetCloudInfo();
+            await GetCloudInfo().ConfigureAwait(false);
             if (sysInfo == null)
                 sysInfo = await Execute("system", "get_sysinfo").ConfigureAwait(false);
 
@@ -84,33 +84,23 @@ namespace TPLinkSmartDevices.Devices
             return await MessageCache.Request(message, Hostname, Port);
         }
 
-        public void SetAlias(string value)
+        public async Task SetAlias(string value)
         {
-            Task.Run(async () =>
-            {
-                await Execute("system", "set_dev_alias", "alias", value).ConfigureAwait(false);
-                this.Alias = value;
-            });
+            await Execute("system", "set_dev_alias", "alias", value).ConfigureAwait(false);
+            this.Alias = value;
         }
 
-        public DateTime GetTime()  //refactor needed
+        public async Task<DateTime> GetTime()  //refactor needed
         {
-            Task.Run(async () =>
-            {
-                dynamic rawTime = await Execute("time", "get_time").ConfigureAwait(false);
-                return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
-            });
-            return default;
+            dynamic rawTime = await Execute("time", "get_time").ConfigureAwait(false);
+            return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);
         }
 
-        public void GetCloudInfo()
+        public async Task GetCloudInfo()
         {
-            Task.Run(async () =>
-            {
-                dynamic cloudInfo = await Execute("cnCloud", "get_info").ConfigureAwait(false);
-                CloudServer = (string)cloudInfo.server;
-                RemoteAccessEnabled = Convert.ToBoolean((int)cloudInfo.binded);
-            });
+            dynamic cloudInfo = await Execute("cnCloud", "get_info").ConfigureAwait(false);
+            CloudServer = (string)cloudInfo.server;
+            RemoteAccessEnabled = Convert.ToBoolean((int)cloudInfo.binded);
         }
 
         /// <summary>
@@ -118,7 +108,7 @@ namespace TPLinkSmartDevices.Devices
         /// </summary>
         public async Task ConfigureRemoteAccess(string username, string password)
         {
-            if (!RemoteAccessEnabled) SetRemoteAccessEnabled(true);
+            if (!RemoteAccessEnabled) await SetRemoteAccessEnabled(true).ConfigureAwait(false);
             try
             {               
                 dynamic result = await Execute("cnCloud", "bind", new JObject
@@ -145,30 +135,24 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Unbinds currently set account from cloud server
         /// </summary>
-        public void UnbindRemoteAccess()
+        public async Task UnbindRemoteAccess()
         {
-            Task.Run(async () =>
-            {
-                dynamic result = await Execute("cnCloud", "unbind").ConfigureAwait(false);
-                SetRemoteAccessEnabled(false);
-            });
+            dynamic result = await Execute("cnCloud", "unbind").ConfigureAwait(false);
+            await SetRemoteAccessEnabled(false).ConfigureAwait(false);
         }
 
-        private void SetRemoteAccessEnabled(bool enabled, string server = "n-devs.tplinkcloud.com")
+        private async Task SetRemoteAccessEnabled(bool enabled, string server = "n-devs.tplinkcloud.com")
         {
-            Task.Run(async () =>
+            if (enabled)
             {
-                if (enabled)
-                {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", server).ConfigureAwait(false);
-                    RemoteAccessEnabled = true;
-                }
-                else
-                {
-                    dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com").ConfigureAwait(false);
-                    RemoteAccessEnabled = false;
-                }
-            });
+                dynamic result = await Execute("cnCloud", "set_server_url", "server", server).ConfigureAwait(false);
+                RemoteAccessEnabled = true;
+            }
+            else
+            {
+                dynamic result = await Execute("cnCloud", "set_server_url", "server", "bogus.server.com").ConfigureAwait(false);
+                RemoteAccessEnabled = false;
+            }
         }
 
         public abstract Task SetPoweredOn(bool value);

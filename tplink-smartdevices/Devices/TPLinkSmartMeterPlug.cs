@@ -43,12 +43,9 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Erases all emeter statistics 
         /// </summary>
-        public void EraseStats()
+        public async Task EraseStats()
         {
-            Task.Run(async () =>
-            {
-                await Execute("emeter", "erase_emeter_stat").ConfigureAwait(false);
-            });
+            await Execute("emeter", "erase_emeter_stat").ConfigureAwait(false);
         }
 
         /// <summary>
