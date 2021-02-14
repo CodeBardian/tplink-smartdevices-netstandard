@@ -90,7 +90,7 @@ namespace TPLinkSmartDevices.Devices
             this.Alias = value;
         }
 
-        public async Task<DateTime> GetTime()  //refactor needed
+        public async Task<DateTime> GetTime()
         {
             dynamic rawTime = await Execute("time", "get_time").ConfigureAwait(false);
             return new DateTime((int)rawTime.year, (int)rawTime.month, (int)rawTime.mday, (int)rawTime.hour, (int)rawTime.min, (int)rawTime.sec);

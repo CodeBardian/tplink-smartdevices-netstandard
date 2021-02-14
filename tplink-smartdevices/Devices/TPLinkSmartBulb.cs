@@ -30,44 +30,17 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Bulb color defined by HSV and color temp
         /// </summary>
-        public BulbHSV HSV
-        {
-            get
-            {
-                if (!IsColor)
-                    throw new NotSupportedException("Bulb does not support color changes.");
-                return _hsv;
-            }
-            private set { }
-        }
+        public BulbHSV HSV => IsColor ? _hsv : throw new NotSupportedException("Bulb does not support color changes.");
 
         /// <summary>
         /// Color temperature in Kelvin
         /// </summary>
-        public int ColorTemperature
-        {
-            get
-            {
-                if (!IsVariableColorTemperature)
-                    throw new NotSupportedException("Bulb does not support color temperature changes.");
-                return _colorTemp;
-            }
-            private set { }
-        }
+        public int ColorTemperature => IsVariableColorTemperature ? _colorTemp : throw new NotSupportedException("Bulb does not support color temperature changes.");
 
         /// <summary>
         /// Bulb brightness in percent
         /// </summary>
-        public int Brightness
-        {
-            get
-            {
-                if (!IsDimmable)
-                    throw new NotSupportedException("Bulb does not support dimming.");
-                return _brightness;
-            }
-            private set { }
-        }
+        public int Brightness => IsDimmable ? _brightness : throw new NotSupportedException("Bulb does not support dimming.");
 
         public List<PreferredLightState> PreferredLightStates => _preferredLightStates;
 
@@ -119,19 +92,14 @@ namespace TPLinkSmartDevices.Devices
         {
             if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
 
-            if (IsDimmable)
+            if (!IsDimmable) throw new NotSupportedException("Bulb does not support dimming.");
+
+            await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
             {
-                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
-                {
-                    new JProperty("brightness", brightness),
-                    new JProperty("transition_period", transition_period)
-                }, null).ConfigureAwait(false);
-                _brightness = brightness;
-            }
-            else
-            {
-                throw new NotSupportedException("Bulb does not support dimming.");
-            }
+                new JProperty("brightness", brightness),
+                new JProperty("transition_period", transition_period)
+            }, null).ConfigureAwait(false);
+            _brightness = brightness;
         }
 
         /// <summary>
@@ -141,19 +109,14 @@ namespace TPLinkSmartDevices.Devices
         {
             if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
 
-            if (IsVariableColorTemperature)
+            if (!IsVariableColorTemperature) throw new NotSupportedException("Bulb does not support color temperature changes.");
+
+            await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
             {
-                await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
-                {
-                    new JProperty("color_temp", colortemp),
-                    new JProperty("transition_period", transition_period)
-                }, null).ConfigureAwait(false);
-                _colorTemp = colortemp;
-            }
-            else
-            {
-                throw new NotSupportedException("Bulb does not support color temperature changes.");
-            }
+                new JProperty("color_temp", colortemp),
+                new JProperty("transition_period", transition_period)
+            }, null).ConfigureAwait(false);
+            _colorTemp = colortemp;
         }
 
         /// <summary>
@@ -163,22 +126,17 @@ namespace TPLinkSmartDevices.Devices
         {
             if (transition_period < 0 || transition_period > 10000) throw new ArgumentException("transition_period only allows values between 0 and 10000");
 
-            if (IsColor)
-            {      
-                dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
-                {
-                    new JProperty("hue", hsv.Hue),
-                    new JProperty("saturation", hsv.Saturation),
-                    new JProperty("brightness", hsv.Value),
-                    new JProperty("color_temp", 0),
-                    new JProperty("transition_period", transition_period)
-                }, null).ConfigureAwait(false);
-                _hsv = hsv;
-            }
-            else
+            if (!IsColor) throw new NotSupportedException("Bulb does not support color changes.");
+            
+            dynamic result = await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
             {
-                throw new NotSupportedException("Bulb does not support color changes.");
-            }
+                new JProperty("hue", hsv.Hue),
+                new JProperty("saturation", hsv.Saturation),
+                new JProperty("brightness", hsv.Value),
+                new JProperty("color_temp", 0),
+                new JProperty("transition_period", transition_period)
+            }, null).ConfigureAwait(false);
+            _hsv = hsv;
         }
 
         /// <summary>
