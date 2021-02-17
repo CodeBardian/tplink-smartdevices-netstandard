@@ -10,6 +10,8 @@ namespace TPLinkSmartDevices.Devices
 {
     public class TPLinkSmartPlug : TPLinkSmartDevice, ICountDown
     {
+        private const string COUNTDOWN_NAMESPACE = "count_down";
+
         /// <summary>
         /// If the outlet relay is powered on
         /// </summary>
@@ -105,29 +107,14 @@ namespace TPLinkSmartDevices.Devices
 
         public async Task RetrieveCountDownRules()
         {
-            dynamic result = await Execute("count_down", "get_rules").ConfigureAwait(false);
-            JArray ruleList = JArray.Parse(Convert.ToString(result.rule_list));
-            CountDownRules = ruleList.Count != 0 ? ruleList.Select(x => new CountDownRule
-            {
-                Enabled = (bool)x["enable"],
-                Delay = (int)x["delay"], 
-                PoweredOn = (bool)x["act"],
-                Name = (string)x["name"],
-            }).ToList() : new List<CountDownRule>();
+            CountDownRules = await this.RetrieveCountDownRules(COUNTDOWN_NAMESPACE);
         }
 
         public async Task AddCountDownRule(CountDownRule cdr)
         {
             if (CountDownRules.Any(c => c.Id == cdr.Id)) throw new Exception("countdown rule with specified id already exists");
 
-            dynamic result = await Execute("count_down", "add_rule", new JObject
-            {
-                new JProperty("enable", cdr.Enabled),
-                new JProperty("delay", cdr.Delay),
-                new JProperty("act", cdr.PoweredOn),
-                new JProperty("name", cdr.Name ?? "countdown rule")
-            }, null).ConfigureAwait(false);
-            cdr.Id = (string)result.id;
+            cdr = await this.AddCountDownRule(COUNTDOWN_NAMESPACE, cdr);
             CountDownRules.Add(cdr);
         }
 
@@ -142,20 +129,13 @@ namespace TPLinkSmartDevices.Devices
             cdr.PoweredOn = poweredOn ?? cdr.PoweredOn;
             cdr.Name = name ?? cdr.Name;
 
-            dynamic result = await Execute("count_down", "edit_rule", new JObject
-            {
-                new JProperty("id", id),
-                new JProperty("enable", cdr.Enabled),
-                new JProperty("delay", cdr.Delay),
-                new JProperty("act", cdr.PoweredOn),
-                new JProperty("name", cdr.Name) 
-            }, null).ConfigureAwait(false);
+            await this.EditCountDownRule(COUNTDOWN_NAMESPACE, cdr);
         }
 
         public async Task EditCountDownRule(CountDownRule newCdr)
         {
             if (newCdr.Id == null) throw new Exception("countdown rule id is required");
-            if (CountDownRules.Any(c => c.Id == newCdr.Id)) throw new Exception("countdown rule with specified id already exists");
+            if (!CountDownRules.Any(c => c.Id == newCdr.Id)) throw new Exception("plug has no countdown rule with specified id");
 
             CountDownRule cdr = CountDownRules.Find(c => c.Id == newCdr.Id);
             cdr.Enabled = newCdr.Enabled;
@@ -163,27 +143,20 @@ namespace TPLinkSmartDevices.Devices
             cdr.PoweredOn = newCdr.PoweredOn;
             cdr.Name = newCdr.Name ?? cdr.Name;
 
-            dynamic result = await Execute("count_down", "edit_rule", new JObject
-            {
-                new JProperty("id", cdr.Id),
-                new JProperty("enable", cdr.Enabled),
-                new JProperty("delay", cdr.Delay),
-                new JProperty("act", cdr.PoweredOn),
-                new JProperty("name", cdr.Name)
-            }, null).ConfigureAwait(false);
+            await this.EditCountDownRule(COUNTDOWN_NAMESPACE, cdr);
         }
 
 
         public async Task DeleteCountDownRule(string id)
         {
-            dynamic result = await Execute("count_down", "delete_rule", "id", id).ConfigureAwait(false);
+            dynamic result = await Execute(COUNTDOWN_NAMESPACE, "delete_rule", "id", id).ConfigureAwait(false);
 
             CountDownRules.RemoveAll(c => c.Id == id);
         }
 
         public async Task DeleteAllCountDownRules()
         {
-            dynamic result = await Execute("count_down", "delete_all_rules").ConfigureAwait(false);
+            dynamic result = await Execute(COUNTDOWN_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
 
             CountDownRules.Clear();
         }

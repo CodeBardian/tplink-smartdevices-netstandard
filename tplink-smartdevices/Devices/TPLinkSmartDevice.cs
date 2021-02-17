@@ -72,13 +72,13 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Sends command to device and returns answer 
         /// </summary>
-        protected async Task<dynamic> Execute(string system, string command, object argument = null, object value = null)
+        protected internal async Task<dynamic> Execute(string system, string command, object argument = null, object value = null)
         {
             var message = new SmartHomeProtocolMessage(system, command, argument, value);
             return await MessageCache.Request(message, Hostname, Port).ConfigureAwait(false);
         }
 
-        protected async Task<dynamic> Execute(string json)
+        protected internal async Task<dynamic> Execute(string json)
         {
             var message = new SmartHomeProtocolMessage(json);
             return await MessageCache.Request(message, Hostname, Port);
