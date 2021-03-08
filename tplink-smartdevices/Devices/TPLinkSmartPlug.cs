@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data.CountDownRule;
+using TPLinkSmartDevices.Data.Schedule;
 
 namespace TPLinkSmartDevices.Devices
 {
-    public class TPLinkSmartPlug : TPLinkSmartDevice, ICountDown
+    public class TPLinkSmartPlug : TPLinkSmartDevice, ICountDown, ISchedule
     {
         private const string COUNTDOWN_NAMESPACE = "count_down";
+        private const string SCHEDULE_NAMESPACE = "schedule";
 
         /// <summary>
         /// If the outlet relay is powered on
@@ -29,6 +31,8 @@ namespace TPLinkSmartDevices.Devices
 
         public string[] Features { get; private set; }
         public List<CountDownRule> CountDownRules { get; private set; }
+
+        public List<Schedule> Schedules { get; private set; }
 
         public TPLinkSmartPlug(string hostname, int port = 9999) : base(hostname, port)
         {
@@ -66,6 +70,7 @@ namespace TPLinkSmartDevices.Devices
                 PoweredOnSince = DateTime.Now - TimeSpan.FromSeconds((int)sysInfo.on_time);
 
             await RetrieveCountDownRules().ConfigureAwait(false);
+            await RetrieveSchedules().ConfigureAwait(false);
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
@@ -159,6 +164,53 @@ namespace TPLinkSmartDevices.Devices
             dynamic result = await Execute(COUNTDOWN_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
 
             CountDownRules.Clear();
+        }
+
+        public async Task RetrieveSchedules()
+        {
+            dynamic result = await Execute(SCHEDULE_NAMESPACE, "get_rules").ConfigureAwait(false);
+            string rule_list = Convert.ToString(result.rule_list);
+            Schedules = JsonConvert.DeserializeObject<List<Schedule>>(rule_list);
+        }
+
+        public async Task AddSchedule(Schedule schedule)
+        {
+            try
+            {
+                string payload = JsonConvert.SerializeObject(schedule);
+                dynamic result = await Execute(SCHEDULE_NAMESPACE, "add_rule", payload).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task EditSchedule(Schedule schedule)
+        {
+            try
+            {
+                JObject payload = JObject.FromObject(schedule);
+                dynamic result = await Execute(SCHEDULE_NAMESPACE, "edit_rule", payload).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task DeleteSchedule(string id)
+        {
+            dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_rule", "id", id).ConfigureAwait(false);
+
+            Schedules.RemoveAll(c => c.Id == id);
+        }
+
+        public async Task DeleteSchedules()
+        {
+            dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
+
+            Schedules.Clear();
         }
     }
 }

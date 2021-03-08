@@ -6,7 +6,7 @@ using TPLinkSmartDevices.Data.CountDownRule;
 
 namespace TPLinkSmartDevices.Devices
 {
-    public interface ICountDown
+    interface ICountDown
     {
         List<CountDownRule> CountDownRules { get; }
         Task RetrieveCountDownRules();
