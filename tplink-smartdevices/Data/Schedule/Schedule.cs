@@ -84,7 +84,8 @@ namespace TPLinkSmartDevices.Data.Schedule
         /// </summary>
         [JsonProperty("repeat")]
         [JsonConverter(typeof(BoolConverter))]
-        public bool Repeat { get; set; }
+        //seems to be required to set to true, otherwise throws -3 protocol error
+        public bool Repeat => true;  
 
         [JsonProperty("s_light")]
         public object LightState => new { saturation = Saturation, hue = Hue, brightness = Brightness, color_temp = ColorTemp };
@@ -126,6 +127,11 @@ namespace TPLinkSmartDevices.Data.Schedule
                 Brightness = (int)_additionalData["s_light"]["brightness"];
                 ColorTemp = (int)_additionalData["s_light"]["color_temp"];
             }
+        }
+
+        public bool ShouldSerializeId()
+        {
+            return Id != null;
         }
 
         //TODO: additional unknown parameters: latitude, longitude, year, month, day, force, frequency, on_off, eoffset/soffset !!

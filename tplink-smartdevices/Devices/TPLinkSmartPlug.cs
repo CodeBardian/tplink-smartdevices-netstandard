@@ -177,7 +177,8 @@ namespace TPLinkSmartDevices.Devices
         {
             try
             {
-                string payload = JsonConvert.SerializeObject(schedule);
+                JObject payload = JObject.FromObject(schedule);
+                payload.Property("s_light")?.Remove();
                 dynamic result = await Execute(SCHEDULE_NAMESPACE, "add_rule", payload).ConfigureAwait(false);
             }
             catch (Exception e)
