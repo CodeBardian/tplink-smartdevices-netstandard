@@ -61,28 +61,7 @@ namespace TPLinkSmartDevices.Data.Schedule
             {
                 if ((int)daySource[i] == 0) continue;
 
-                switch (i) { 
-                    case 0: weekdays |= Weekdays.Sunday;
-                        break;
-                    case 1:
-                        weekdays |= Weekdays.Monday;
-                        break;
-                    case 2:
-                        weekdays |= Weekdays.Tuesday;
-                        break;
-                    case 3:
-                        weekdays |= Weekdays.Wednesday;
-                        break;
-                    case 4:
-                        weekdays |= Weekdays.Thursday;
-                        break;
-                    case 5:
-                        weekdays |= Weekdays.Friday;
-                        break;
-                    case 6:
-                        weekdays |= Weekdays.Saturday;
-                        break;
-                }
+                weekdays |= (Weekdays)(1 << i);
             }
 
             return weekdays;
