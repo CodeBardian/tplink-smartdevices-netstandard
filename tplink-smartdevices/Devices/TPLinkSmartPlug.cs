@@ -30,8 +30,8 @@ namespace TPLinkSmartDevices.Devices
         public DateTime PoweredOnSince { get; private set; }
 
         public string[] Features { get; private set; }
-        public List<CountDownRule> CountDownRules { get; private set; }
 
+        public List<CountDownRule> CountDownRules { get; private set; }
         public List<Schedule> Schedules { get; private set; }
 
         public TPLinkSmartPlug(string hostname, int port = 9999) : base(hostname, port)
@@ -94,11 +94,6 @@ namespace TPLinkSmartDevices.Devices
                 await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
                 this.OutletPowered = value;
             });
-        }
-
-        private object GetPlugID(int outletId)
-        {
-            return JArray.FromObject(new [] {$"{DeviceId}0{outletId}"});
         }
 
         /// <summary>
@@ -168,49 +163,28 @@ namespace TPLinkSmartDevices.Devices
 
         public async Task RetrieveSchedules()
         {
-            dynamic result = await Execute(SCHEDULE_NAMESPACE, "get_rules").ConfigureAwait(false);
-            string rule_list = Convert.ToString(result.rule_list);
-            Schedules = JsonConvert.DeserializeObject<List<Schedule>>(rule_list);
+            Schedules = await this.RetrieveSchedules(SCHEDULE_NAMESPACE);
         }
 
         public async Task AddSchedule(Schedule schedule)
         {
-            try
-            {
-                JObject payload = JObject.FromObject(schedule);
-                payload.Property("s_light")?.Remove();
-                dynamic result = await Execute(SCHEDULE_NAMESPACE, "add_rule", payload).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            await this.AddSchedule(SCHEDULE_NAMESPACE, schedule);
         }
 
         public async Task EditSchedule(Schedule schedule)
         {
-            try
-            {
-                JObject payload = JObject.FromObject(schedule);
-                dynamic result = await Execute(SCHEDULE_NAMESPACE, "edit_rule", payload).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            await this.EditSchedule(SCHEDULE_NAMESPACE, schedule);
         }
 
         public async Task DeleteSchedule(string id)
         {
             dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_rule", "id", id).ConfigureAwait(false);
-
             Schedules.RemoveAll(c => c.Id == id);
         }
 
         public async Task DeleteSchedules()
         {
             dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
-
             Schedules.Clear();
         }
     }

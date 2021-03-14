@@ -6,12 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using TPLinkSmartDevices.Data;
 using TPLinkSmartDevices.Data.CountDownRule;
+using TPLinkSmartDevices.Data.Schedule;
 
 namespace TPLinkSmartDevices.Devices
 {
-    public partial class TPLinkSmartBulb : TPLinkSmartDevice, ICountDown
+    public partial class TPLinkSmartBulb : TPLinkSmartDevice, ICountDown, ISchedule
     {
         private const string COUNTDOWN_NAMESPACE = "smartlife.iot.common.count_down";
+        private const string SCHEDULE_NAMESPACE = "smartlife.iot.common.schedule";
 
         private bool _poweredOn;
         private BulbHSV _hsv;
@@ -47,6 +49,7 @@ namespace TPLinkSmartDevices.Devices
 
         public List<PreferredLightState> PreferredLightStates => _preferredLightStates;
         public List<CountDownRule> CountDownRules { get; private set; }
+        public List<Schedule> Schedules { get; private set; }
 
         public TPLinkSmartBulb(string hostName, int port=9999) : base(hostName,port)
         {
@@ -87,6 +90,7 @@ namespace TPLinkSmartDevices.Devices
 
             await RetrievePresets().ConfigureAwait(false);
             await RetrieveCountDownRules().ConfigureAwait(false);
+            await RetrieveSchedules().ConfigureAwait(false);
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
@@ -240,6 +244,33 @@ namespace TPLinkSmartDevices.Devices
             dynamic result = await Execute(COUNTDOWN_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
 
             CountDownRules.Clear();
+        }
+
+        public async Task RetrieveSchedules()
+        {
+            Schedules = await this.RetrieveSchedules(SCHEDULE_NAMESPACE);
+        }
+
+        public async Task AddSchedule(Schedule schedule)
+        {
+            await this.AddSchedule(SCHEDULE_NAMESPACE, schedule);
+        }
+
+        public async Task EditSchedule(Schedule schedule)
+        {
+            await this.EditSchedule(SCHEDULE_NAMESPACE, schedule);
+        }
+
+        public async Task DeleteSchedule(string id)
+        {
+            dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_rule", "id", id).ConfigureAwait(false);
+            Schedules.RemoveAll(c => c.Id == id);
+        }
+
+        public async Task DeleteSchedules()
+        {
+            dynamic result = await Execute(SCHEDULE_NAMESPACE, "delete_all_rules").ConfigureAwait(false);
+            Schedules.Clear();
         }
 
         public class PreferredLightState

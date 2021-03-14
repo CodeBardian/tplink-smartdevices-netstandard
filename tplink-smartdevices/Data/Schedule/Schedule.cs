@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
+using TPLinkSmartDevices.Devices;
 
 namespace TPLinkSmartDevices.Data.Schedule
 {
@@ -137,25 +139,7 @@ namespace TPLinkSmartDevices.Data.Schedule
         //TODO: additional unknown parameters: latitude, longitude, year, month, day, force, frequency, on_off, eoffset/soffset !!
     }
 
-    public class BoolConverter : JsonConverter
-    {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            writer.WriteValue(((bool)value) ? 1 : 0);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            return reader.Value.ToString() == "1";
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(bool);
-        }
-    }
-
-    public class TimeSpanConverter : JsonConverter
+    internal class TimeSpanConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -172,6 +156,34 @@ namespace TPLinkSmartDevices.Data.Schedule
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(TimeSpan);
+        }
+    }
+
+    internal static class CountDownExtensions
+    {
+        internal static async Task<List<Schedule>> RetrieveSchedules(this ISchedule device, string ns)
+        {
+            dynamic result = await ((TPLinkSmartDevice)device).Execute(ns, "get_rules").ConfigureAwait(false);
+            string rule_list = Convert.ToString(result.rule_list);
+            return JsonConvert.DeserializeObject<List<Schedule>>(rule_list);
+        }
+
+        internal static async Task AddSchedule(this ISchedule device, string ns, Schedule schedule)
+        {
+            JObject payload = JObject.FromObject(schedule);
+            if (ns == "schedule")
+            {
+                payload.Property("s_light")?.Remove();
+            }
+            dynamic result = await ((TPLinkSmartDevice)device).Execute(ns, "add_rule", payload).ConfigureAwait(false);
+            schedule.Id = (string)result.id;
+            device.Schedules.Add(schedule);
+        }
+
+        internal static async Task EditSchedule(this ISchedule device, string ns, Schedule schedule)
+        {
+            JObject payload = JObject.FromObject(schedule);
+            dynamic result = await ((TPLinkSmartDevice)device).Execute(ns, "edit_rule", payload).ConfigureAwait(false);
         }
     }
 }
