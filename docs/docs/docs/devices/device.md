@@ -116,8 +116,6 @@ public string Type { get; private set; }
     : * `#!csharp string username`: username (e-mail address) of kasa account
       * `#!csharp string password`: password of kasa account
 
-!!! tip "Method is awaitable" 
-
 ### `UnbindRemoteAccess()`
 : Unbinds currently connected account from tp-link's cloud server
   ``` csharp
@@ -147,8 +145,6 @@ public string Type { get; private set; }
 
     __Parameters__
     : * `#!csharp dynamic sysInfo`: response of smart devices on system properties, defaults to `null` which results in a new request being made
-
-!!! tip "Method is awaitable" 
 
 ### `SetAlias(string)`
 : Sets alias of this device

@@ -3,72 +3,102 @@
 [![Nuget](https://img.shields.io/nuget/v/tplink-smartdevices?style=for-the-badge)](https://www.nuget.org/packages/tplink-smartdevices/)
 ![Travis (.org)](https://img.shields.io/travis/CodeBardian/tplink-smartdevices-netstandard?style=for-the-badge)
 
-This library allows a developer to discover and operate TP-Link Smart Devices with C# applications such as Xamarin, UWP or .net framework.
-This includes support for TP-Link Smart Plugs HS100/105/110 as well as TP-Link Smart Bulbs KL/LB: 100/110/120/130.
+This library allows a developer to discover and operate TP-Link Smart Devices from multiple .NET implementations such as .NET Core, Xamarin, .NET Framework and more. 
 
 This project is migrated to .net standard from Anthony Turner's TP-Link Smart Devices SDK: <br>
 https://github.com/anthturner/TPLinkSmartDevices <br>
-some changes have been made, e.g added asynchronous code, support of newer KL-series bulbs, event for better discovery handling, setup functionality (no need for kasa account and app anymore, except for remote control)
+notable changes include: asynchronous operations, more supported devices, better discovery handling, setup functionality (no need for kasa account and app anymore, except for remote control)
 
-Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see which .net platform versions can implement this library before using!
-### Prerequisites
-~~Before using tplink-smartdevices your devices must be connected to the Wi-Fi network.
-This can be done using the TP-Link provided mobile app Kasa.~~
+Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see which .net platform versions can implement this library!
+
+#### Supported Devices
+
+| Type                    | Supported models             | Not tested, maybe working         |
+| ----------------------- | ---------------------------- |---------------------------------- |
+| Plug                    |  HS100, HS110, HS300, HS107  | HS105, HS200, KP200/KP303/KP400   |
+| Bulb                    |  KL100/KL110/KL130           | KL50/KL60/LB100/LB110/LB120/LB130 |
+| Switch                  |  HS220                       |                                   |
+
+> Doesn't include new protocol for firmware version 1.1.0 on HS100 (Hardware Version 4.1)
+
+## Usage
+Use NuGet package manager to add a reference to this project, for example with dotnet cli:
+```
+> dotnet add package tplink-smartdevices --version 2.0.0
+```
 
 #### Setup / First Use
 
 If your devices are already connected to your Wi-Fi network (e.g through TP-Link provided mobile app Kasa) this step can be skipped. Otherwise you can use the following script to associate your smart devices with your home network:
 
-```
+```cs
 await new TPLinkDiscovery().Associate("ssid", "password");
 ```
 Note that the device running the program needs to be connected to the network which the tplink devices provide. It should be called "TP-Link_Smart Plug_XXXX" or similar. If you have a brand new plug/bulb this network should automatically appear. Otherwise, hold down the reset button on a plug for about 10 seconds, until its light blinks amber rapidly. For a bulb flip the switch on and off 5 times. Not too quickly though! (About 1 sec per flip).
 
-## Usage
-Use NuGet package manager to add a reference to this project, for example with dotnet cli:
-```
-> dotnet add package tplink-smartdevices --version 1.0.4
-```
-
 ### Discovery
 
 basic:
-
-	// Runs in a async Task<List<TPLinkSmartDevice>>
-	var discoveredDevices = await new TPLinkDiscovery().Discover();
+```cs
+// Runs in a async Task<List<TPLinkSmartDevice>>
+var discoveredDevices = await new TPLinkDiscovery().Discover();
+```
 	
 with event handler:
+```cs
+TPLinkDiscovery discovery = new TPLinkDiscovery();
+discovery.DeviceFound += delegate {
+	//Console.WriteLine("Device found: " + e.Device.Alias);
+	//Log.Debug("DISCOVERY","Device found" + e.Device.Alias);	
+};
+var discoveredDevices = await discovery.Discover();
+```    
 
-	TPLinkDiscovery discovery = new TPLinkDiscovery();
-	discovery.DeviceFound += delegate {
-	    //Console.WriteLine("Device found: " + e.Device.Alias);
-	    //Log.Debug("DISCOVERY","Device found" + e.Device.Alias);	
-	};
-	var discoveredDevices = await discovery.Discover();
-	    
-
-### Example Usage
-    var smartPlug = await TPLinkSmartPlug.Create("100.10.4.1");
-    smartPlug.SetOutletPowered(true); // Turn on relay
-    smartPlug.SetOutletPowered(false); // Turn off relay
-
-    var smartBulb = await TPLinkSmartBulb.Create("100.10.4.2");
-    smartBulb.SetPoweredOn(true); // Turn on bulb
-    smartBulb.SetPoweredOn(false); // Turn off bulb
+### Power State
+```cs
+var smartPlug = await TPLinkSmartPlug.Create("100.10.4.1");
+await smartPlug.SetPoweredOn(true); // Turn on relay
+await smartPlug.SetPoweredOn(false); // Turn off relay
+```  
  
 or after discovery:
-    
-    foreach (var item in discoveredDevices)
+```cs    
+foreach (var item in discoveredDevices)
+{
+    if (item is TPLinkSmartPlug plug)
     {
-        if (item is TPLinkSmartPlug plug)
-        {
-            plug.SetOutletPowered(true);
-        }
-        else if (item is TPLinkSmartBulb bulb) 
-        {
-            bulb.SetPoweredOn(true);
-        }
+        await plug.SetPoweredOn(true);
     }
+    else if (item is TPLinkSmartBulb bulb) 
+    {
+        await bulb.SetPoweredOn(true);
+    }
+}
+```  
+
+### Timer
+```cs
+CountDownRule cdr = new CountDownRule() { 
+    Delay = 3600, 
+    Enabled = true, 
+    PoweredOn = true, 
+    Name = "1h Timer" 
+}
+await plug.AddCountDownRule(cdr);
+
+### Schedule
+```cs
+Schedule schedule = new Schedule
+{
+    Name = "TurnOffMondays10am",
+    StartAction = 0,
+    StartTime = new TimeSpan(10, 0, 0),
+    StartTimeOption = TimeOption.Custom,
+    Enabled = true,
+    Weekdays = Weekdays.Monday,
+};
+await plug.AddSchedule(schedule);
+```
     
 ### Remote Control
 

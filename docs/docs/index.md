@@ -1,6 +1,6 @@
 # Welcome to tplink-smartdevices Documentation 
 
-__tplink-smartdevices__ is a .NET standard 2.0 library for discovering and operating TP-Link smart devices. It allows developers to discover and operate TP-Link smart devices with C# applications such as Xamarin, UWP or .net framework. <br/>
+__tplink-smartdevices__ is a .NET standard 2.0 library for discovering and operating TP-Link Smart Devices. It allows a developer to discover and operate TP-Link Smart Devices from multiple .NET implementations such as .NET Core, Xamarin, .NET Framework and more. <br/>
 
 ### Ready to dive in ?
 
@@ -19,4 +19,4 @@ __tplink-smartdevices__ is a .NET standard 2.0 library for discovering and opera
 | `TPLinkSmartMeterPlug`  |  HS110            |                                   |
 | `TPLinkSmartBulb`       | KL100/KL110/KL130 | KL50/KL60/LB100/LB110/LB120/LB130 |
 | `TPLinkSmartMultiPlug`  |  HS300/HS107      | KP200/KP303/KP400                 |
-| `TPLinkSmartSwitch`     |  HS220            |                                   |
+| `TPLinkSmartDimmer`     |  HS220            |                                   |

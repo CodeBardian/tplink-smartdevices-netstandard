@@ -2,6 +2,8 @@ site_name: tplink-smartdevices-docs
 nav:
     - Home: 'index.md'
     - 'Getting Started': 'getting-started.md'
+    - Timer: 'timer.md'
+    - Schedule: 'schedule.md'
     - Docs:
       - 'TPLinkDiscovery': 'docs/discovery.md'
       - Devices: 

@@ -15,7 +15,7 @@ namespace TPLinkSmartDevices.Data.CountDownRule
         /// identifier of CountDown rule
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; internal set; }
 
         /// <summary>
         /// custom name of CountDown rule

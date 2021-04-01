@@ -30,7 +30,7 @@ namespace TPLinkSmartDevices.Data.Schedule
         public TimeOption StartTimeOption { get; set; }
 
         /// <summary>
-        /// start time in minutes after midnight
+        /// start time after midnight
         /// </summary>
         [JsonProperty("smin")]
         [JsonConverter(typeof(TimeSpanConverter))]
@@ -159,7 +159,7 @@ namespace TPLinkSmartDevices.Data.Schedule
         }
     }
 
-    internal static class CountDownExtensions
+    internal static class SchedulesExtensions
     {
         internal static async Task<List<Schedule>> RetrieveSchedules(this ISchedule device, string ns)
         {

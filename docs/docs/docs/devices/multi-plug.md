@@ -55,8 +55,6 @@ public Outlet[] Outlets { get; private set; }
   public async Task Refresh()
   ```
 
-!!! tip "Method is awaitable" 
-
 ### `SetOutletPowered(bool, int)`
 : Change the plugs outlet relay state
   ``` csharp

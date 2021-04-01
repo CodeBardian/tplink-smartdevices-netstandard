@@ -23,8 +23,6 @@ public List<TPLinkSmartDevice> DiscoveredDevices { get; private set; }
       * `#!csharp int timeout`: Timespan after which the discovery finishes, defaults to `5000`(5 seconds)
       * `#!csharp string target`: ip address of discovery broadcast, defaults to `255.255.255.255`
 
-!!! tip "Method is awaitable" 
-
 !!! tip 
     The discovery of devices within a network fails under certain circumstances. Some routers seem to block udp packets to the broadcast address (255.255.255.255), which is used to send out a discovery request.
     In case of using different subnet's, what seems to resolve the issue is broadcasting to the subnet's local broadcast IP (such as 192.168.0.255, if IP is 192.168.0.X with a subnet mask of 255.255.255.0)
@@ -42,8 +40,6 @@ public List<TPLinkSmartDevice> DiscoveredDevices { get; private set; }
 
 !!! caution 
     Host who runs the application needs to be connected to the open configuration network! (TP-Link_Smart Plug_XXXX or similar)
-
-!!! tip "Method is awaitable" 
 
 ## Events
 
