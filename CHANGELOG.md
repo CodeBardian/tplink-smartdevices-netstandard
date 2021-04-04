@@ -1,5 +1,19 @@
 ## Changelog
 
+### [2.0.0] - 2021-04-04
+
+#### Added
+
+- support for hs220 dimmer switch ([#28556c9](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/28556c9))
+- Timers
+- Schedules
+
+#### Changed
+- no more `Task.Run` ([#1986900](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/1986900))
+
+#### Fixed
+- exception on retrieving cloud info without internet connection([#96be351e](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commits/6be351e))
+
 ### [1.0.4] - 2020-11-16
 
 #### Added
