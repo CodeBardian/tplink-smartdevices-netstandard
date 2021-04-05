@@ -46,15 +46,11 @@ public uint VGain { get; private set; }
     : * `#!csharp string hostname`: ip-address of of this plug
       * `#!csharp int port`: plug communicates on this port, defaults to `9999`
 
-!!! tip "Method is awaitable" 
-
 ### `Refresh()`
 : Updates current power usage, gain data and all other properties of this plug (includes a call to [`TPLinkSmartPlug.Refresh()`](plug.md#refresh) for the common device information)
   ``` csharp
   public async Task Refresh()
   ```
-
-!!! tip "Method is awaitable" 
 
 ### `EraseStats()`
 : Erases all collected e-meter statistics of this plug
@@ -73,8 +69,6 @@ public uint VGain { get; private set; }
     : * `#!csharp int month`: month of year, ranging from `1`(January) to `12`(December)
       * `#!csharp int year`: 
 
-!!! tip "Method is awaitable" 
-
 ### `GetYearStats(int, float)`
 : Queries collected usage statistics for a whole year. Returns a `#!csharp Dictionary<int, float>` of each month and energy consumption of that month in kWh)
   ``` csharp
@@ -83,5 +77,3 @@ public uint VGain { get; private set; }
 
     __Parameters__
     : * `#!csharp int year`: 
-
-!!! tip "Method is awaitable" 

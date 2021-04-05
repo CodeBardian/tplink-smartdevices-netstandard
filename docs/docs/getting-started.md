@@ -6,15 +6,15 @@ Use NuGet package manager to add a reference to this project
 
 === ".NET CLI"
     ``` 
-    > dotnet add package tplink-smartdevices --version 1.0.3
+    > dotnet add package tplink-smartdevices --version 2.0.0
     ```
 === "PackageReference"
     ``` html
-    <PackageReference Include="tplink-smartdevices" Version="1.0.3" />
+    <PackageReference Include="tplink-smartdevices" Version="2.0.0" />
     ```
 === "Package Manager"
     ```
-    Install-Package tplink-smartdevices -Version 1.0.3
+    Install-Package tplink-smartdevices -Version 2.0.0
     ```
 
 
@@ -29,6 +29,7 @@ Use NuGet package manager to add a reference to this project
 | `TPLinkSmartMeterPlug`  |  HS110            |                                   |
 | `TPLinkSmartBulb`       | KL100/KL110/KL130 | KL50/KL60/LB100/LB110/LB120/LB130 |
 | `TPLinkSmartMultiPlug`  |  HS300/HS107      | KP200/KP303/KP400                 |
+| `TPLinkSmartDimmer`     |  HS220            |                                   |
 
 ## Usage
 
@@ -74,15 +75,6 @@ Smart devices which are already connected to the same network as the host device
     ```
     <small> Full reference for [`TPLinkSmartPlug`](docs/devices/plug.md) and [`TPLinkSmartBulb`](docs/devices/bulb.md)</small>
 
-### Remote Control 
-
-If you want to control your devices remotely (not from within the same network) there is the possibility to link each device independently to your kasa account. It then shows up in your Kasa app and can be controlled over the internet from wherever it's needed.
-
-``` csharp
-smartDevice.ConfigureRemoteAccess("username", "password");
-```
-<small> Full reference for [`TPLinkSmartDevice.ConfigureRemoteAccess(string, string)`](docs/devices/device.md#configureremoteaccessstring-string)</small>
-
 ### Basic Usage Examples
 
 Following script is a basic example which describes the use-case of turning on all smart plugs in your current network:
@@ -94,19 +86,19 @@ foreach (var item in discoveredDevices)
 {
     if (item is TPLinkSmartPlug plug)
     {
-        plug.SetOutletPowered(true);
+        await plug.SetPoweredOn(true);
     }
 }
 ```
-<small> Full reference for [`TPLinkSmartPlug.SetOutletPowered(bool)`](docs/devices/plug.md#setoutletpoweredbool)</small>
+<small> Full reference for [`TPLinkSmartPlug.SetPoweredOn(bool)`](docs/devices/plug.md#power)</small>
 
 Changing color of a single smart bulb (LB130, KL130):
 
 ``` csharp
 var smartBulb = await TPLinkSmartBulb.Create("100.10.4.1");
 
-BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0, 100, 100)
-BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60, 100, 100)
+BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 100 }; // red HSV(0, 100, 100)
+BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 100 };  // yellow HSV(60, 100, 100)
 
 //apply color (instant)
 smartBulb.SetHSV(red);
@@ -114,3 +106,47 @@ smartBulb.SetHSV(red);
 smartBulb.SetHSV(yellow, 1000);
 ```
 <small> Full reference for [`TPLinkSmartBulb.SetHSV(BulbHSV, int)`](docs/devices/bulb.md#sethsv)</small>
+
+### Remote Control 
+
+If you want to control your devices remotely (not from within the same network) there is the possibility to link each device independently to your kasa account. It then shows up in your Kasa app and can be controlled over the internet from wherever it's needed.
+
+``` csharp
+smartDevice.ConfigureRemoteAccess("username", "password");
+```
+<small> Full reference for [`TPLinkSmartDevice.ConfigureRemoteAccess(string, string)`](docs/devices/device.md#configureremoteaccessstring-string)</small>
+
+### Timer
+
+By setting up a Countdown Rule it is possible to have a device execute a specific action after a certain time runs out. This can for example be used to turn off all devices after half an hour:
+
+``` csharp
+List<ICountDown> cdDevices = discoveredDevices.OfType<ICountDown>().ToList();
+cdDevices.ForEach(d =>
+    d.AddCountDownRule(
+        new CountDownRule() { 
+            Delay = 1800, 
+            Enabled = true, 
+            PoweredOn = false, 
+            Name = "MyTimer" 
+        }
+    )
+);
+```
+<small> Full reference for [`CountDownRules`](timer.md)</small>
+
+### Schedule
+Schedule your smart devices to automatically switch on or off if you are home or away, on sunrise or sunset or whenever you feel like. Example of turning light bulb on each workday at 07:00 in the morning.
+``` csharp
+Schedule schedule = new Schedule
+    {
+        Name = "MySchedule",
+        StartAction = 1,
+        StartTime = new TimeSpan(7, 0, 0),
+        StartTimeOption = TimeOption.Custom,
+        Enabled = true,
+        Weekdays = Weekdays.WorkDays
+    };
+await smartBulb.AddSchedule(schedule);
+```
+<small> Full reference for [`Schedule`](schedule.md)</small>

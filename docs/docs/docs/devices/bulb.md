@@ -83,20 +83,16 @@ public List<PreferredLightState> PreferredLightStates { get; }
     : * `#!csharp string hostname`: ip-address of of this bulb
       * `#!csharp int port`: bulb communicates on this port, defaults to `9999`
 
-!!! tip "Method is awaitable" 
-
 ### `Refresh()`
 : Refreshes all properties of this bulb (includes a call to [`TPLinkSmartDevice.Refresh(dynamic)`](device.md#refreshdynamic) for the common device information)
   ``` csharp
   public async Task Refresh()
   ```
 
-!!! tip "Method is awaitable" 
-
 ### `SetPoweredOn(bool)`
 : Change the power state of this bulb 
   ``` csharp
-  public void SetPoweredOn(bool value)
+  public async task SetPoweredOn(bool value)
   ```
 
     __Parameters__
@@ -149,10 +145,8 @@ public List<PreferredLightState> PreferredLightStates { get; }
 
     __Example__
     ``` csharp
-    BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 255 }; // red HSV(0, 100, 100)
-    BulbHSV yellow = new BulbHSV { Hue = 60, Saturation = 100, Value = 255 };  // yellow HSV(60, 100, 100)
+    BulbHSV red = new BulbHSV { Hue = 0, Saturation = 100, Value = 100 }; // red HSV(0, 100, 100)
 
-    //apply color
     smartBulb.SetHSV(red);
     ```
    

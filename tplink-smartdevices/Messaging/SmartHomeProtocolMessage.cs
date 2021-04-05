@@ -108,7 +108,7 @@ namespace TPLinkSmartDevices.Messaging
             var decrypted = Encoding.ASCII.GetString(SmartHomeProtocolEncoder.Decrypt(packet)).Trim('\0');
 
             var subResult = (dynamic)((JObject)JObject.Parse(decrypted)[System])[Command];
-            if (subResult["err_code"] != null && subResult.err_code != 0)
+            if (subResult?["err_code"] != null && subResult?.err_code != 0)
                 throw new Exception($"Protocol error {subResult.err_code} ({subResult.err_msg})");
 
             return subResult;
