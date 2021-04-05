@@ -14,7 +14,7 @@
     
     
       
-        <title>About - tplink-smartdevices-docs</title>
+        <title>Timer - tplink-smartdevices-docs</title>
       
     
     
@@ -62,6 +62,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#options" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -88,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              About
+              Timer
             
           </span>
         </div>
@@ -222,11 +227,52 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../timer/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Timer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Timer
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -457,15 +503,117 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>About</h1>
+                  <h1>Timer</h1>
                 
-                
+                <p>All Devices implementing <code>ICountDown</code> can perform certain actions after a timer runs out. Use <code>CountDownRule</code> to specify the timer options. All timers only run once, for repeated actions create a <a href="./"><code>Schedule</code></a>. 
+Currently active timers can be accessed via the <code>CountDownRules</code> property.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">var</span> <span class="n">cdr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CountDownRule</span><span class="p">()</span> <span class="p">{</span> 
+    <span class="n">Delay</span> <span class="p">=</span> <span class="m">1800</span><span class="p">,</span> 
+    <span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> 
+    <span class="n">PoweredOn</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> 
+    <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;MyTimer&quot;</span> 
+<span class="p">}</span>
+<span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">AddCountDownRule</span><span class="p">(</span><span class="n">cdr</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="options">Options</h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td>string</td>
+<td>custom name of timer, shows in kasa app</td>
+</tr>
+<tr>
+<td><code>Enabled</code></td>
+<td>bool</td>
+<td>if the rule is currently active or not</td>
+</tr>
+<tr>
+<td><code>PoweredOn</code></td>
+<td>bool</td>
+<td>if the device should be powered on or off after the timer runs out</td>
+</tr>
+<tr>
+<td><code>Delay</code></td>
+<td>int</td>
+<td>delay in seconds after which the action triggers</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methods">Methods</h4>
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">RetrieveCountDownRules</span><span class="p">();</span>
+</code></pre></div>
+queries the device for current timers and updates <code>CountDownRules</code> respectively.</p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">AddCountDownRule</span><span class="p">(</span><span class="n">CountDownRule</span><span class="p">);</span>
+</code></pre></div>
+adds a new rule</p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">EditCountDownRule</span><span class="p">(</span><span class="n">CountDownRule</span><span class="p">);</span>
+</code></pre></div>
+update an existing rule. Example:
+<div class="highlight"><pre><span></span><code><span class="n">device</span><span class="p">.</span><span class="n">CountDownRules</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">Delay</span> <span class="p">=</span> <span class="m">36000</span><span class="p">;</span>
+<span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">EditCountDownRule</span><span class="p">(</span><span class="n">CountDownRules</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</code></pre></div></p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">DeleteCountDownRule</span><span class="p">(</span><span class="n">CountDownRule</span><span class="p">);</span>
+</code></pre></div>
+deletes an existing rule. Example:
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">DeleteCountDownRule</span><span class="p">(</span><span class="n">CountDownRules</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</code></pre></div></p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">DeleteAllCountDownRules</span><span class="p">();</span>
+</code></pre></div>
+deletes all existing rules.</p>
                 
               
               
@@ -481,6 +629,39 @@
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../getting-started/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Getting Started
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../schedule/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Schedule
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

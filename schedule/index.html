@@ -14,7 +14,7 @@
     
     
       
-        <title>About - tplink-smartdevices-docs</title>
+        <title>Schedule - tplink-smartdevices-docs</title>
       
     
     
@@ -62,6 +62,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#options" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -88,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              About
+              Schedule
             
           </span>
         </div>
@@ -237,11 +242,52 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../schedule/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Schedule
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Schedule
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -457,15 +503,131 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
                 
                 
-                  <h1>About</h1>
+                  <h1>Schedule</h1>
                 
-                
+                <p>All devices implementing <code>ISchedule</code> can perform certain actions repeatedly on a specific time. Use <code>Schedule</code> to specify the options. Schedules are executed when the time of day equals <code>StartTime</code> as long as
+the schedule is <code>Enabled</code>. All created schedules can be accessed via the <code>Schedules</code> property.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Schedule</span> <span class="n">schedule</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Schedule</span>
+<span class="p">{</span>
+    <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;Test1&quot;</span><span class="p">,</span>
+    <span class="n">StartAction</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
+    <span class="n">StartTime</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TimeSpan</span><span class="p">(</span><span class="m">13</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span>
+    <span class="n">StartTimeOption</span> <span class="p">=</span> <span class="n">TimeOption</span><span class="p">.</span><span class="n">Custom</span><span class="p">,</span>
+    <span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+    <span class="n">Weekdays</span> <span class="p">=</span> <span class="n">Weekdays</span><span class="p">.</span><span class="n">WeekendDays</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">AddSchedule</span><span class="p">(</span><span class="n">schedule</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="options">Options</h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td>string</td>
+<td>custom name of schedule, shows in kasa app</td>
+</tr>
+<tr>
+<td><code>Enabled</code></td>
+<td>bool</td>
+<td>if the schedule is currently active or not</td>
+</tr>
+<tr>
+<td><code>StartAction</code></td>
+<td>int</td>
+<td>whether to turn device on or off at start of rule. 0 = turn off, 1 = turn on</td>
+</tr>
+<tr>
+<td><code>StartTimeOption</code></td>
+<td>TimeOption</td>
+<td><code>TimeOption.Sunset</code> and  <code>TimeOption.Sunrise</code> trigger the action at, well, sunset or sunrise. Use  <code>TimeOption.Custom</code> in conjunction with <code>StartTime</code> to set your own timing</td>
+</tr>
+<tr>
+<td><code>StartTime</code></td>
+<td>TimeSpan</td>
+<td>time on which the action triggers when using <code>StartTimeOption = TimeOption.Custom</code> e.g. 13:05 would be <code>TimeSpan(13, 5, 0)</code> or you can specify in minutes after midnight with <code>TimeSpan.FromMinutes(785)</code></td>
+</tr>
+<tr>
+<td><code>Weekdays</code></td>
+<td>Weekdays</td>
+<td>flag of days on which the schedule is executed. Combine multiple days with bitwise or - operator <code>Weekdays = Weekdays.Monday | Weekdays.Friday</code> or use preset combinations like <code>Weekdays = Weekdays.WeekendDays</code></td>
+</tr>
+</tbody>
+</table>
+<p><small>some more options are available, they are not well tested as of version 2.0.0</small></p>
+<h4 id="methods">Methods</h4>
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">RetrieveSchedules</span><span class="p">();</span>
+</code></pre></div>
+queries the device for current schedules and updates <code>Schedules</code> respectively.</p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">AddSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">);</span>
+</code></pre></div>
+adds a new schedule</p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">EditSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">);</span>
+</code></pre></div>
+update an existing schedule. Example:
+<div class="highlight"><pre><span></span><code><span class="n">device</span><span class="p">.</span><span class="n">Schedule</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">Weekdays</span> <span class="p">|=</span> <span class="n">Weekdays</span><span class="p">.</span><span class="n">Thursday</span><span class="p">;</span>
+<span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">EditSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</code></pre></div></p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">DeleteSchedule</span><span class="p">(</span><span class="n">Schedule</span><span class="p">);</span>
+</code></pre></div>
+deletes an existing schedule. Example:
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="p">.</span><span class="n">DeleteSchedule</span><span class="p">(</span><span class="n">Schedules</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</code></pre></div></p>
+<hr />
+<p><div class="highlight"><pre><span></span><code><span class="n">Task</span> <span class="n">ICountDown</span><span class="p">.</span><span class="n">Schedules</span><span class="p">();</span>
+</code></pre></div>
+deletes all existing schedules.</p>
                 
               
               
@@ -481,6 +643,39 @@
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../timer/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Timer
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../docs/discovery/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              TPLinkDiscovery
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
