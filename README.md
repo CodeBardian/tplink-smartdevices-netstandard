@@ -85,6 +85,7 @@ CountDownRule cdr = new CountDownRule() {
     Name = "1h Timer" 
 }
 await plug.AddCountDownRule(cdr);
+```
 
 ### Schedule
 ```cs
@@ -103,7 +104,7 @@ await plug.AddSchedule(schedule);
 ### Remote Control
 
 If you still want to control your devices remotely (not from within the same network) there is the possibility to link each device independently to your kasa account. It then shows up in your app.
-```
+```cs
 smartdevice.ConfigureRemoteAccess("username", "password");
 ```
 To check if your device is linked to tplink cloud use `RemoteAccessEnabled` property.
