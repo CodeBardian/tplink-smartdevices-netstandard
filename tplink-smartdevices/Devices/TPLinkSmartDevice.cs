@@ -78,9 +78,9 @@ namespace TPLinkSmartDevices.Devices
             return await MessageCache.Request(message, Hostname, Port).ConfigureAwait(false);
         }
 
-        protected internal async Task<dynamic> Execute(string json)
+        protected internal async Task<dynamic> Execute(string system, string command, string json)
         {
-            var message = new SmartHomeProtocolMessage(json);
+            var message = new SmartHomeProtocolMessage(system, command, json);
             return await MessageCache.Request(message, Hostname, Port);
         }
 

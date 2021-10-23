@@ -64,7 +64,7 @@ namespace TPLinkSmartDevices.Messaging
             Value = value;
         }
 
-        internal SmartHomeProtocolMessage(string json, string system = "system", string command = "command")
+        internal SmartHomeProtocolMessage(string system, string command, string json)
         {
             Message = json;
             System = system;
