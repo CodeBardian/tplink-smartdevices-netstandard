@@ -64,9 +64,11 @@ namespace TPLinkSmartDevices.Messaging
             Value = value;
         }
 
-        internal SmartHomeProtocolMessage(string json)
+        internal SmartHomeProtocolMessage(string json, string system = "system", string command = "command")
         {
             Message = json;
+            System = system;
+            Command = command;
         }
 
         internal async Task<dynamic> Execute(string hostname, int port)
@@ -91,7 +93,7 @@ namespace TPLinkSmartDevices.Messaging
                     if (!buffer.Any())
                     {
                         var lengthBytes = chunk.Take(4).ToArray();
-                        if (BitConverter.IsLittleEndian) 
+                        if (BitConverter.IsLittleEndian)
                             lengthBytes = lengthBytes.Reverse().ToArray();
                         targetSize = (int)BitConverter.ToUInt32(lengthBytes, 0);
                     }
