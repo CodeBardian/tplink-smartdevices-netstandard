@@ -93,7 +93,7 @@ namespace TPLinkSmartDevices.Devices
                 };
 
                 string message = root.ToString(Formatting.None);
-                await Execute(message).ConfigureAwait(false);
+                await Execute("system", "set_relay_state", message).ConfigureAwait(false);
                 this.Outlets[outletId].OutletPowered = value;
                 this.AllOutletsPowered = !this.Outlets.Any(o => o.OutletPowered == false);
             }
