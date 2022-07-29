@@ -56,5 +56,11 @@ jobs:
           asset_name: tplink-smartdevices${{ steps.get_version_number.outputs.VERSION }}.zip
           asset_content_type: application/zip
         
+      - name: Pack 
+        run: dotnet pack --configuration Release
+        
+      - name: Publish Nuget
+        run: dotnet nuget push "*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_KEY }}
+        working-directory: tplink-smartdevices/bin/Release
         
         
