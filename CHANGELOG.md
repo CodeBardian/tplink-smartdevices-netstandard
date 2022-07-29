@@ -1,5 +1,14 @@
 ## Changelog
 
+### [2.0.1] - 2022-07-29
+
+#### Added
+
+- automatic push to nuget on release ([#dafb5be](https://github.com/CodeBardian/tplink-smartdevices-netstandard/commit/dafb5be))
+
+#### Fixed
+- exception on sending commands to multiplugs ([#18](https://github.com/CodeBardian/tplink-smartdevices-netstandard/pull/18))
+
 ### [2.0.0] - 2021-04-04
 
 #### Added

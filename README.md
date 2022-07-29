@@ -24,7 +24,7 @@ Consult https://github.com/dotnet/standard/blob/master/docs/versions.md to see w
 ## Usage
 Use NuGet package manager to add a reference to this project, for example with dotnet cli:
 ```
-> dotnet add package tplink-smartdevices --version 2.0.0
+> dotnet add package tplink-smartdevices --version 2.0.1
 ```
 
 #### Setup / First Use
