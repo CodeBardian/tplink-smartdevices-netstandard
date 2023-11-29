@@ -77,7 +77,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Send command which changes power state to plug
         /// </summary>
-        public override async Task SetPoweredOn(bool value)
+        public async Task SetPoweredOn(bool value)
         {
             await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
             this.OutletPowered = value;

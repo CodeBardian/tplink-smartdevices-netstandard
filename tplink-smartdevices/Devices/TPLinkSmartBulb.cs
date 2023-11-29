@@ -151,10 +151,13 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set power state of bulb
         /// </summary>
-        public override async Task SetPoweredOn(bool value)
+        public async Task SetPoweredOn(bool value, int transition_period = 0)
         {
-            await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", "on_off", value ? 1 : 0).ConfigureAwait(false);
-            _poweredOn = value;
+            await Execute("smartlife.iot.smartbulb.lightingservice", "transition_light_state", new JObject
+            {
+                new JProperty("on_off", value ? 1 : 0),
+                new JProperty("transition_period", transition_period)
+            }, null).ConfigureAwait(false);
         }
 
         /// <summary>
