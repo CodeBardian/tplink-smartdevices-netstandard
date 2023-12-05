@@ -62,7 +62,7 @@ namespace TPLinkSmartDevices.Devices
             await Refresh((object)sysInfo).ConfigureAwait(false);
         }
 
-        public async Task SetPoweredOn(bool value)
+        public override async Task SetPoweredOn(bool value)
         {
             await Execute("system", "set_relay_state", "state", value ? 1 : 0).ConfigureAwait(false);
             this.AllOutletsPowered = value;

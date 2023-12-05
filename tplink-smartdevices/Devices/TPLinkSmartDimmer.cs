@@ -64,7 +64,7 @@ namespace TPLinkSmartDevices.Devices
         /// <summary>
         /// Set power state of dimming switch
         /// </summary>
-        public async Task SetPoweredOn(bool value)
+        public override async Task SetPoweredOn(bool value)
         {
             await Execute("smartlife.iot.dimmer", "set_switch_state", "state", value ? 1 : 0).ConfigureAwait(false);
             _poweredOn = value;

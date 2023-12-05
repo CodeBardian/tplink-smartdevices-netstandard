@@ -159,5 +159,7 @@ namespace TPLinkSmartDevices.Devices
                 RemoteAccessEnabled = false;
             }
         }
+
+        public abstract Task SetPoweredOn(bool value);
     }
 }
